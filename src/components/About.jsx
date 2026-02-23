@@ -1,15 +1,26 @@
 import { motion } from 'framer-motion';
-
-const technologies = [
-  "JavaScript (ES6+)",
-  "React",
-  "Node.js",
-  "TypeScript",
-  "Python",
-  "Tailwind CSS",
-];
+import { usePortfolio } from '../context/PortfolioContext';
 
 const About = () => {
+  const { data } = usePortfolio();
+  const { about, profile } = data;
+
+  const defaultSkills = [
+    "JavaScript (ES6+)",
+    "React",
+    "Node.js",
+    "TypeScript",
+    "Python",
+    "Tailwind CSS",
+  ];
+
+  const paragraphs = about?.paragraphs || [
+    "Hello! My name is " + (profile?.name || "Your Name") + " and I enjoy creating things that live on the internet. My interest in web development started back in 2020 when I decided to try editing custom Tumblr themes — turns out hacking together HTML & CSS is pretty fun!",
+    "Fast-forward to today, and I've had the privilege of working at an advertising agency, a start-up, and a huge corporation. My main focus these days is building accessible, inclusive products and digital experiences."
+  ];
+
+  const skills = about?.skills?.length > 0 ? about.skills : defaultSkills;
+
   return (
     <section id="about" className="min-h-screen flex items-center py-20 bg-navy">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +31,7 @@ const About = () => {
           transition={{ duration: 0.6 }}
           className="text-4xl font-bold text-slate-100 mb-12"
         >
-          <span className="text-primary">01.</span> About Me
+          <span className="text-primary">01.</span> {about?.title || 'About Me'}
         </motion.h2>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div 
@@ -30,21 +41,14 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-slate-400 space-y-4"
           >
-            <p>
-              Hello! My name is Tesfaye Kelbesa and I enjoy creating things that live on the internet. 
-              My interest in web development started back in 2020 when I decided to try editing 
-              custom Tumblr themes — turns out hacking together HTML & CSS is pretty fun!
-            </p>
-            <p>
-              Fast-forward to today, and I've had the privilege of working at an advertising agency, 
-              a start-up, and a huge corporation. My main focus these days is building accessible, 
-              inclusive products and digital experiences.
-            </p>
+            {paragraphs.map((para, index) => (
+              <p key={index}>{para}</p>
+            ))}
             <p>
               Here are a few technologies I've been working with recently:
             </p>
             <ul className="grid grid-cols-2 gap-2 font-mono text-sm">
-              {technologies.map((tech, index) => (
+              {skills.map((tech, index) => (
                 <motion.li 
                   key={index}
                   initial={{ opacity: 0, x: -10 }}
@@ -75,9 +79,13 @@ const About = () => {
                 <motion.div 
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
-                  className="w-64 h-64 rounded-full bg-slate-800 flex items-center justify-center"
+                  className="w-64 h-64 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden"
                 >
-                  <span className="text-6xl">👨‍💻</span>
+                  {profile?.avatar ? (
+                    <img src={profile.avatar} alt={profile.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-6xl">👨‍💻</span>
+                  )}
                 </motion.div>
               </motion.div>
               <motion.div 

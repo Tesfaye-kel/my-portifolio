@@ -1,35 +1,10 @@
-const projects = [
-  {
-    title: "Project One",
-    description: "A web application that helps users manage their daily tasks efficiently with drag-and-drop functionality.",
-    technologies: ["React", "Node.js", "MongoDB"],
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Project Two",
-    description: "An e-commerce platform with secure payment integration and real-time inventory management.",
-    technologies: ["Next.js", "Stripe", "PostgreSQL"],
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Project Three",
-    description: "A weather dashboard that provides real-time weather data with interactive visualizations.",
-    technologies: ["Vue.js", "OpenWeather API", "Chart.js"],
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Project Four",
-    description: "A social media analytics tool that tracks engagement metrics across multiple platforms.",
-    technologies: ["React", "D3.js", "Firebase"],
-    github: "#",
-    live: "#",
-  },
-];
+import { motion } from 'framer-motion';
+import { usePortfolio } from '../context/PortfolioContext';
 
 const Projects = () => {
+  const { data } = usePortfolio();
+  const { projects } = data;
+
   return (
     <section id="projects" className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,15 +15,23 @@ const Projects = () => {
         <div className="space-y-24">
           {projects.map((project, index) => (
             <div 
-              key={index}
+              key={project.id || index}
               className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center`}
             >
               {/* Project Image */}
               <div className="w-full md:w-1/2">
                 <div className="relative group overflow-hidden rounded-lg">
-                  <div className="bg-slate-700/50 aspect-video flex items-center justify-center">
-                    <span className="text-6xl">🚀</span>
-                  </div>
+                  {project.image ? (
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full aspect-video object-cover"
+                    />
+                  ) : (
+                    <div className="bg-slate-700/50 aspect-video flex items-center justify-center">
+                      <span className="text-6xl">🚀</span>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </div>
@@ -62,13 +45,13 @@ const Projects = () => {
                   {project.description}
                 </p>
                 <ul className="flex flex-wrap gap-3 font-mono text-sm text-slate-400">
-                  {project.technologies.map((tech, i) => (
+                  {project.technologies?.map((tech, i) => (
                     <li key={i}>{tech}</li>
                   ))}
                 </ul>
                 <div className="flex gap-4 pt-2">
                   <a 
-                    href={project.github}
+                    href={project.github || '#'}
                     className="text-slate-100 hover:text-primary transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -78,7 +61,7 @@ const Projects = () => {
                     </svg>
                   </a>
                   <a 
-                    href={project.live}
+                    href={project.live || '#'}
                     className="text-slate-100 hover:text-primary transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
