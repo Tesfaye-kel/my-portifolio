@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { usePortfolio } from '../context/PortfolioContext';
+import ThreeBackground from './ThreeBackground';
 
 const GitHubIcon = () => (
   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -30,16 +31,18 @@ const Hero = () => {
   };
 
   const defaultSocialLinks = [
-    { platform: 'GitHub', url: 'https://github.com', icon: 'github' },
+    { platform: 'GitHub', url: 'https://github.com/Tesfaye-kel', icon: 'github' },
     { platform: 'LinkedIn', url: 'https://linkedin.com', icon: 'linkedin' },
     { platform: 'Twitter', url: 'https://twitter.com', icon: 'twitter' },
+    { platform: 'facebook', url: 'https://facebook.com', icon: 'facebook' },
   ];
 
   const links = socialLinks?.length > 0 ? socialLinks : defaultSocialLinks;
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+      <ThreeBackground />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
@@ -128,11 +131,7 @@ const Hero = () => {
                 transition={{ duration: 0.3 }}
                 className="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-primary/30 flex items-center justify-center overflow-hidden bg-slate-800"
               >
-                {profile?.image ? (
-                  <img src={profile.image} alt={profile.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-8xl">👨‍💻</span>
-                )}
+                <img src="/tes.jpg" alt="Profile" className="w-full h-full object-cover" />
               </motion.div>
               <motion.div 
                 animate={{ 

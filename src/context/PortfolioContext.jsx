@@ -17,9 +17,8 @@ export const PortfolioProvider = ({ children }) => {
     return savedData ? JSON.parse(savedData) : initialData;
   });
 
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem('isAdmin') === 'true';
-  });
+  // Always start as not authenticated
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('portfolioData', JSON.stringify(data));
@@ -29,12 +28,8 @@ export const PortfolioProvider = ({ children }) => {
     localStorage.setItem('isAdmin', isAdmin);
   }, [isAdmin]);
 
-  const login = (password) => {
-    if (password === 'admin123') {
-      setIsAdmin(true);
-      return true;
-    }
-    return false;
+  const login = () => {
+    setIsAdmin(true);
   };
 
   const logout = () => {

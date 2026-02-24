@@ -21,15 +21,6 @@ import GalleryManager from './components/admin/GalleryManager';
 import Messages from './components/admin/Messages';
 import PageTransition from './components/admin/PageTransition';
 
-// Protected Route Component
-const ProtectedRoute = ({ children }) => {
-  const { isAdmin } = usePortfolio();
-  if (!isAdmin) {
-    return <Navigate to="/admin/login" replace />;
-  }
-  return children;
-};
-
 // Public Portfolio Component
 const Portfolio = () => {
   return (
@@ -47,23 +38,27 @@ const Portfolio = () => {
 };
 
 function App() {
+  const { isAdmin, login } = usePortfolio();
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Portfolio */}
-        <Route path="/" element={<Portfolio />} />
+        {/* Login Route - accessible when not authenticated */}
+        <Route 
+          path="/login" 
+          element={!isAdmin ? <Login onLogin={login} /> : <Navigate to="/" replace />} 
+        />
         
-        {/* Admin Login - Public Route */}
-        <Route path="/admin/login" element={<Login />} />
+        {/* Public Portfolio - requires authentication */}
+        <Route 
+          path="/" 
+          element={isAdmin ? <Portfolio /> : <Navigate to="/login" replace />} 
+        />
         
-        {/* Protected Admin Routes with Nested Routing */}
+        {/* Protected Admin Routes - requires authentication */}
         <Route 
           path="/admin" 
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
+          element={isAdmin ? <AdminLayout /> : <Navigate to="/login" replace />}
         >
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
@@ -76,6 +71,9 @@ function App() {
           <Route path="gallery" element={<PageTransition><GalleryManager /></PageTransition>} />
           <Route path="messages" element={<PageTransition><Messages /></PageTransition>} />
         </Route>
+        
+        {/* Catch all - redirect to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );
