@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, LogIn, User } from 'lucide-react';
+import LoginTransition from './LoginTransition';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,7 @@ const Login = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showTransition, setShowTransition] = useState(false);
   const navigate = useNavigate();
 
   // Hardcoded credentials
@@ -19,10 +21,14 @@ const Login = ({ onLogin }) => {
     if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
       setIsLoading(true);
       onLogin();
-      // Delay navigation to show loading spinner
+      // Show transition animation before navigating
       setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 800);
+        setShowTransition(true);
+        // Navigate after transition completes
+        setTimeout(() => {
+          navigate('/', { replace: true });
+        }, 800);
+      }, 300);
     } else {
       setError('Invalid username or password');
     }
@@ -130,6 +136,9 @@ const Login = ({ onLogin }) => {
           </div>
         )}
       </div>
+
+      {/* Full-screen slide transition from left to right */}
+      <LoginTransition isActive={showTransition} />
     </div>
   );
 };
