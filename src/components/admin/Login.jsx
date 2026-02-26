@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, LogIn, User } from 'lucide-react';
 import LoginTransition from './LoginTransition';
+import ThreeBackground from '../ThreeBackground';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -35,7 +36,8 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 relative">
+      <ThreeBackground />
       {/* Flat background */}
       <div className="absolute inset-0 bg-slate-900"></div>
       

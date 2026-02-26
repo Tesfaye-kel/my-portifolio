@@ -6,6 +6,7 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ThreeBackground from './components/ThreeBackground';
 
 // Admin Components
 import Login from './components/admin/Login';
@@ -21,17 +22,38 @@ import GalleryManager from './components/admin/GalleryManager';
 import Messages from './components/admin/Messages';
 import PageTransition from './components/admin/PageTransition';
 
-// Public Portfolio Component
-const Portfolio = () => {
+// Public Portfolio Sections with Page Transition
+const HomePage = () => (
+  <PageTransition>
+    <Hero />
+  </PageTransition>
+);
+
+const AboutPage = () => (
+  <PageTransition>
+    <About />
+  </PageTransition>
+);
+
+const ProjectsPage = () => (
+  <PageTransition>
+    <Projects />
+  </PageTransition>
+);
+
+const ContactPage = () => (
+  <PageTransition>
+    <Contact />
+  </PageTransition>
+);
+
+// Public Portfolio Layout
+const PortfolioLayout = ({ children }) => {
   return (
-    <div className="bg-navy min-h-screen">
+    <div className="min-h-screen relative">
+      <ThreeBackground />
       <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Projects />
-        <Contact />
-      </main>
+      <main>{children}</main>
       <Footer />
     </div>
   );
@@ -49,10 +71,22 @@ function App() {
           element={!isAdmin ? <Login onLogin={login} /> : <Navigate to="/" replace />} 
         />
         
-        {/* Public Portfolio - requires authentication */}
+        {/* Public Portfolio Routes - requires authentication */}
         <Route 
           path="/" 
-          element={isAdmin ? <Portfolio /> : <Navigate to="/login" replace />} 
+          element={isAdmin ? <PortfolioLayout><Hero /></PortfolioLayout> : <Navigate to="/login" replace />} 
+        />
+        <Route 
+          path="/about" 
+          element={isAdmin ? <PortfolioLayout><AboutPage /></PortfolioLayout> : <Navigate to="/login" replace />} 
+        />
+        <Route 
+          path="/projects" 
+          element={isAdmin ? <PortfolioLayout><ProjectsPage /></PortfolioLayout> : <Navigate to="/login" replace />} 
+        />
+        <Route 
+          path="/contact" 
+          element={isAdmin ? <PortfolioLayout><ContactPage /></PortfolioLayout> : <Navigate to="/login" replace />} 
         />
         
         {/* Protected Admin Routes - requires authentication */}

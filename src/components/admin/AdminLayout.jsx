@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
+import ThreeBackground from '../ThreeBackground';
 import {
   LayoutDashboard,
   User,
@@ -39,7 +40,8 @@ const AdminLayout = () => {
   const unreadCount = data.messages?.filter((m) => !m.read).length || 0;
 
   return (
-    <div className={`min-h-screen ${data.theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className={`min-h-screen relative ${data.theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      <ThreeBackground />
       {/* Fixed Left Sidebar - Vertical Navigation */}
       <aside
         className="fixed top-0 left-0 z-40 h-screen w-64 bg-gray-800 border-r border-gray-700 flex flex-col"

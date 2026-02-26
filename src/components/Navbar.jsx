@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'Contact', href: '/contact' },
     { name: 'Admin', href: '/admin', isRoute: true },
   ];
 
@@ -18,37 +19,32 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a 
-              href="#home" 
+            <Link 
+              to="/" 
               className="text-2xl font-bold text-primary hover:text-primary/80 transition-colors duration-300"
             >
               Portfolio
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map((link) => (
-                link.isRoute ? (
-                  <Link
-                    key={link.name}
-                    to={link.href}
-                    className="text-primary hover:text-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 relative group"
-                  >
-                    {link.name}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                  </Link>
-                ) : (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="text-gray-300 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 relative group"
-                  >
-                    {link.name}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                  </a>
-                )
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 relative group ${
+                    location.pathname === link.href 
+                      ? 'text-primary' 
+                      : link.isRoute ? 'text-primary hover:text-primary/80' : 'text-gray-300 hover:text-primary'
+                  }`}
+                >
+                  {link.name}
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full ${
+                    location.pathname === link.href ? 'w-full' : 'w-0'
+                  }`}></span>
+                </Link>
               ))}
             </div>
           </div>
@@ -95,25 +91,18 @@ const Navbar = () => {
       >
         <div className="px-2 pt-2 pb-3 space-y-1 bg-navy/95 backdrop-blur-md">
           {navLinks.map((link) => (
-            link.isRoute ? (
-              <Link
-                key={link.name}
-                to={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-primary hover:text-primary/80 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
-              >
-                {link.name}
-              </Link>
-            ) : (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-gray-300 hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
-              >
-                {link.name}
-              </a>
-            )
+            <Link
+              key={link.name}
+              to={link.href}
+              onClick={() => setIsOpen(false)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ${
+                location.pathname === link.href 
+                  ? 'text-primary' 
+                  : link.isRoute ? 'text-primary hover:text-primary/80' : 'text-gray-300 hover:text-primary'
+              }`}
+            >
+              {link.name}
+            </Link>
           ))}
         </div>
       </div>
