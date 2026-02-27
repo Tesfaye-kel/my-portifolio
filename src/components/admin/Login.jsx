@@ -123,7 +123,7 @@ const Login = ({ onLogin }) => {
           {/* Flat footer */}
           <div className="mt-6 pt-4 border-t border-slate-700">
             <p className="text-center text-slate-500 text-xs">
-              Demo: <span className="text-blue-400 font-mono">admin / 1234</span>
+              Demo: <span className="text-green-400 font-mono">admin / 1234</span>
             </p>
           </div>
         </div>
