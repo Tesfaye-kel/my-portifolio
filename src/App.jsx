@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { usePortfolio } from './context/PortfolioContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -21,6 +22,7 @@ import SkillsManager from './components/admin/SkillsManager';
 import GalleryManager from './components/admin/GalleryManager';
 import Messages from './components/admin/Messages';
 import PageTransition from './components/admin/PageTransition';
+import LoginToHomeTransition from './components/admin/LoginToHomeTransition';
 
 // Public Portfolio Sections with Page Transition
 const HomePage = () => (
@@ -61,6 +63,19 @@ const PortfolioLayout = ({ children }) => {
 
 function App() {
   const { isAdmin, login } = usePortfolio();
+  const [showLoginToHomeTransition, setShowLoginToHomeTransition] = useState(false);
+
+  // Track if user just logged in (for transition)
+  useEffect(() => {
+    if (isAdmin) {
+      setShowLoginToHomeTransition(true);
+      // Hide transition after animation completes
+      const timer = setTimeout(() => {
+        setShowLoginToHomeTransition(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAdmin]);
 
   return (
     <BrowserRouter>
@@ -71,22 +86,48 @@ function App() {
           element={!isAdmin ? <Login onLogin={login} /> : <Navigate to="/" replace />} 
         />
         
-        {/* Public Portfolio Routes - requires authentication */}
+{/* Public Portfolio Routes - requires authentication */}
         <Route 
           path="/" 
-          element={isAdmin ? <PortfolioLayout><Hero /></PortfolioLayout> : <Navigate to="/login" replace />} 
+          element={
+            isAdmin ? (
+              <LoginToHomeTransition isActive={showLoginToHomeTransition}>
+                <PortfolioLayout><Hero /></PortfolioLayout>
+              </LoginToHomeTransition>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          } 
         />
         <Route 
           path="/about" 
-          element={isAdmin ? <PortfolioLayout><AboutPage /></PortfolioLayout> : <Navigate to="/login" replace />} 
+          element={
+            isAdmin ? (
+              <PortfolioLayout><AboutPage /></PortfolioLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          } 
         />
         <Route 
           path="/projects" 
-          element={isAdmin ? <PortfolioLayout><ProjectsPage /></PortfolioLayout> : <Navigate to="/login" replace />} 
+          element={
+            isAdmin ? (
+              <PortfolioLayout><ProjectsPage /></PortfolioLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          } 
         />
         <Route 
           path="/contact" 
-          element={isAdmin ? <PortfolioLayout><ContactPage /></PortfolioLayout> : <Navigate to="/login" replace />} 
+          element={
+            isAdmin ? (
+              <PortfolioLayout><ContactPage /></PortfolioLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          } 
         />
         
         {/* Protected Admin Routes - requires authentication */}

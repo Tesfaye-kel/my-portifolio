@@ -112,7 +112,7 @@ const Login = ({ onLogin }) => {
             {/* Flat button */}
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold bg-green-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoading}
             >
               <LogIn size={18} />
@@ -123,7 +123,7 @@ const Login = ({ onLogin }) => {
           {/* Flat footer */}
           <div className="mt-6 pt-4 border-t border-slate-700">
             <p className="text-center text-slate-500 text-xs">
-              Demo: <span className="text-blue-400 font-mono">admin / 1234</span>
+              Demo: <span className="text-green-400 font-mono">admin / 1234</span>
             </p>
           </div>
         </div>
