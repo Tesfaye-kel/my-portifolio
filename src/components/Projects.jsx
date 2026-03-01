@@ -10,7 +10,7 @@ const Projects = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold text-slate-100 mb-12">
           <span className="text-primary">02.</span> Some Things I've Built
-        </h2>
+      </h2>
         
         <div className="space-y-24">
           {projects.map((project, index) => (
