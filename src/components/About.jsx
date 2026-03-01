@@ -15,7 +15,7 @@ const About = () => {
   ];
 
   const paragraphs = about?.paragraphs || [
-    "Hello! My name is " + (profile?.name || "Your Name") + " and I enjoy creating things that live on the internet. My interest in web development started back in 2020 when I decided to try editing custom Tumblr themes — turns out hacking together HTML & CSS is pretty fun!",
+    "Hello! My name is " + (profile?.name || "Tesfaye Kelbesa") + " and I enjoy creating things that live on the internet. My interest in web development started back in 2020 when I decided to try editing custom Tumblr themes — turns out hacking together HTML & CSS is pretty fun!",
     "Fast-forward to today, and I've had the privilege of working at an advertising agency, a start-up, and a huge corporation. My main focus these days is building accessible, inclusive products and digital experiences."
   ];
 
