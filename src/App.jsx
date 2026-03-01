@@ -25,16 +25,16 @@ import PageTransition from './components/admin/PageTransition';
 import LoginToHomeTransition from './components/admin/LoginToHomeTransition';
 
 // Public Portfolio Sections with Page Transition
-const HomePage = () => (
-  <PageTransition>
-    <Hero />
-  </PageTransition>
+   const HomePage = () => (
+     <PageTransition>
+       <Hero />
+     </PageTransition>
 );
 
-const AboutPage = () => (
-  <PageTransition>
-    <About />
-  </PageTransition>
+  const AboutPage = () => (
+    <PageTransition>
+     <About />
+    </PageTransition>
 );
 
 const ProjectsPage = () => (
