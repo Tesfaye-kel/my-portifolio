@@ -201,7 +201,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-primary font-mono text-lg mb-4"
           >
-            04. What's Next?
+          
           </motion.p>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -221,8 +221,8 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-slate-400 max-w-2xl mx-auto text-lg"
           >
-            I'm currently looking for new opportunities. Whether you have a question or 
-            just want to say hi, my inbox is always open. I'll try my best to get back to you!
+          I’m currently open to new opportunities. Whether you have a question or just want to say hello, 
+           my inbox is always open. I’ll do my best to get back to you as soon as possible!
           </motion.p>
         </motion.div>
 
@@ -421,7 +421,7 @@ const Contact = () => {
             Prefer a quick chat? Feel free to reach out directly
           </p>
           <motion.a
-            href="mailto:tesfaye.kelemu1@gmail.com"
+            href="mailto:tesfayekelbesa912@gmail.com"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
