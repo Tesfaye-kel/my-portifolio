@@ -17,6 +17,7 @@ export const initialData = {
     name: "John Doe",
     subtitle: "I build things for the web.",
     description: "I'm a software engineer specializing in building (and occasionally designing) exceptional digital experiences. Currently, I'm focused on building accessible, human-centered products.",
+    background: "/backgroundimage.png", // can be changed to any URL or placed in public folder
     ctaText: "Check out my work",
     ctaLink: "#projects",
   },

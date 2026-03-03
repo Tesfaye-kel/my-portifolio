@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { usePortfolio } from '../../context/PortfolioContext';
-import { Save } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { usePortfolio } from "../../context/PortfolioContext";
+import { Save } from "lucide-react";
 
 const HeroSettings = () => {
   const { data, updateHero } = usePortfolio();
@@ -22,17 +22,26 @@ const HeroSettings = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-white">Hero Section</h1>
-        <p className="text-gray-400 mt-1">Customize your hero section content.</p>
+        <p className="text-gray-400 mt-1">
+          Customize your hero section content.
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6"
+      >
         {/* Greeting */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Greeting Text</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Greeting Text
+          </label>
           <input
             type="text"
             value={formData.greeting}
-            onChange={(e) => setFormData({ ...formData, greeting: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, greeting: e.target.value })
+            }
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
             placeholder="Hi, my name is"
           />
@@ -40,7 +49,9 @@ const HeroSettings = () => {
 
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Your Name</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Your Name
+          </label>
           <input
             type="text"
             value={formData.name}
@@ -49,14 +60,34 @@ const HeroSettings = () => {
             placeholder="John Doe"
           />
         </div>
+        {/* Background Image URL */}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Background Image URL
+          </label>
+          <input
+            type="text"
+            value={formData.background || ''}
+            onChange={(e) => setFormData({ ...formData, background: e.target.value })}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+            placeholder="/backgroundimage.png"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Place your image in <code>public/</code> and provide the absolute path.
+          </p>
+        </div>
 
         {/* Subtitle */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Subtitle</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Subtitle
+          </label>
           <input
             type="text"
             value={formData.subtitle}
-            onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, subtitle: e.target.value })
+            }
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
             placeholder="I build things for the web."
           />
@@ -64,23 +95,31 @@ const HeroSettings = () => {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Description
+          </label>
           <textarea
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
             rows={4}
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
-            placeholder="I'm a software engineer..."
+            placeholder="I'm a computer science..."
           />
         </div>
 
         {/* CTA Text */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">CTA Button Text</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            CTA Button Text
+          </label>
           <input
             type="text"
             value={formData.ctaText}
-            onChange={(e) => setFormData({ ...formData, ctaText: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, ctaText: e.target.value })
+            }
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
             placeholder="Check out my work"
           />
@@ -88,11 +127,15 @@ const HeroSettings = () => {
 
         {/* CTA Link */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">CTA Button Link</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            CTA Button Link
+          </label>
           <input
             type="text"
             value={formData.ctaLink}
-            onChange={(e) => setFormData({ ...formData, ctaLink: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, ctaLink: e.target.value })
+            }
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
             placeholder="#projects"
           />
@@ -121,6 +164,9 @@ const HeroSettings = () => {
           <h3 className="text-4xl font-bold text-white">{formData.name}</h3>
           <p className="text-2xl text-gray-400">{formData.subtitle}</p>
           <p className="text-gray-400">{formData.description}</p>
+          {formData.background && (
+            <p className="text-sm text-gray-500">Background: {formData.background}</p>
+          )}
           <a
             href={formData.ctaLink}
             className="inline-block bg-primary text-gray-900 px-6 py-3 rounded-md font-semibold"

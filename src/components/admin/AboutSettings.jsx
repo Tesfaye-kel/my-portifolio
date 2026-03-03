@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { usePortfolio } from '../../context/PortfolioContext';
-import { Save, Plus, Trash2 } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { usePortfolio } from "../../context/PortfolioContext";
+import { Save, Plus, Trash2 } from "lucide-react";
 
 const AboutSettings = () => {
   const { data, updateAbout } = usePortfolio();
@@ -25,7 +25,7 @@ const AboutSettings = () => {
   };
 
   const addParagraph = () => {
-    setFormData({ ...formData, paragraphs: [...formData.paragraphs, ''] });
+    setFormData({ ...formData, paragraphs: [...formData.paragraphs, ""] });
   };
 
   const removeParagraph = (index) => {
@@ -37,24 +37,35 @@ const AboutSettings = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-white">About Section</h1>
-        <p className="text-gray-400 mt-1">Customize your about section content.</p>
+        <p className="text-gray-400 mt-1">
+          Customize your about section content.
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6"
+      >
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Section Title</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Section Title
+          </label>
           <input
             type="text"
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
           />
         </div>
 
         {/* Paragraphs */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">About Paragraphs</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            About Paragraphs
+          </label>
           {formData.paragraphs.map((paragraph, index) => (
             <div key={index} className="flex items-start gap-3 mb-3">
               <textarea
@@ -103,7 +114,9 @@ const AboutSettings = () => {
         <div className="space-y-4">
           <h3 className="text-2xl font-bold text-white">{formData.title}</h3>
           {formData.paragraphs.map((paragraph, index) => (
-            <p key={index} className="text-gray-400">{paragraph}</p>
+            <p key={index} className="text-gray-400">
+              {paragraph}
+            </p>
           ))}
         </div>
       </div>

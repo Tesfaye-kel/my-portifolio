@@ -9,7 +9,7 @@ const Footer = () => {
             Built with React & Tailwind CSS
           </p>
           <p className="text-slate-500 text-xs mt-2">
-            © {currentYear} Your Name. All rights reserved.
+            © {currentYear} Tesfaye All rights reserved.
           </p>
         </div>
       </div>

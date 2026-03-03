@@ -42,8 +42,8 @@ const Contact = () => {
         </svg>
       ),
       label: 'Email',
-      value: 'tesfaye.kelemu1@gmail.com',
-      href: 'mailto:tesfaye.kelemu1@gmail.com'
+      value: 'tesfayekelbesa912@gmail.com',
+      href: 'mailto:tesfayekelbesa912@gmail.com'
     },
     {
       icon: (
@@ -201,7 +201,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-primary font-mono text-lg mb-4"
           >
-          
+            04. What's Next?
           </motion.p>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -221,8 +221,8 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-slate-400 max-w-2xl mx-auto text-lg"
           >
-          I’m currently open to new opportunities. Whether you have a question or just want to say hello, 
-           my inbox is always open. I’ll do my best to get back to you as soon as possible!
+            I'm currently looking for new opportunities. Whether you have a question or 
+            just want to say hi, my inbox is always open. I'll try my best to get back to you!
           </motion.p>
         </motion.div>
 
@@ -414,7 +414,7 @@ const Contact = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 1 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
           className="text-center mt-16"
         >
           <p className="text-slate-400 mb-6">
