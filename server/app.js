@@ -16,7 +16,7 @@ function App() {
         <Contact />
       </div>
       <footer className="py-10 text-center border-t border-slate-800 text-gray-500">
-        <p>© 2026 Cherinet Habtamu. Built with MERN Stack.</p>
+        <p>© 2026 Tesfaye kelbesa. Built with MERN Stack.</p>
       </footer>
     </div>
   );

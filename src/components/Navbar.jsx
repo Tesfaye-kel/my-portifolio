@@ -17,13 +17,34 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-navy/90 backdrop-blur-md border-b border-primary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+          
+          {/* Logo Section - Replaced Text with High-Quality Icon */}
           <div className="flex-shrink-0">
             <Link 
               to="/" 
-              className="text-2xl font-bold text-primary hover:text-primary/80 transition-colors duration-300"
+              className="group flex items-center gap-3 transition-all duration-300"
+              aria-label="Home"
             >
-              Portfolio
+              <div className="relative p-2 rounded-xl bg-primary/10 border border-primary/30 group-hover:bg-primary group-hover:border-primary transition-all duration-300 shadow-[0_0_15px_rgba(100,255,218,0.1)] group-hover:shadow-[0_0_20px_rgba(100,255,218,0.4)]">
+                <svg 
+                  className="w-7 h-7 text-primary group-hover:text-navy transition-colors duration-300" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                  />
+                </svg>
+              </div>
+              {/* Optional: Subtle label that only appears on hover or stays hidden */}
+              <span className="hidden sm:block font-mono font-bold text-primary opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                DEVELOPER
+              </span>
             </Link>
           </div>
 
@@ -74,7 +95,7 @@ const Navbar = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                   d="M4 6h16M4 12h16M4 18h16"
+                    d="M4 6h16M4 12h16M4 18h16"
                   />
                 )}
               </svg>

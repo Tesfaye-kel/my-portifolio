@@ -57,7 +57,7 @@ const HeroSettings = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
-            placeholder="John Doe"
+            placeholder="Tesfaye kelbesa"
           />
         </div>
         {/* Background Image URL */}
