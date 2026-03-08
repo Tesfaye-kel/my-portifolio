@@ -1,3 +1,4 @@
+import myProfileImage from '../../me.jpg';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { usePortfolio } from '../context/PortfolioContext';
 import { useState, useEffect } from 'react';
@@ -113,7 +114,7 @@ const Hero = () => {
                 className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden shadow-2xl"
               >
                 <img 
-                  src="/me.jpg" 
+                  src={myProfileImage} 
                   alt="Profile" 
                   className="w-full h-full object-cover"
                 />

@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { usePortfolio } from '../context/PortfolioContext';
 import * as LucideIcons from 'lucide-react';
 
+import profileImg from '../../me.jpg';
+
 // --- Icons ---
 const MailIcon = () => (
   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
@@ -16,7 +18,6 @@ const PhoneIcon = () => (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
 );
 
-// SkillBar component
 const SkillBar = ({ skill, percentage }) => (
   <div className="mb-4">
     <div className="flex justify-between mb-1">
@@ -39,11 +40,11 @@ const About = () => {
   const { data } = usePortfolio();
   const { profile, about } = data;
 
-  // Data based on the user's request structure
   const fullName = profile?.name || "Tesfaye Kelbesa";
   const professionalTitle = profile?.title || "Full-Stack Developer";
 
-  const introduction = `Hi, I’m ${fullName}, a ${professionalTitle}        , a Full Stack Developer focused on developing responsive, secure, and user-friendly web applications. I love designing clean interfaces, building efficient backend systems, and continuously learning new technologies to create innovative digital solutions. with a pasion for crafting seamless user experiences and writing clean code that powers impactful web applications that solve real-world problems`;
+  // Cleaned up introduction text
+  const introduction = `Hi, I’m ${fullName}, a ${professionalTitle} focused on developing responsive, secure, and user-friendly web applications. I love designing clean interfaces, building efficient backend systems, and continuously learning new technologies to create innovative digital solutions that solve real-world problems.`;
 
   const technicalSkills = about?.technicalSkills || [
     { name: "HTML & CSS", percentage: 95 },
@@ -81,14 +82,13 @@ const About = () => {
   ];
 
   const whatMakesMeDifferent = about?.whatMakesMeDifferent || [
-  "-⚡️ Speed & Quality --->I build MVPs in days, not weeks, without compromising quality",
-  "-🌍 Multilingual  ----->Communicate effectively across cultures and languages",
-  "-🎓 Educator at Heart-->Passionate about mentoring and helping others grow",
-  "-🤖 AI-First Approach-->Leveraging AI to build smarter, faster solutions",
-  "-📚 Continuous Learner-->Always exploring new technologies and best practices",
-  "-🎙 Content Creator ---->Sharing knowledge through podcasts and community leadership",
-  
-  "-💼 Business Minded --->Understanding both technical and business perspectives"
+  "-⚡️ Speed & Quality ---> I build MVPs in days, not weeks.",
+  "-🌍 Multilingual -----> Communicate effectively across cultures.",
+  "-🎓 Educator at Heart--> Passionate about mentoring others.",
+  "-🤖 AI-First Approach--> Leveraging AI for smarter solutions.",
+  "-📚 Continuous Learner--> Always exploring new best practices.",
+  "-🎙 Content Creator ----> Sharing knowledge through community leadership.",
+  "-💼 Business Minded ---> Understanding both technical and business needs."
 ];
 
   const careerGoals = about?.careerGoals || "I'm currently looking for a full-time role as a Software Engineer where I can apply my skills to solve complex problems and contribute to a forward-thinking team. I am also enthusiastic about collaborating on open-source projects and exploring freelance opportunities.";
@@ -138,7 +138,9 @@ const About = () => {
             <div className="relative w-64 h-64">
               <div className="absolute inset-0 rounded-full border-2 border-primary/50 animate-pulse" />
               <img 
-                src={profile?.avatar || "/me.jpg"} 
+                // Use the imported image as the primary source.
+                // The original `profile?.avatar` from context was preventing the imported image from showing.
+                src={profileImg || profile?.avatar}
                 alt={fullName} 
                 className="w-full h-full object-cover rounded-full p-2 bg-navy"
               />
