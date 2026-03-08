@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { usePortfolio } from "../../context/PortfolioContext";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Save,
   Plus,
@@ -29,7 +30,7 @@ const ProjectsManager = () => {
     setProjects(data.projects || []);
   }, [data.projects]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const projectData = {
       ...formData,
@@ -40,9 +41,9 @@ const ProjectsManager = () => {
     };
 
     if (isEditing) {
-      updateProject(isEditing, projectData);
+      await updateProject(isEditing, projectData);
     } else {
-      addProject(projectData);
+      await addProject(projectData);
     }
 
     resetForm();
@@ -59,9 +60,9 @@ const ProjectsManager = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
-      deleteProject(id);
+      await deleteProject(id);
     }
   };
 
@@ -78,8 +79,24 @@ const ProjectsManager = () => {
     setShowForm(false);
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.2 } }
+  };
+
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="space-y-6"
+    >
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Projects</h1>
@@ -95,16 +112,29 @@ const ProjectsManager = () => {
       </div>
 
       {/* Project Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <AnimatePresence>
+        {showForm && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-700 shadow-2xl"
+            >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-white">
                 {isEditing ? "Edit Project" : "Add New Project"}
               </h2>
               <button
                 onClick={resetForm}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white transition-colors"
               >
                 <X size={24} />
               </button>
@@ -121,7 +151,7 @@ const ProjectsManager = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary transition-colors"
                   required
                 />
               </div>
@@ -136,7 +166,7 @@ const ProjectsManager = () => {
                     setFormData({ ...formData, description: e.target.value })
                   }
                   rows={3}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary transition-colors"
                   required
                 />
               </div>
@@ -151,7 +181,7 @@ const ProjectsManager = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, technologies: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary transition-colors"
                   placeholder="React, Node.js, MongoDB"
                   required
                 />
@@ -168,7 +198,7 @@ const ProjectsManager = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, github: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary transition-colors"
                     placeholder="https://github.com/..."
                   />
                 </div>
@@ -182,7 +212,7 @@ const ProjectsManager = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, live: e.target.value })
                     }
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary transition-colors"
                     placeholder="https://..."
                   />
                 </div>
@@ -205,16 +235,21 @@ const ProjectsManager = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Projects List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AnimatePresence>
         {projects.map((project) => (
-          <div
+          <motion.div
             key={project.id}
-            className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden"
+            variants={itemVariants}
+            layout
+            exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+            className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden hover:border-primary/50 transition-colors"
           >
             <div className="aspect-video bg-gray-700 flex items-center justify-center">
               {project.image ? (
@@ -279,16 +314,22 @@ const ProjectsManager = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
+        </AnimatePresence>
       </div>
 
       {saved && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg">
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="fixed bottom-8 right-8 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-semibold z-50"
+        >
           Changes saved successfully!
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

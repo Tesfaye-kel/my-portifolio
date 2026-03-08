@@ -3,6 +3,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../../context/PortfolioContext';
 import ThreeBackground from '../ThreeBackground';
 import {
+  Globe,
   LayoutDashboard,
   User,
   Link2,
@@ -15,14 +16,25 @@ import {
   Moon,
   LogOut,
 } from 'lucide-react';
+import LoginTransition from './LoginTransition';
 
 const AdminLayout = () => {
   const { data, logout, toggleTheme } = usePortfolio();
   const navigate = useNavigate();
+  const [isExiting, setIsExiting] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleViewSite = () => {
+    if (window.confirm("You are about to leave the admin panel. Continue to the public site?")) {
+      setIsExiting(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 500); // Corresponds to transition duration
+    }
   };
 
   const navItems = [
@@ -86,6 +98,13 @@ const AdminLayout = () => {
         {/* Bottom Actions */}
         <div className="p-4 border-t border-gray-700 space-y-2">
           <button
+            onClick={handleViewSite}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+          >
+            <Globe size={20} />
+            <span>View Site</span>
+          </button>
+          <button
             onClick={toggleTheme}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
           >
@@ -108,6 +127,7 @@ const AdminLayout = () => {
       <main className="ml-64 p-6">
         <Outlet />
       </main>
+      <LoginTransition isActive={isExiting} text="Loading Site..." />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 
-const LoginTransition = ({ isActive }) => {
+const LoginTransition = ({ isActive, text = 'Welcome Back' }) => {
   return (
     <AnimatePresence>
       {isActive && (
@@ -9,7 +9,7 @@ const LoginTransition = ({ isActive }) => {
           animate={{ x: 0 }}
           exit={{ x: '0%' }}
           transition={{
-            duration: 0.8,
+            duration: 0.5,
             ease: [0.4, 0, 0.2, 1],
           }}
           style={{
@@ -29,7 +29,7 @@ const LoginTransition = ({ isActive }) => {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -67,7 +67,7 @@ const LoginTransition = ({ isActive }) => {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
               style={{
                 fontSize: '1.5rem',
                 fontWeight: 700,
@@ -76,14 +76,14 @@ const LoginTransition = ({ isActive }) => {
                 textTransform: 'uppercase',
               }}
             >
-              Welcome Back
+              {text}
             </motion.h2>
             
             {/* Loading Progress Bar */}
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: 200 }}
-              transition={{ delay: 0.6, duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              animate={{ width: 150 }}
+              transition={{ delay: 0.2, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               style={{
                 height: 4,
                 background: 'linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%)',

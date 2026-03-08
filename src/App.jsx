@@ -23,29 +23,21 @@ import GalleryManager from './components/admin/GalleryManager';
 import Messages from './components/admin/Messages';
 import PageTransition from './components/admin/PageTransition';
 import LoginToHomeTransition from './components/admin/LoginToHomeTransition';
+import ProjectDetail from './components/ProjectDetail';
 
 // Public Portfolio Sections with Page Transition
    const HomePage = () => (
      <PageTransition>
        <Hero />
+       <About />
+       <Projects />
+       <Contact />
      </PageTransition>
 );
 
-  const AboutPage = () => (
-    <PageTransition>
-     <About />
-    </PageTransition>
-);
-
-const ProjectsPage = () => (
+const ProjectDetailPage = () => (
   <PageTransition>
-    <Projects />
-  </PageTransition>
-);
-
-const ContactPage = () => (
-  <PageTransition>
-    <Contact />
+    <ProjectDetail />
   </PageTransition>
 );
 
@@ -53,6 +45,7 @@ const ContactPage = () => (
 const PortfolioLayout = ({ children }) => {
   return (
     <div className="min-h-screen relative">
+      <style>{`html { scroll-behavior: smooth; }`}</style>
       <ThreeBackground />
       <Navbar />
       <main>{children}</main>
@@ -71,8 +64,8 @@ function App() {
       setShowLoginToHomeTransition(true);
       // Hide transition after animation completes
       const timer = setTimeout(() => {
-        setShowLoginToHomeTransition(false);
-      }, 2000);
+        setShowLoginToHomeTransition(false); // was 2000
+      }, 1200); // Adjusted to match new transition speed
       return () => clearTimeout(timer);
     }
   }, [isAdmin]);
@@ -83,7 +76,7 @@ function App() {
         {/* Login Route - accessible when not authenticated */}
         <Route 
           path="/login" 
-          element={!isAdmin ? <Login onLogin={login} /> : <Navigate to="/" replace />} 
+          element={!isAdmin ? <Login onLogin={login} /> : <Navigate to="/admin" replace />} 
         />
         
 {/* Public Portfolio Routes - requires authentication */}
@@ -92,7 +85,7 @@ function App() {
           element={
             isAdmin ? (
               <LoginToHomeTransition isActive={showLoginToHomeTransition}>
-                <PortfolioLayout><Hero /></PortfolioLayout>
+                <PortfolioLayout><HomePage /></PortfolioLayout>
               </LoginToHomeTransition>
             ) : (
               <Navigate to="/login" replace />
@@ -100,30 +93,10 @@ function App() {
           } 
         />
         <Route 
-          path="/about" 
+          path="/project/:id" 
           element={
             isAdmin ? (
-              <PortfolioLayout><AboutPage /></PortfolioLayout>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          } 
-        />
-        <Route 
-          path="/projects" 
-          element={
-            isAdmin ? (
-              <PortfolioLayout><ProjectsPage /></PortfolioLayout>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          } 
-        />
-        <Route 
-          path="/contact" 
-          element={
-            isAdmin ? (
-              <PortfolioLayout><ContactPage /></PortfolioLayout>
+              <PortfolioLayout><ProjectDetailPage /></PortfolioLayout>
             ) : (
               <Navigate to="/login" replace />
             )

@@ -10,7 +10,7 @@ const PageTransition = ({ children }) => {
 
   const containerVariants = {
     exit: {
-      transition: { staggerChildren: 0.07, staggerDirection: 1 }
+      transition: { staggerChildren: 0.04, staggerDirection: 1 }
     }
   };
 
@@ -21,7 +21,7 @@ const PageTransition = ({ children }) => {
       opacity: 0,
       rotateX: i < 3 ? -25 : i > 5 ? 25 : 0, // Tilts top/bottom rows
       rotateY: i % 3 === 0 ? -25 : i % 3 === 2 ? 25 : 0, // Tilts side columns
-      transition: { duration: 0.9, ease: [0.4, 0, 0.2, 1] }
+      transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
     })
   };
 
@@ -31,7 +31,7 @@ const PageTransition = ({ children }) => {
       z: 0, 
       scale: 1, 
       opacity: 1, 
-      transition: { delay: 0.5, duration: 0.8, ease: "easeOut" } 
+      transition: { delay: 0.3, duration: 0.5, ease: "easeOut" } 
     }
   };
 

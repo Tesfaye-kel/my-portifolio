@@ -8,9 +8,9 @@ const LoginToHomeTransition = ({ children, isActive }) => {
   // Create diagonal sweep panels (8 panels going from left-bottom to right-top)
   const panels = [
     { id: 0, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0 },
-    { id: 1, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0.1 },
-    { id: 2, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0.15 },
-    { id: 3, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0.2 },
+    { id: 1, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0.05 },
+    { id: 2, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0.08 },
+    { id: 3, startX: '-100%', startY: '100%', endX: '0%', endY: '0%', delay: 0.1 },
   ];
 
   return (
@@ -24,7 +24,7 @@ const LoginToHomeTransition = ({ children, isActive }) => {
             key="login-to-home-transition"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, delay: 1.2 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
             className="absolute inset-0 z-50"
           >
             {/* Diagonal sweep panels from left-bottom to right-top */}
@@ -48,7 +48,7 @@ const LoginToHomeTransition = ({ children, isActive }) => {
                   opacity: 0
                 }}
                 transition={{ 
-                  duration: 1.2, 
+                  duration: 0.7, 
                   delay: panel.delay,
                   ease: [0.4, 0, 0.2, 1]
                 }}
@@ -148,7 +148,7 @@ const LoginToHomeTransition = ({ children, isActive }) => {
                 y: '-100%',
               }}
               transition={{ 
-                duration: 1.5, 
+                duration: 0.8, 
                 ease: [0.4, 0, 0.2, 1]
               }}
               style={{
@@ -191,8 +191,8 @@ const LoginToHomeTransition = ({ children, isActive }) => {
             scale: 1,
             y: 0,
             transition: { 
-              delay: isActive ? 1.0 : 0, 
-              duration: 0.6, 
+              delay: isActive ? 0.6 : 0, 
+              duration: 0.4, 
               ease: "easeOut" 
             }
           }}

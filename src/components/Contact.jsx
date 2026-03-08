@@ -201,7 +201,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-primary font-mono text-lg mb-4"
           >
-            04. What's Next?
+           
           </motion.p>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}

@@ -19,7 +19,7 @@ const SocialLinks = () => {
   };
 
   const addLink = () => {
-    setLinks([...links, { name: '', url: '', icon: 'link' }]);
+    setLinks([...links, { name: '', url: '', icon: '' }]);
   };
 
   const updateLink = (index, field, value) => {
@@ -29,7 +29,9 @@ const SocialLinks = () => {
   };
 
   const removeLink = (index) => {
-    setLinks(links.filter((_, i) => i !== index));
+    if (window.confirm('Are you sure you want to remove this link?')) {
+      setLinks(links.filter((_, i) => i !== index));
+    }
   };
 
   return (
@@ -42,7 +44,7 @@ const SocialLinks = () => {
       <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-6 border border-gray-700 space-y-6">
         {links.map((link, index) => (
           <div key={index} className="flex items-start gap-4 p-4 bg-gray-700/50 rounded-lg">
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Platform Name</label>
                 <input
@@ -64,6 +66,17 @@ const SocialLinks = () => {
                   placeholder="https://github.com/username"
                   required
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Icon Name</label>
+                <input
+                  type="text"
+                  value={link.icon}
+                  onChange={(e) => updateLink(index, 'icon', e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:border-primary"
+                  placeholder="e.g., Github"
+                />
+                <p className="text-xs text-gray-500 mt-1">Use icon name from Lucide Icons.</p>
               </div>
             </div>
             <button

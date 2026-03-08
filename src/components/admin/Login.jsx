@@ -27,8 +27,8 @@ const Login = ({ onLogin }) => {
         setShowTransition(true);
         // Navigate after transition completes
         setTimeout(() => {
-          navigate('/', { replace: true });
-        }, 800);
+          navigate('/admin', { replace: true });
+        }, 500);
       }, 300);
     } else {
       setError('Invalid username or password');
