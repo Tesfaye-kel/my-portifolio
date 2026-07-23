@@ -1,14 +1,13 @@
-import bgImage from '../../backgroundimage.jpg';
-
 const ThreeBackground = () => {
+    // Use the base URL from Vite config for correct asset paths on both GitHub Pages and Vercel
+    const base = import.meta.env.BASE_URL || '/';
     return (
         <>
             {/* Background Image */}
             <div 
                 className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
                 style={{
-                    // 2. Use the variable name here
-                    backgroundImage: `url(${bgImage})`
+                    backgroundImage: `url(${base}backgroundimage.jpg)`
                 }}
             />
             {/* Dark Overlay */}

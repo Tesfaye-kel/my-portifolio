@@ -55,8 +55,11 @@ const PortfolioLayout = ({ children }) => {
 function App() {
   const { isAdmin, login } = usePortfolio();
   
+  // Use '/' for Vercel, '/my-portifolio/' for GitHub Pages
+  const basename = import.meta.env.VITE_BASE_URL || '/my-portifolio';
+  
   return (
-    <BrowserRouter basename="/my-portifolio">
+    <BrowserRouter basename={basename}>
       <Routes>
         {/* Public Portfolio Routes */}
         <Route 
