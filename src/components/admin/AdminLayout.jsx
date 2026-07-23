@@ -25,16 +25,14 @@ const AdminLayout = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/admin');
   };
 
   const handleViewSite = () => {
-    if (window.confirm("You are about to leave the admin panel. Continue to the public site?")) {
-      setIsExiting(true);
-      setTimeout(() => {
-        navigate('/');
-      }, 500); // Corresponds to transition duration
-    }
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate('/');
+    }, 500); // Corresponds to transition duration
   };
 
   const navItems = [

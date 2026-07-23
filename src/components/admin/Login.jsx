@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, LogIn, User } from 'lucide-react';
 import LoginTransition from './LoginTransition';
 import ThreeBackground from '../ThreeBackground';
@@ -11,25 +10,20 @@ const Login = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
-  const navigate = useNavigate();
 
   // Hardcoded credentials
-  const CORRECT_USERNAME = 'admin';
-  const CORRECT_PASSWORD = '1234';
+  const CORRECT_USERNAME = 'Tesfaye'; // Change this to your unique username
+  const CORRECT_PASSWORD = 'YourStrongPasswordHere'; // Change this to a strong password only you know
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
       setIsLoading(true);
-      onLogin();
-      // Show transition animation before navigating
+      setShowTransition(true);
+      // Show transition animation, then authenticate (login is at /admin, so route auto-switches to AdminLayout)
       setTimeout(() => {
-        setShowTransition(true);
-        // Navigate after transition completes
-        setTimeout(() => {
-          navigate('/admin', { replace: true });
-        }, 500);
-      }, 300);
+        onLogin();
+      }, 800);
     } else {
       setError('Invalid username or password');
     }
@@ -122,9 +116,6 @@ const Login = ({ onLogin }) => {
 
           {/* Flat footer */}
           <div className="mt-6 pt-4 border-t border-slate-700">
-            <p className="text-center text-slate-500 text-xs">
-              Demo: <span className="text-green-400 font-mono">admin / 1234</span>
-            </p>
           </div>
         </div>
 

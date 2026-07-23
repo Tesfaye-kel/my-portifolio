@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { usePortfolio } from './context/PortfolioContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -22,7 +21,6 @@ import SkillsManager from './components/admin/SkillsManager';
 import GalleryManager from './components/admin/GalleryManager';
 import Messages from './components/admin/Messages';
 import PageTransition from './components/admin/PageTransition';
-import LoginToHomeTransition from './components/admin/LoginToHomeTransition';
 import ProjectDetail from './components/ProjectDetail';
 
 // Public Portfolio Sections with Page Transition
@@ -56,57 +54,24 @@ const PortfolioLayout = ({ children }) => {
 
 function App() {
   const { isAdmin, login } = usePortfolio();
-  const [showLoginToHomeTransition, setShowLoginToHomeTransition] = useState(false);
-
-  // Track if user just logged in (for transition)
-  useEffect(() => {
-    if (isAdmin) {
-      setShowLoginToHomeTransition(true);
-      // Hide transition after animation completes
-      const timer = setTimeout(() => {
-        setShowLoginToHomeTransition(false); // was 2000
-      }, 1200); // Adjusted to match new transition speed
-      return () => clearTimeout(timer);
-    }
-  }, [isAdmin]);
-
+  
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/my-portifolio">
       <Routes>
-        {/* Login Route - accessible when not authenticated */}
-        <Route 
-          path="/login" 
-          element={!isAdmin ? <Login onLogin={login} /> : <Navigate to="/admin" replace />} 
-        />
-        
-{/* Public Portfolio Routes - requires authentication */}
+        {/* Public Portfolio Routes */}
         <Route 
           path="/" 
-          element={
-            isAdmin ? (
-              <LoginToHomeTransition isActive={showLoginToHomeTransition}>
-                <PortfolioLayout><HomePage /></PortfolioLayout>
-              </LoginToHomeTransition>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          } 
+          element={<PortfolioLayout><HomePage /></PortfolioLayout>} 
         />
         <Route 
           path="/project/:id" 
-          element={
-            isAdmin ? (
-              <PortfolioLayout><ProjectDetailPage /></PortfolioLayout>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          } 
+          element={<PortfolioLayout><ProjectDetailPage /></PortfolioLayout>} 
         />
         
-        {/* Protected Admin Routes - requires authentication */}
+        {/* Admin Login - Only accessible via direct /admin URL, no public links point here */}
         <Route 
           path="/admin" 
-          element={isAdmin ? <AdminLayout /> : <Navigate to="/login" replace />}
+          element={isAdmin ? <AdminLayout /> : <Login onLogin={login} />}
         >
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
@@ -120,8 +85,8 @@ function App() {
           <Route path="messages" element={<PageTransition><Messages /></PageTransition>} />
         </Route>
         
-        {/* Catch all - redirect to login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* Catch all - redirect to home page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
