@@ -18,7 +18,7 @@ const Contact = () => {
       setFormData({ name: '', email: '', message: '' });
     }, 2000);
   };
-
+ 
   const handleChange = (e) => {
     setFormData({
       ...formData,
