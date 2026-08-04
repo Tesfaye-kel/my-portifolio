@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const PortfolioContext = createContext();
 
@@ -42,7 +42,14 @@ const initialData = {
       "Skilled in both front-end and back-end development.",
       "Passionate about building scalable web solutions and learning new technologies."
     ],
-    whatMakesMeDifferent: [],
+    whatMakesMeDifferent: [
+      "🔍 Curiosity & Continuous Learning - I enjoy learning something new every day, whether it's a new technology, a better way to solve a problem, or a different perspective from others. Staying curious helps me continuously improve as an engineer and as a person.",
+      "🧩 Problem-Solving Mindset - I naturally enjoy breaking complicated problems into smaller, manageable pieces. Whether I'm debugging code, planning a project, or handling everyday challenges, I focus on understanding the root cause and finding practical solutions.",
+      "📅 Consistency Over Motivation - I believe progress comes from consistent effort rather than waiting for motivation. I maintain daily habits of learning, coding, experimenting, and improving—even when the results aren't immediate.",
+      "🎯 Building With Purpose - I don't want to write code simply because I can. I'm interested in understanding why something needs to be built and who it helps. I aim to create software that is useful, maintainable, and meaningful to its users.",
+      "🤝 Independent Thinker & Collaborative Teammate - I'm comfortable exploring ideas independently, researching solutions, and taking ownership of my work. At the same time, I value teamwork, open communication, feedback, and learning from people with different experiences.",
+      "🧘 Calm Under Pressure - I believe staying calm is one of the most valuable skills when facing difficult problems. When things don't go as planned, I take a step back, understand the situation, and approach the problem logically rather than reacting emotionally. This helps me make better decisions, solve problems effectively, and remain reliable when challenges arise."
+    ],
     careerGoals: "",
   },
   projects: [],
@@ -53,8 +60,17 @@ const initialData = {
 };
 
 export const PortfolioProvider = ({ children }) => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(() => {
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('portfolio-theme');
+    return { ...initialData, theme: savedTheme || 'dark' };
+  });
   const [isAdmin, setIsAdmin] = useState(false);
+
+  // Save theme preference
+  useEffect(() => {
+    localStorage.setItem('portfolio-theme', data.theme);
+  }, [data.theme]);
 
   // --- Generic Update Function ---
   const updateSection = (section, sectionData) => {
