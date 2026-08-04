@@ -96,13 +96,13 @@ const Navbar = () => {
 
           {/* Desktop Navigation - Centered */}
           <div className="hidden md:flex items-center justify-center">
-            <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#112240]/40 border border-[#233554]/30 backdrop-blur-md">
+            <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-[#112240]/40 border border-[#233554]/30 backdrop-blur-md">
               {navLinks.map((link) => (
                 <a
                   key={link.id}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`relative px-3 py-2 text-sm font-medium transition-colors duration-300 group flex items-center gap-2 rounded-full ${
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 group flex items-center gap-2 rounded-full ${
                     activeSection === link.id 
                       ? 'text-primary bg-primary/10' 
                       : 'text-slate-400 hover:text-primary hover:bg-primary/5'
