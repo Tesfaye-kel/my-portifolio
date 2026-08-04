@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Code2, Sun, Moon } from 'lucide-react';
+import { 
+  Menu, X, Code2, Sun, Moon, 
+  User, Briefcase, Wrench, FolderGit2, 
+  Sparkles, Mail 
+} from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 const Navbar = () => {
@@ -13,12 +17,12 @@ const Navbar = () => {
   const isDark = data.theme === 'dark';
 
   const navLinks = [
-    { name: 'About', href: '#about', id: 'about' },
-    { name: 'Experience', href: '#experience', id: 'experience' },
-    { name: 'Skills', href: '#skills', id: 'skills' },
-    { name: 'Projects', href: '#projects', id: 'projects' },
-    { name: 'Services', href: '#services', id: 'services' },
-    { name: 'Contact', href: '#contact', id: 'contact' },
+    { name: 'About', href: '#about', id: 'about', icon: <User size={16} /> },
+    { name: 'Experience', href: '#experience', id: 'experience', icon: <Briefcase size={16} /> },
+    { name: 'Skills', href: '#skills', id: 'skills', icon: <Wrench size={16} /> },
+    { name: 'Projects', href: '#projects', id: 'projects', icon: <FolderGit2 size={16} /> },
+    { name: 'Services', href: '#services', id: 'services', icon: <Sparkles size={16} /> },
+    { name: 'Contact', href: '#contact', id: 'contact', icon: <Mail size={16} /> },
   ];
 
   useEffect(() => {
@@ -72,11 +76,11 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="grid grid-cols-3 items-center h-20">
           {/* Logo */}
           <Link 
             to="/" 
-            className="group flex items-center gap-3"
+            className="group flex items-center gap-3 justify-self-start"
             aria-label="Home"
           >
             <div className="relative">
@@ -90,31 +94,41 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.id}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 group flex items-center gap-2 ${
-                  activeSection === link.id ? 'text-primary' : 'text-slate-400 hover:text-primary'
-                }`}
-              >
-                <span className={`w-1.5 h-1.5 rounded-full bg-primary transition-all duration-300 ${
-                  activeSection === link.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100'
-                }`} />
-                {link.name}
-                <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${
-                  activeSection === link.id ? 'w-full' : 'w-0 group-hover:w-full'
-                }`} />
-              </a>
-            ))}
-            
-            {/* Theme Toggle */}
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex items-center justify-center">
+            <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#112240]/40 border border-[#233554]/30 backdrop-blur-md">
+              {navLinks.map((link) => (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`relative px-3 py-2 text-sm font-medium transition-colors duration-300 group flex items-center gap-2 rounded-full ${
+                    activeSection === link.id 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-slate-400 hover:text-primary hover:bg-primary/5'
+                  }`}
+                >
+                  <span className={`transition-all duration-300 ${
+                    activeSection === link.id 
+                      ? 'text-primary opacity-100' 
+                      : 'text-slate-500 opacity-60 group-hover:text-primary group-hover:opacity-100'
+                  }`}>
+                    {link.icon}
+                  </span>
+                  {link.name}
+                  <span className={`absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-0.5 bg-primary rounded-full transition-all duration-300 ${
+                    activeSection === link.id ? 'w-6' : 'w-0 group-hover:w-6'
+                  }`} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Theme Toggle - Right */}
+          <div className="hidden md:flex items-center justify-self-end">
             <button
               onClick={toggleTheme}
-              className="ml-4 p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-all duration-300"
+              className="p-2 rounded-full text-slate-400 hover:text-primary hover:bg-primary/10 border border-[#233554]/30 bg-[#112240]/40 transition-all duration-300"
               aria-label="Toggle theme"
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
@@ -122,7 +136,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-2 justify-self-end">
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-all duration-300"
@@ -160,15 +174,19 @@ const Navbar = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg text-base font-medium transition-colors duration-300 ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-colors duration-300 ${
                     activeSection === link.id 
                       ? 'text-primary bg-primary/10' 
                       : 'text-slate-400 hover:text-primary hover:bg-primary/5'
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full bg-primary transition-all duration-300 ${
-                    activeSection === link.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-                  }`} />
+                  <span className={`transition-all duration-300 ${
+                    activeSection === link.id 
+                      ? 'text-primary' 
+                      : 'text-slate-500 group-hover:text-primary'
+                  }`}>
+                    {link.icon}
+                  </span>
                   {link.name}
                 </motion.a>
               ))}
