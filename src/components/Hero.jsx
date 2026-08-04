@@ -224,21 +224,14 @@ const Hero = () => {
             className="flex flex-col items-center justify-center order-1 lg:order-2"
           >
             <div className="relative mb-8">
-              {/* Glow effect behind image */}
-              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse-glow" />
-              
-              {/* Rotating border */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="absolute -inset-4 rounded-full border-2 border-dashed border-primary/30"
-              />
+              {/* Professional soft shadow */}
+              <div className="absolute inset-0 rounded-full shadow-[0_20px_60px_-15px_rgba(2,12,27,0.5)]" />
               
               {/* Profile Image */}
               <motion.div 
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-primary/20"
+                className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-[0_10px_40px_-10px_rgba(2,12,27,0.6)] ring-1 ring-[#233554]/40"
               >
                 <img 
                   src={myProfileImage} 

@@ -9,7 +9,6 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ThreeBackground from './components/ThreeBackground';
-import CustomCursor from './components/CustomCursor';
 
  // Admin Components
 import Login from './components/admin/Login';
@@ -56,7 +55,6 @@ const PortfolioLayout = ({ children }) => {
     <div className="min-h-screen relative">
       <style>{`html { scroll-behavior: smooth; }`}</style>
       <ThreeBackground />
-      <CustomCursor />
       <div className="noise-overlay" />
       <Navbar />
       <main>{children}</main>
