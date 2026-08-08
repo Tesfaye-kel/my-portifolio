@@ -307,7 +307,7 @@ const storySections = [
     icon: <Compass size={18} />,
     tagline: 'Always moving forward',
     paragraphs: [
-      'My journey is still just beginning. I want to keep growing as a full-stack developer, deepen my understanding of technology, and challenge myself with bigger and more meaningful projects.',
+      'My journey is still just beginning. By the will of the GOD I want to keep growing as a full-stack developer, deepen my understanding of technology, and challenge myself with bigger and more meaningful projects.',
       'My goal is to move beyond simply learning how to build software and become someone who can use technology to solve real problems and create things that make a difference.',
       'There is still a lot to learn, and I am ready for the journey ahead.'
     ]
