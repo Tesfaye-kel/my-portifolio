@@ -12,8 +12,6 @@ import {
   Brain, Coffee, Music, BookOpen, 
   Gamepad2, Camera, Compass, Dumbbell, Plane
 } from 'lucide-react';
-import profileImg from '../../me.jpg';
-
 // --- Animated Counter ---
 const Counter = ({ value, suffix = '', duration = 2 }) => {
   const [count, setCount] = useState(0);
@@ -62,6 +60,47 @@ const SectionHeader = ({ number, title, subtitle }) => (
       <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
     </div>
     {subtitle && <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">{subtitle}</p>}
+  </motion.div>
+);
+
+// --- Story Section ---
+const StorySection = ({ title, tagline, icon, paragraphs, index }) => (
+  <motion.div
+    initial={{ opacity: 0, x: 50 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.15 }}
+    className="group relative"
+  >
+    <div className="relative p-8 rounded-2xl bg-gradient-to-br from-[#112240]/60 to-[#0a192f]/60 border border-[#233554]/60 hover:border-primary/40 hover:shadow-[0_0_35px_rgba(100,255,218,0.08)] transition-all duration-300 overflow-hidden">
+      {/* Subtle top accent line */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+      
+      <div className="flex flex-col items-center text-center mb-6 pt-3">
+        <div className="relative mb-4">
+          <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg group-hover:blur-xl transition-all" />
+          <div className="relative p-3 rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 group-hover:scale-110 transition-all">
+            {icon}
+          </div>
+        </div>
+        <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-2">{title}</h3>
+        {tagline && (
+          <span className="px-4 py-1.5 rounded-full bg-primary/5 border border-primary/20 text-primary/70 text-xs font-mono tracking-wide">
+            {tagline}
+          </span>
+        )}
+        <div className="flex items-center gap-1 mt-4">
+          <span className="w-8 h-[2px] bg-primary/40 rounded-full" />
+          <span className="w-2 h-2 bg-primary/60 rounded-full" />
+          <span className="w-8 h-[2px] bg-primary/40 rounded-full" />
+        </div>
+      </div>
+      <div className="space-y-4 text-left">
+        {paragraphs.map((para, i) => (
+          <p key={i} className="text-slate-400 leading-relaxed text-[15px]">{para}</p>
+        ))}
+      </div>
+    </div>
   </motion.div>
 );
 
@@ -180,13 +219,13 @@ const engineeringPrinciples = [
   },
   {
     icon: <Zap size={24} />,
-    title: 'Performance',
+    title: 'Perfrmance',
     description: 'Optimized interfaces with lazy loading, code splitting, and efficient rendering. Fast load times and smooth interactions.',
     color: '#fbbf24'
   },
   {
     icon: <Shield size={24} />,
-    title: 'Security',
+    title: 'Securty',
     description: 'Secure APIs with proper authentication, input validation, and environment variable management. Protecting user data.',
     color: '#f87171'
   },
@@ -235,6 +274,43 @@ const servicesData = [
     title: 'Performance Optimization',
     description: 'Improving application speed and user experience through code optimization, caching, and efficient rendering strategies.',
     technologies: ['React', 'Vite', 'Webpack']
+  }
+];
+
+// --- Personal Story Data ---
+const storySections = [
+  {
+    id: 'beginning',
+    title: 'The Beginning',
+    icon: <Sparkles size={18} />,
+    tagline: 'Where it all started',
+    paragraphs: [
+      'I grew up in a small town where electricity was limited and technology was far from everyday life. Until Grade 9, my understanding of technology was mostly something I heard about through the radio.',
+      'Grade 10 changed that. I began exploring technology firsthand, slowly adapting to it and developing a curiosity that continued to grow.',
+      'By the time I entered Haramaya University, technology had become more than something I was learning to use—it had become something I wanted to understand. After my freshman year, I chose Computer Science and began pursuing that curiosity with deeper focus and purpose.',
+      'A limited beginning. A growing curiosity. A clear direction. That is where my journey began.'
+    ]
+  },
+  {
+    id: 'today',
+    title: 'Where I Am Today',
+    icon: <Rocket size={18} />,
+    tagline: 'Building with purpose',
+    paragraphs: [
+      'Today, I am pursuing my path as a full-stack developer, continuously expanding my knowledge across frontend, backend, databases, APIs, and modern development tools.',
+      'My goal is not simply to learn technologies, but to understand how they work together to solve real problems. Every project is another step toward becoming a developer who can turn an idea into a complete, meaningful product.'
+    ]
+  },
+  {
+    id: 'next',
+    title: "What's Next",
+    icon: <Compass size={18} />,
+    tagline: 'Always moving forward',
+    paragraphs: [
+      'My journey is still just beginning. I want to keep growing as a full-stack developer, deepen my understanding of technology, and challenge myself with bigger and more meaningful projects.',
+      'My goal is to move beyond simply learning how to build software and become someone who can use technology to solve real problems and create things that make a difference.',
+      'There is still a lot to learn, and I am ready for the journey ahead.'
+    ]
   }
 ];
 
@@ -321,6 +397,9 @@ const personalityTraits = [
   { label: 'Teamwork', value: 88 },
   { label: 'Adaptability', value: 92 },
   { label: 'Leadership', value: 75 },
+  { label: 'Emotional Intelligence', value: 85 },
+  { label: 'Time Management', value: 82 },
+  { label: 'Self-Motivation', value: 86 },
 ];
 
 const interests = [
@@ -351,8 +430,6 @@ const About = () => {
   const fullName = profile?.name || "Tesfaye Kelbesa";
   const professionalTitle = profile?.title || "Full-Stack Developer";
 
-  const introduction = `Hi, I'm ${fullName}, a ${professionalTitle} focused on developing responsive, secure, and user-friendly web applications. I love designing clean interfaces, building efficient backend systems, and continuously learning new technologies to create innovative digital solutions that solve real-world problems.`;
-
   const education = about?.education || [
     "Bachelor's Degree in Computer Science.",
     "Strong foundation in programming, algorithms, and database systems.",
@@ -370,8 +447,6 @@ const About = () => {
     "🧘 Calm Under Pressure - I believe staying calm is one of the most valuable skills when facing difficult problems. When things don't go as planned, I take a step back, understand the situation, and approach the problem logically rather than reacting emotionally. This helps me make better decisions, solve problems effectively, and remain reliable when challenges arise."
   ];
 
-  const careerGoals = about?.careerGoals || "I'm currently looking for a full-time role as a Software Engineer where I can apply my skills to solve complex problems and contribute to a forward-thinking team. I am also enthusiastic about collaborating on open-source projects and exploring freelance opportunities.";
-
   const contactInfo = [
     { icon: <Mail size={18} />, label: "Email", value: "tesfayekelbesa912@gmail.com", href: "mailto:tesfayekelbesa912@gmail.com" },
     { icon: <Linkedin size={18} />, label: "LinkedIn", value: "linkedin.com/in/tesfaye-kelbesa", href: "https://linkedin.com" },
@@ -384,85 +459,66 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* 1. Introduction - Editorial Layout */}
-        <SectionHeader number="01" title="About Me" subtitle="Get to know the developer behind the code" />
+        <SectionHeader number="01" title="About Me" />
         
-        <div className="grid lg:grid-cols-5 gap-12 items-start mb-32">
-          {/* Profile Image */}
+        {/* Story Journey with Indentation Guides */}
+        <div className="grid lg:grid-cols-5 gap-12 mb-32">
+          {/* Indentation Guides - Left Column */}
           <motion.div
-            initial={{ opacity: 0, rotate: -5, scale: 0.9 }}
-            whileInView={{ opacity: 1, rotate: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, type: "spring" }}
-            className="lg:col-span-2"
-          >
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-primary/10 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative rounded-2xl overflow-hidden border border-[#233554]/50">
-                <img 
-                  src={profileImg} 
-                  alt={fullName} 
-                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f] via-transparent to-transparent" />
-              </div>
-              
-              {/* Floating metadata */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="absolute -bottom-6 -right-6 p-4 rounded-xl bg-[#112240]/90 backdrop-blur-md border border-[#233554]/50 shadow-xl"
-              >
-                <p className="font-mono text-primary text-sm">Based in</p>
-                <p className="text-slate-300 font-medium">Addis Ababa, Ethiopia</p>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Introduction Text */}
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3"
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-2 hidden lg:block"
           >
-            <p className="text-slate-400 text-lg leading-relaxed mb-8">{introduction}</p>
-            
-            {/* Code snippet */}
-            <div className="code-block mb-10">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-3 h-3 rounded-full bg-red-500/50" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                <span className="w-3 h-3 rounded-full bg-green-500/50" />
-                <span className="ml-2 text-xs text-slate-500 font-mono">developer.js</span>
-              </div>
-              <pre className="text-sm">
-                <code>
-                  <span className="comment">// The developer behind this portfolio</span>{"\n"}
-                  <span className="keyword">const</span> <span className="property">developer</span> = {"{"}{"\n"}
-                  {"  "}<span className="property">name</span>: <span className="string">"{fullName}"</span>,{"\n"}
-                  {"  "}<span className="property">role</span>: <span className="string">"{professionalTitle}"</span>,{"\n"}
-                  {"  "}<span className="property">frontend</span>: [<span className="string">"React"</span>, <span className="string">"Tailwind"</span>],{"\n"}
-                  {"  "}<span className="property">backend</span>: [<span className="string">"Node.js"</span>, <span className="string">"Express"</span>],{"\n"}
-                  {"  "}<span className="property">database</span>: [<span className="string">"MongoDB"</span>, <span className="string">"Firebase"</span>],{"\n"}
-                  {"  "}<span className="property">passion</span>: <span className="string">"Building scalable solutions"</span>,{"\n"}
-                  {"  "}<span className="property">currentlyLearning</span>: <span className="string">"TypeScript, Docker"</span>,{"\n"}
-                  {"}"};
-                </code>
-              </pre>
-            </div>
+            <div className="relative h-full min-h-[560px]">
+              {/* Main vertical guide line - moved more to the right */}
+              <motion.div
+                initial={{ scaleY: 0 }}
+                whileInView={{ scaleY: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.8, ease: "easeInOut" }}
+                className="absolute left-[35%] top-2 bottom-10 w-[2px] origin-top bg-gradient-to-b from-primary/60 via-primary/25 to-primary/5"
+                style={{ 
+                  boxShadow: '0 0 25px rgba(100,255,218,0.3), 0 0 50px rgba(100,255,218,0.12), 0 0 75px rgba(100,255,218,0.06)'
+                }}
+              />
 
-            {/* Career goals */}
-            <div className="p-8 rounded-xl bg-gradient-to-br from-[#112240]/60 to-[#0a192f]/60 border border-[#233554]/50">
-              <h3 className="text-xl font-semibold text-slate-100 mb-4 flex items-center gap-2">
-                <Rocket size={20} className="text-primary" />
-                Career Direction
-              </h3>
-              <p className="text-slate-400 leading-relaxed">{careerGoals}</p>
+              {/* Guide nodes with arrows */}
+              {storySections.map((section, index) => {
+                const positions = ['top-[16%]', 'top-[48%]', 'top-[80%]'];
+                return (
+                  <motion.div
+                    key={section.id}
+                    initial={{ opacity: 0, x: -15 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.6 + index * 0.2 }}
+                    className={`absolute ${positions[index]} left-[35%] -translate-y-1/2 w-[320px]`}
+                  >
+                    {/* Node dot on main line - larger */}
+                    <div className="absolute -left-[8px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#0a192f] border-[3px] border-primary/70 shadow-[0_0_20px_rgba(100,255,218,0.7)]" />
+                    
+                    {/* Horizontal connector with arrow - thicker line and bigger arrow */}
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center w-[calc(100%-1.5rem)]">
+                      <div 
+                        className="flex-1 h-[2px] bg-gradient-to-r from-primary/60 to-primary/25"
+                        style={{ boxShadow: '0 0 12px rgba(100,255,218,0.35)' }}
+                      />
+                      <ArrowRight size={24} strokeWidth={4} className="text-primary/80 ml-1.5 shrink-0 drop-shadow-[0_0_6px_rgba(100,255,218,0.4)]" />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
+
+          {/* Story Sections - Right Column */}
+          <div className="lg:col-span-3 space-y-14 my-16">
+            {storySections.map((section, index) => (
+              <StorySection key={section.id} {...section} index={index} />
+            ))}
+          </div>
         </div>
 
         {/* What makes me different - Full width */}
@@ -474,11 +530,20 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="my-20"
           >
-            <h3 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4 flex items-center justify-center gap-3">
-              <Sparkles size={28} className="text-primary" />
+            <div className="flex items-center justify-center gap-6 mb-6">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/60 max-w-[200px]" />
+              <div className="p-3 rounded-xl bg-primary/10 text-primary shadow-[0_0_20px_rgba(100,255,218,0.15)]">
+                <Sparkles size={28} />
+              </div>
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-primary/40 to-primary/60 max-w-[200px]" />
+            </div>
+            <h3 className="text-3xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-primary via-blue-400 to-purple-400 bg-clip-text text-transparent">
               What Makes Me Different
             </h3>
-            <div className="w-24 h-1 bg-primary/60 rounded-full mx-auto mt-4" />
+            <p className="text-slate-400 text-center max-w-2xl mx-auto text-sm md:text-base">
+              The principles and mindset that shape how I work and grow
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary/60 via-blue-400/60 to-purple-400/60 rounded-full mx-auto mt-6" />
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-8">
             {whatMakesMeDifferent.map((item, index) => {
@@ -505,269 +570,147 @@ const About = () => {
         <div className="mb-32">
           <SectionHeader number="02" title="Beyond the Code" subtitle="A deeper look at who I am as a developer and person" />
 
-          {/* GitHub Activity - Standard Card */}
-          <div className="mb-12">
-            <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Github size={20} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-100">GitHub Activity</h3>
-                    <p className="text-xs text-slate-500 font-mono">@Tesfaye-kel</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                {githubStats.map((stat, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
-                    className="p-4 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 text-center hover:border-primary/30 transition-colors"
-                  >
-                    <div className="text-primary mb-2 flex justify-center">{stat.icon}</div>
-                    <p className="text-xl font-bold gradient-text">{stat.value}</p>
-                    <p className="text-xs text-slate-500 font-mono mt-1">{stat.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Language Distribution */}
-              <div className="mb-8">
-                <h4 className="text-sm font-mono text-slate-400 mb-4 flex items-center gap-2">
-                  <Code2 size={14} className="text-primary" />
-                  Language Distribution
-                </h4>
-                <div className="space-y-3">
-                  {githubLanguages.map((lang, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="flex items-center gap-2 text-sm text-slate-300">
-                          <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: lang.color }} />
-                          {lang.name}
-                        </span>
-                        <span className="text-xs font-mono text-slate-500">{lang.percentage}%</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-[#0a192f]/60 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${lang.percentage}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: i * 0.1 }}
-                          className="h-full rounded-full"
-                          style={{ backgroundColor: lang.color }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Commit Activity */}
-              <div className="pt-6 border-t border-[#233554]/50">
-                <h4 className="text-sm font-mono text-slate-400 mb-4 flex items-center gap-2">
-                  <GitCommit size={14} className="text-primary" />
-                  Weekly Commit Activity
-                </h4>
-                <div className="space-y-2">
-                  {commitActivity.map((commit) => (
-                    <div key={commit.day} className="flex items-center gap-3">
-                      <span className="w-8 text-xs font-mono text-slate-500">{commit.day}</span>
-                      <div className="flex-1 h-2 rounded-full bg-[#0a192f]/60 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${(commit.count / maxCommitCount) * 100}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.8 }}
-                          className="h-full rounded-full bg-gradient-to-r from-primary/40 to-primary"
-                        />
-                      </div>
-                      <span className="w-8 text-xs font-mono text-primary text-right">{commit.count}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-center text-xs text-slate-500 font-mono mt-4">
-                  Most active on <span className="text-primary">Thursdays</span> · {maxCommitCount} commits/day
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Social Media & Personality - Standard Grid */}
+          {/* Language & Personality - Side by Side */}
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* Social Media Presence */}
+            {/* Language Distribution - Circle Chart */}
             <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                  <Share2 size={20} />
+                  <Code2 size={20} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-100">Social Media Presence</h3>
-                  <p className="text-xs text-slate-500 font-mono">Where I share my work</p>
+                  <h3 className="font-semibold text-slate-100">Language Distribution</h3>
+                  <p className="text-xs text-slate-500 font-mono">Technologies I use</p>
                 </div>
               </div>
-
-              {/* Platform list */}
-              <div className="space-y-3 mb-6">
-                {socialPlatforms.map((platform, i) => (
-                  <motion.a
-                    key={i}
-                    href={platform.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
-                    className="flex items-center justify-between p-3 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span style={{ color: platform.color }}>{platform.icon}</span>
-                      <div>
-                        <p className="text-sm font-medium text-slate-200">{platform.name}</p>
-                        <p className="text-xs text-slate-500 font-mono">{platform.activity}</p>
-                      </div>
+              <div className="flex flex-col items-center">
+                {/* Circle chart using conic-gradient */}
+                <div className="relative w-48 h-48 rounded-full mb-6"
+                  style={{
+                    background: `conic-gradient(
+                      #f7df1e 0% 45%,
+                      #3178c6 45% 65%,
+                      #e34c26 65% 85%,
+                      #3776ab 85% 95%,
+                      #8892b0 95% 100%
+                    )`
+                  }}
+                >
+                  <div className="absolute inset-3 rounded-full bg-[#0a192f] flex items-center justify-center">
+                    <div className="text-center">
+                      <Code2 size={24} className="text-primary mx-auto mb-1" />
+                      <p className="text-xs font-mono text-slate-400">Languages</p>
                     </div>
-                    <span className="text-xs text-slate-400 font-mono group-hover:text-primary transition-colors">
-                      {platform.reach}
-                    </span>
-                  </motion.a>
-                ))}
-              </div>
-
-              {/* Recent posts */}
-              <div className="pt-6 border-t border-[#233554]/50">
-                <h4 className="text-sm font-mono text-slate-400 mb-4">Recent Activity</h4>
-                <div className="space-y-3">
-                  {socialPosts.map((post, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: i * 0.05 }}
-                      className="p-4 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 transition-colors"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-mono text-primary">{post.platform}</span>
-                        <span className="text-xs text-slate-500">{post.time}</span>
-                      </div>
-                      <p className="text-sm font-medium text-slate-200 mb-1">{post.title}</p>
-                      <p className="text-sm text-slate-400 mb-3">{post.content}</p>
-                      <div className="flex items-center gap-4 text-xs text-slate-500">
-                        <span className="flex items-center gap-1"><ThumbsUp size={12} className="text-primary" /> {post.likes}</span>
-                        <span className="flex items-center gap-1"><MessageCircle size={12} /> {post.comments}</span>
-                        <span className="flex items-center gap-1"><Eye size={12} /> {post.views}</span>
-                      </div>
-                    </motion.div>
+                  </div>
+                </div>
+                {/* Legend */}
+                <div className="w-full space-y-3">
+                  {githubLanguages.map((lang, i) => (
+                    <div key={i} className="flex justify-between items-center">
+                      <span className="flex items-center gap-2 text-sm text-slate-300">
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: lang.color }} />
+                        {lang.name}
+                      </span>
+                      <span className="text-xs font-mono text-slate-500">{lang.percentage}%</span>
+                    </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Personality & Interests */}
-            <div className="space-y-6">
-              {/* Personality Traits */}
-              <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Brain size={20} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-100">Personality Traits</h3>
-                    <p className="text-xs text-slate-500 font-mono">Core strengths</p>
-                  </div>
+            {/* Personality Traits Only */}
+            <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                  <Brain size={20} />
                 </div>
-                <div className="space-y-3">
-                  {personalityTraits.map((trait, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-slate-300">{trait.label}</span>
-                        <span className="text-xs font-mono text-primary">{trait.value}%</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-[#0a192f]/60 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${trait.value}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: i * 0.1 }}
-                          className="h-full rounded-full bg-gradient-to-r from-primary/40 to-primary"
-                        />
-                      </div>
+                <div>
+                  <h3 className="font-semibold text-slate-100">Personality Traits</h3>
+                  <p className="text-xs text-slate-500 font-mono">Core strengths</p>
+                </div>
+              </div>
+              <div className="space-y-3">
+                {personalityTraits.map((trait, i) => (
+                  <div key={i}>
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm text-slate-300">{trait.label}</span>
+                      <span className="text-xs font-mono text-primary">{trait.value}%</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Interests & Hobbies */}
-              <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Compass size={20} />
+                    <div className="h-2 rounded-full bg-[#0a192f]/60 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${trait.value}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: i * 0.1 }}
+                        className="h-full rounded-full bg-gradient-to-r from-primary/40 to-primary"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-100">Interests & Hobbies</h3>
-                    <p className="text-xs text-slate-500 font-mono">Beyond the code</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-3">
-                  {interests.map((interest, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: i * 0.05 }}
-                      className="p-3 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all"
-                    >
-                      <div className="flex flex-col items-center gap-2">
-                        <span style={{ color: interest.color }}>{interest.icon}</span>
-                        <span className="text-xs font-mono text-slate-300">{interest.label}</span>
-                        <span className="text-[10px] text-slate-500 text-center leading-tight">{interest.desc}</span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Daily Habits */}
-              <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Zap size={20} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-100">Daily Habits</h3>
-                    <p className="text-xs text-slate-500 font-mono">A typical day</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {dailyHabits.map((habit, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: i * 0.05 }}
-                      className="flex items-center justify-between p-3 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span style={{ color: habit.color }}>{habit.icon}</span>
-                        <span className="text-sm text-slate-300">{habit.label}</span>
-                      </div>
-                      <span className="text-xs font-mono text-primary">{habit.time}</span>
-                    </motion.div>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
           </div>
+
+          {/* Interests & Hobbies */}
+          <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50 mt-6">
+            <div className="flex flex-col items-center gap-3 mb-6 text-center">
+              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                <Compass size={20} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-100">Interests & Hobbies</h3>
+                <p className="text-xs text-slate-500 font-mono">Beyond the code</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {interests.map((interest, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
+                  className="p-3 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <span style={{ color: interest.color }}>{interest.icon}</span>
+                    <span className="text-xs font-mono text-slate-300">{interest.label}</span>
+                    <span className="text-[10px] text-slate-500 text-center leading-tight">{interest.desc}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Developer Code Block */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="code-block mt-6"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-3 h-3 rounded-full bg-red-500/50" />
+              <span className="w-3 h-3 rounded-full bg-yellow-500/50" />
+              <span className="w-3 h-3 rounded-full bg-green-500/50" />
+              <span className="ml-2 text-xs text-slate-500 font-mono">developer.js</span>
+            </div>
+            <pre className="text-sm overflow-x-auto">
+              <code>
+                <span className="comment">// The developer behind this portfolio</span>{"\n"}
+                <span className="keyword">const</span> <span className="property">developer</span> = {"{"}{"\n"}
+                {"  "}<span className="property">name</span>: <span className="string">"{fullName}"</span>,{"\n"}
+                {"  "}<span className="property">role</span>: <span className="string">"{professionalTitle}"</span>,{"\n"}
+                {"  "}<span className="property">frontend</span>: [<span className="string">"React"</span>, <span className="string">"Tailwind"</span>],{"\n"}
+                {"  "}<span className="property">backend</span>: [<span className="string">"Node.js"</span>, <span className="string">"Express"</span>],{"\n"}
+                {"  "}<span className="property">database</span>: [<span className="string">"MongoDB"</span>, <span className="string">"Firebase"</span>],{"\n"}
+                {"  "}<span className="property">passion</span>: <span className="string">"Building scalable solutions"</span>,{"\n"}
+                {"  "}<span className="property">currentlyLearning</span>: <span className="string">"TypeScript, Docker"</span>,{"\n"}
+                {"}"};
+              </code>
+            </pre>
+          </motion.div>
         </div>
 
         {/* 3. Statistics */}
