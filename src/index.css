@@ -106,12 +106,73 @@ body.light .border-slate-600 {
   color: #64ffda;
 }
 
-/* ===== Grid Pattern Background ===== */
+/* ===== Grid Pattern Background (original) ===== */
 .grid-pattern {
   background-image: 
     linear-gradient(rgba(100, 255, 218, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(100, 255, 218, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
+}
+
+/* ===== Premium Fine Grid (cleaner, crisper) ===== */
+.premium-grid {
+  background-image:
+    linear-gradient(rgba(204, 214, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(204, 214, 246, 0.08) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* ===== Premium Glass Coating (clean, light, transparent) ===== */
+.premium-glass {
+  background: linear-gradient(
+    160deg,
+    rgba(17, 34, 64, 0.015) 0%,
+    rgba(17, 34, 64, 0.045) 50%,
+    rgba(17, 34, 64, 0.015) 100%
+  );
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+/* ===== Premium Glass Sheen (soft light reflection) ===== */
+.premium-sheen {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(204, 214, 246, 0.03) 40%,
+    rgba(204, 214, 246, 0.05) 50%,
+    rgba(204, 214, 246, 0.03) 60%,
+    transparent 100%
+  );
+}
+
+/* ===== Premium Sunrise Light (soft, airy, from top) ===== */
+.premium-light {
+  background: radial-gradient(
+    ellipse 70% 55% at 50% 0%,
+    rgba(204, 214, 246, 0.10) 0%,
+    rgba(204, 214, 246, 0.04) 45%,
+    transparent 80%
+  );
+}
+
+/* ===== Premium Clear Depth (very light, keeps edges open) ===== */
+.premium-vignette {
+  background: radial-gradient(
+    ellipse 130% 100% at 50% 30%,
+    transparent 55%,
+    rgba(2, 12, 27, 0.18) 100%
+  );
+}
+
+/* ===== Premium Clean Screen (air + clarity) ===== */
+.premium-clear {
+  background: linear-gradient(
+    180deg,
+    rgba(230, 241, 255, 0.02) 0%,
+    rgba(230, 241, 255, 0.005) 50%,
+    transparent 100%
+  );
 }
 
 /* ===== Noise Texture ===== */
