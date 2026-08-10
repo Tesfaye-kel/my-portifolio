@@ -30,12 +30,15 @@
 }
 
 /* ===== Base Styles ===== */
+/* 1rem — usually 16px */
 * {
-  margin: 1px;
-  padding: 1px;
   box-sizing: border-box;
 }
 
+body {
+  margin: 1px;
+  padding: 1px;
+}
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
