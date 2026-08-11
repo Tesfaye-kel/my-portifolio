@@ -67,8 +67,8 @@ function App() {
   const { isAdmin, login } = usePortfolio();
   
   // Use '/' for Vercel, '/my-portifolio/' for GitHub Pages
-  const basename = import.meta.env.VITE_BASE_URL || '/my-portifolio';
-
+  const basename = import.meta.env.VITE_BASE_URL || '/';
+  
   // Initialize Lenis smooth scrolling
   useEffect(() => {
     const lenis = new Lenis({
