@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
+const baseUrl = import.meta.env.BASE_URL || '/';
+
 const PortfolioContext = createContext();
 
 export const usePortfolio = () => useContext(PortfolioContext);
@@ -12,7 +14,7 @@ const initialData = {
     tagline: "Building digital experiences",
     email: "tesfayekelbesa912@gmail.com",
     location: "Addis Ababa, Ethiopia",
-    avatar: "/me.jpg",
+    avatar: `${baseUrl}me.jpg`,
   },
   hero: {
     greeting: "Hi, I am",

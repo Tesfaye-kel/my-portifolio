@@ -1,3 +1,5 @@
+const baseUrl = import.meta.env.BASE_URL || '/';
+
 export const initialData = {
   profile: {
     name: "John Doe",
@@ -5,7 +7,7 @@ export const initialData = {
     tagline: "Building digital experiences that matter",
     email: "john@example.com",
     location: "San Francisco, CA",
-    avatar: "/profile.jpg",
+    avatar: `${baseUrl}profile.jpg`,
   },
   socialLinks: [
     { name: "GitHub", url: "https://github.com", icon: "github" },
@@ -17,7 +19,7 @@ export const initialData = {
     name: "John Doe",
     subtitle: "I build things for the web.",
     description: "I'm a software engineer specializing in building (and occasionally designing) exceptional digital experiences. Currently, I'm focused on building accessible, human-centered products.",
-    background: "/backgroundimage.png", // can be changed to any URL or placed in public folder
+    background: `${baseUrl}backgroundimage.png`, // can be changed to any URL or placed in public folder
     ctaText: "Check out my work",
     ctaLink: "#projects",
   },
@@ -68,9 +70,9 @@ export const initialData = {
     },
   ],
   gallery: [
-    { id: 1, title: "Gallery Image 1", url: "/basic.jpg" },
-    { id: 2, title: "Gallery Image 2", url: "/cul.jpg" },
-    { id: 3, title: "Gallery Image 3", url: "/smallb.jpg" },
+    { id: 1, title: "Gallery Image 1", url: `${baseUrl}basic.jpg` },
+    { id: 2, title: "Gallery Image 2", url: `${baseUrl}cul.jpg` },
+    { id: 3, title: "Gallery Image 3", url: `${baseUrl}smallb.jpg` },
   ],
   messages: [
     {
