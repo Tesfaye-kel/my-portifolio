@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { usePortfolio } from '../context/PortfolioContext';
 import { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Mail, ArrowDown, Download, ExternalLink } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowDown, Download, ExternalLink, Twitter, Facebook, Send } from 'lucide-react';
 import myProfileImage from '../../me.jpg';
 
 // --- Typewriter Effect ---
@@ -100,6 +100,9 @@ const Hero = () => {
   const socialLinks = [
     { icon: <Github size={20} />, url: 'https://github.com/Tesfaye-kel', label: 'GitHub' },
     { icon: <Linkedin size={20} />, url: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: <Twitter size={20} />, url: 'https://twitter.com', label: 'Twitter' },
+    { icon: <Facebook size={20} />, url: 'https://facebook.com', label: 'Facebook' },
+    { icon: <Send size={20} />, url: 'https://t.me', label: 'Telegram' },
     { icon: <Mail size={20} />, url: 'mailto:tesfayekelbesa912@gmail.com', label: 'Email' },
   ];
 
@@ -197,7 +200,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="flex gap-6 justify-center lg:justify-start"
+              className="flex items-center justify-between w-full gap-2 sm:gap-4"
             >
               {socialLinks.map((link, index) => (
                 <motion.a
@@ -207,12 +210,33 @@ const Hero = () => {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.2, y: -3 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-3 rounded-lg bg-[#112240]/50 border border-[#233554]/50 text-slate-400 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
+                  className="p-2 sm:p-3 rounded-lg bg-[#112240]/50 border border-[#233554]/50 text-slate-400 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
                   aria-label={link.label}
                 >
                   {link.icon}
                 </motion.a>
               ))}
+            </motion.div>
+
+            {/* Words I Live By */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.6 }}
+              className="mt-10 text-center"
+            >
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/60 max-w-[80px]" />
+                <span className="text-primary font-mono text-sm tracking-widest uppercase">Words I Live By</span>
+                <div className="flex-1 h-px bg-gradient-to-l from-transparent via-primary/40 to-primary/60 max-w-[80px]" />
+              </div>
+              <div className="relative max-w-xl mx-auto px-6 py-6 rounded-2xl bg-[#112240]/40 border border-[#233554]/50">
+                <span className="absolute -top-4 left-4 text-5xl text-primary/30 font-serif">"</span>
+                <p className="text-slate-300 text-base sm:text-lg italic leading-relaxed">
+                  Embrace what life gives you, then Try to make something beautiful from it.
+                </p>
+                <span className="absolute -bottom-6 right-4 text-5xl text-primary/30 font-serif">"</span>
+              </div>
             </motion.div>
           </motion.div>
           
@@ -240,25 +264,6 @@ const Hero = () => {
                 />
               </motion.div>
 
-              {/* Floating badges */}
-              <FloatingBadge 
-                icon={<span className="text-lg">⚛️</span>}
-                label="React"
-                position="-left-16 top-8"
-                delay={1.2}
-              />
-              <FloatingBadge 
-                icon={<span className="text-lg">🟢</span>}
-                label="Node.js"
-                position="-right-16 top-1/3"
-                delay={1.4}
-              />
-              <FloatingBadge 
-                icon={<span className="text-lg">🍃</span>}
-                label="MongoDB"
-                position="-left-12 bottom-16"
-                delay={1.6}
-              />
             </div>
           </motion.div>
         </div>

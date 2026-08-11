@@ -120,8 +120,8 @@ body.light .border-slate-600 {
 /* ===== Premium Fine Grid (cleaner, crisper) ===== */
 .premium-grid {
   background-image:
-    linear-gradient(rgba(204, 214, 246, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(204, 214, 246, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(204, 214, 246, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(204, 214, 246, 0.12) 1px, transparent 1px);
   background-size: 72px 72px;
 }
 

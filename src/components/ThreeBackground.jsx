@@ -15,23 +15,17 @@ const ThreeBackground = () => {
       {/* Base deep background */}
       <div className="absolute inset-0 bg-[#0a192f]" />
 
-      {/* Clean, airy gradient — fresh sunrise atmosphere */}
-      <div className="absolute inset-0 premium-clear" />
+      {/* Clearly visible fine grid — more prominent */}
+      <div className="absolute inset-0 premium-grid" />
 
-      {/* Clearly visible but subtle fine grid */}
-      <div className="absolute inset-0 premium-grid opacity-80" />
+      {/* Transparent glass coating — minimal depth */}
+      <div className="absolute inset-0 premium-glass opacity-50" />
 
-      {/* Crystal-clear glass coating — very light glassmorphism depth */}
-      <div className="absolute inset-0 premium-glass" />
+      {/* Soft light wash from the top */}
+      <div className="absolute inset-0 premium-light opacity-60" />
 
-      {/* Soft glass sheen — light diffusion across the surface */}
-      <div className="absolute inset-0 premium-sheen" />
-
-      {/* Soft sunrise light from the top */}
-      <div className="absolute inset-0 premium-light" />
-
-      {/* Very light depth, keeping the edges open and airy */}
-      <div className="absolute inset-0 premium-vignette" />
+      {/* Very light depth, keeping edges open and airy */}
+      <div className="absolute inset-0 premium-vignette opacity-70" />
     </div>
   );
 };

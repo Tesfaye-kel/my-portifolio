@@ -53,11 +53,10 @@ const SectionHeader = ({ number, title, subtitle }) => (
     transition={{ duration: 0.6 }}
     className="mb-20 text-center"
   >
-    <div className="flex items-center justify-center gap-6 mb-6">
-      <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
-      <span className="font-mono text-primary text-lg">{number}.</span>
-      <h2 className="text-3xl md:text-4xl font-bold text-slate-100">{title}</h2>
-      <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
+    <div className="flex items-center justify-center gap-4 mb-6" style={{ marginLeft: '-0.5px' }}>
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/40 to-white/60 max-w-[80px]" />
+      <h2 className="text-white font-mono text-base tracking-widest uppercase">{title}</h2>
+      <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/40 to-white/60 max-w-[80px]" />
     </div>
     {subtitle && <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">{subtitle}</p>}
   </motion.div>
@@ -440,7 +439,7 @@ const About = () => {
 
   const whatMakesMeDifferent = about?.whatMakesMeDifferent || [
     "🔍 Curiosity & Continuous Learning - I enjoy learning something new every day, whether it's a new technology, a better way to solve a problem, or a different perspective from others. Staying curious helps me continuously improve as an engineer and as a person.",
-    "🧩 Problem-Solving Mindset - I naturally enjoy breaking complicated problems into smaller, manageable pieces. Whether I'm debugging code, planning a project, or handling everyday challenges, I focus on understanding the root cause and finding practical solutions.",
+    "🌍 Cosmopolitan by Nature - I value diversity in cultures, backgrounds, ideas, and ways of thinking. My life has exposed me to struggles shaped by society and politics, but I choose to remain open-minded rather than defined by political labels. I learn from different perspectives while staying true to my own values, curiosity, and identity.",
     "📅 Consistency Over Motivation - I believe progress comes from consistent effort rather than waiting for motivation. I maintain daily habits of learning, coding, experimenting, and improving—even when the results aren't immediate.",
     "🎯 Building With Purpose - I don't want to write code simply because I can. I'm interested in understanding why something needs to be built and who it helps. I aim to create software that is useful, maintainable, and meaningful to its users.",
     "🤝 Independent Thinker & Collaborative Teammate - I'm comfortable exploring ideas independently, researching solutions, and taking ownership of my work. At the same time, I value teamwork, open communication, feedback, and learning from people with different experiences.",
@@ -558,8 +557,11 @@ const About = () => {
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                   className="group p-5 rounded-xl bg-[#112240]/40 border border-[#233554]/30 hover:border-primary/30 hover:bg-[#112240]/60 transition-all duration-300"
                 >
-                  <p className="font-semibold text-slate-200 mb-2 leading-snug text-left">{title}</p>
-                  <p className="text-sm text-slate-400 leading-relaxed text-left">{description}</p>
+                  <p className="font-semibold text-slate-200 mb-2 leading-snug text-center">{title}</p>
+                  <p className="flex items-start gap-2 text-sm text-slate-400 leading-relaxed text-left">
+                    <ArrowRight size={12} className="text-primary shrink-0 mt-1" />
+                    <span>{description}</span>
+                  </p>
                 </motion.div>
               );
             })}
