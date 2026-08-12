@@ -107,13 +107,13 @@ const Hero = () => {
   ];
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Decor */}
       <motion.div style={{ y: y1, opacity }} className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
       <motion.div style={{ y: y2, opacity }} className="absolute bottom-20 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           
           {/* Left Content */}
           <motion.div 
@@ -122,12 +122,12 @@ const Hero = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-left order-2 lg:order-1"
           >
-            {/* Availability Status */}
+            {/* Availability Status - at the very top */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-4"
             >
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -140,7 +140,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-primary font-mono text-lg mb-4"
+              className="text-primary font-mono text-lg mb-2"
             >
               {hero?.greeting || 'Hello, I am'}
             </motion.p>
@@ -149,7 +149,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-5xl md:text-7xl font-bold mb-4"
+              className="text-4xl md:text-6xl font-bold mb-2"
             >
               <span className="gradient-text">
                 {profile?.name || 'Tesfaye Kelbesa'}
@@ -160,7 +160,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-2xl md:text-4xl font-bold text-slate-400 mb-6 h-12"
+              className="text-xl md:text-3xl font-bold text-slate-400 mb-3 h-10"
             >
               <TypewriterEffect texts={titles} />
             </motion.h2>
@@ -169,7 +169,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-slate-400 text-lg max-w-xl mx-auto lg:mx-0 mb-8"
+              className="text-slate-400 text-base md:text-lg max-w-xl mx-auto lg:mx-0 mb-4"
             >
               {hero?.description || 'Building scalable digital experiences where engineering meets design. Specializing in the MERN stack with a passion for clean, efficient, and user-friendly applications.'}
             </motion.p>
@@ -179,7 +179,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
+              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-4"
             >
               <MagneticButton href="#contact" className="bg-primary text-[#0a192f] border-primary">
                 Get in Touch
@@ -200,7 +200,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="flex items-center justify-between w-full gap-2 sm:gap-4"
+              className="flex items-center justify-between w-full gap-2 sm:gap-4 mb-4"
             >
               {socialLinks.map((link, index) => (
                 <motion.a
@@ -223,16 +223,16 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.6 }}
-              className="mt-10 text-center"
+              className="mt-4 text-center"
             >
-              <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="flex items-center justify-center gap-4 mb-3">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/60 max-w-[80px]" />
                 <span className="text-primary font-mono text-sm tracking-widest uppercase">Words I Live By</span>
                 <div className="flex-1 h-px bg-gradient-to-l from-transparent via-primary/40 to-primary/60 max-w-[80px]" />
               </div>
-              <div className="relative max-w-xl mx-auto px-6 py-6 rounded-2xl bg-[#112240]/40 border border-[#233554]/50">
+              <div className="relative max-w-xl mx-auto px-5 py-4 rounded-2xl bg-[#112240]/40 border border-[#233554]/50">
                 <span className="absolute -top-4 left-4 text-5xl text-primary/30 font-serif">"</span>
-                <p className="text-slate-300 text-base sm:text-lg italic leading-relaxed">
+                <p className="text-slate-300 text-sm sm:text-base italic leading-relaxed">
                   Embrace what life gives you, then Try to make something beautiful from it.
                 </p>
                 <span className="absolute -bottom-6 right-4 text-5xl text-primary/30 font-serif">"</span>
@@ -247,15 +247,15 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col items-center justify-center order-1 lg:order-2"
           >
-            <div className="relative mb-8">
+            <div className="relative mb-4">
               {/* Professional soft shadow */}
               <div className="absolute inset-0 rounded-full shadow-[0_20px_60px_-15px_rgba(2,12,27,0.5)]" />
               
-              {/* Profile Image */}
+              {/* Profile Image - slightly smaller and moved up */}
               <motion.div 
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-[0_10px_40px_-10px_rgba(2,12,27,0.6)] ring-1 ring-[#233554]/40"
+                className="relative w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden shadow-[0_10px_40px_-10px_rgba(2,12,27,0.6)] ring-1 ring-[#233554]/40"
               >
                 <img 
                   src={myProfileImage} 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Lenis from 'lenis';
 import { usePortfolio } from './context/PortfolioContext';
@@ -63,12 +63,31 @@ const PortfolioLayout = ({ children }) => {
   );
 };
 
+// Scroll to hash target when navigating (e.g. /#projects)
+const ScrollToHash = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '');
+      const target = document.getElementById(targetId);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  return null;
+};
+
 function App() {
   const { isAdmin, login } = usePortfolio();
   
   // Use '/' for Vercel, '/my-portifolio/' for GitHub Pages
   const basename = import.meta.env.VITE_BASE_URL || '/';
-  
+
   // Initialize Lenis smooth scrolling
   useEffect(() => {
     const lenis = new Lenis({
@@ -91,6 +110,7 @@ function App() {
 
   return (
     <BrowserRouter basename={basename}>
+      <ScrollToHash />
       <Routes>
         {/* Public Portfolio Routes */}
         <Route 
