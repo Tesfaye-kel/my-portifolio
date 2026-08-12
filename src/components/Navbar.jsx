@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Menu, X, Code2, Sun, Moon, 
+  Menu, X, Code2, Sun, Moon, Home,
   User, Briefcase, Wrench, FolderGit2, 
   Sparkles, Mail 
 } from 'lucide-react';
@@ -17,6 +17,7 @@ const Navbar = () => {
   const isDark = data.theme === 'dark';
 
   const navLinks = [
+    { name: 'Home', href: '#home', id: 'home', icon: <Home size={16} /> },
     { name: 'About', href: '#about', id: 'about', icon: <User size={16} /> },
     { name: 'Experience', href: '#experience', id: 'experience', icon: <Briefcase size={16} /> },
     { name: 'Skills', href: '#skills', id: 'skills', icon: <Wrench size={16} /> },
@@ -25,24 +26,40 @@ const Navbar = () => {
     { name: 'Contact', href: '#contact', id: 'contact', icon: <Mail size={16} /> },
   ];
 
+  // Map each section to its navigation group
+  const sectionGroups = {
+    home: 'home',
+    about: 'about',
+    experience: 'about',
+    skills: 'about',
+    projects: 'projects',
+    services: 'projects',
+    contact: 'contact',
+  };
+  // Order of group boundaries for detection
+  const groupBoundaries = ['home', 'about', 'projects', 'contact'];
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       
-      // Track active section
-      const sections = navLinks.map(l => l.id);
-      const scrollPosition = window.scrollY + 100;
+      // Track active section: find the nav link element whose top is closest above the viewport center
+      const viewportCenter = window.innerHeight / 2;
+      let current = 'home';
+      let closestTop = -Infinity;
       
-      for (const section of sections) {
-        const element = document.getElementById(section);
+      for (const link of navLinks) {
+        const element = document.getElementById(link.id);
         if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
+          const rect = element.getBoundingClientRect();
+          // Section is active if its top is above the center and it's the closest one
+          if (rect.top <= viewportCenter && rect.top > closestTop) {
+            closestTop = rect.top;
+            current = sectionGroups[link.id] || link.id;
           }
         }
       }
+      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -61,6 +78,9 @@ const Navbar = () => {
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
+      // Immediately set active section based on the clicked link's group
+      const clickedId = href.replace('#', '');
+      setActiveSection(sectionGroups[clickedId] || clickedId);
     }
   };
 

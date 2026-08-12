@@ -126,6 +126,7 @@ const techStack = {
       { name: 'Node.js', level: 85, desc: 'Event-driven architecture, REST APIs' },
       { name: 'Express', level: 85, desc: 'Middleware, routing, API design' },
       { name: 'REST APIs', level: 88, desc: 'CRUD operations, authentication, validation' },
+      { name: 'Go', level: 80, desc: 'Concurrent systems, high-performance services' },
     ]
   },
   database: {
@@ -133,8 +134,9 @@ const techStack = {
     title: 'Database',
     color: '#4DB33D',
     technologies: [
-      { name: 'MongoDB', level: 82, desc: 'NoSQL, Mongoose ODM, aggregation' },
-      { name: 'Firebase', level: 78, desc: 'Realtime database, authentication, hosting' },
+      { name: 'MongoDB', level: 90, desc: 'NoSQL, Mongoose ODM, aggregation' },
+      { name: 'SQL', level: 85, desc: 'Relational queries, schema design' },
+      { name: 'PostgreSQL', level: 85, desc: 'Advanced queries, indexing, transactions' },
     ]
   },
   tools: {
@@ -270,9 +272,9 @@ const servicesData = [
   },
   {
     icon: <Rocket size={24} />,
-    title: 'Performance Optimization',
-    description: 'Improving application speed and user experience through code optimization, caching, and efficient rendering strategies.',
-    technologies: ['React', 'Vite', 'Webpack']
+    title: 'AI Integration',
+    description: 'Connecting applications to large language models to power intelligent features. Designing prompts and API workflows that turn raw model output into reliable, production-ready functionality.',
+    technologies: ['Claude API', 'Prompt Engineering', 'REST APIs']
   }
 ];
 
@@ -323,12 +325,12 @@ const githubStats = [
   { icon: <Terminal size={16} />, label: 'Languages', value: '3' },
 ];
 
-const githubLanguages = [
-  { name: 'JavaScript', percentage: 45, color: '#f7df1e' },
-  { name: 'TypeScript', percentage: 20, color: '#3178c6' },
-  { name: 'HTML/CSS', percentage: 20, color: '#e34c26' },
-  { name: 'Python', percentage: 10, color: '#3776ab' },
-  { name: 'Other', percentage: 5, color: '#8892b0' },
+const techDistribution = [
+  { name: 'Frontend', percentage: 30, color: '#61dafb' },
+  { name: 'Backend', percentage: 35, color: '#68a063' },
+  { name: 'Database', percentage: 15, color: '#f7df1e' },
+  { name: 'DevOps', percentage: 10, color: '#f34f29' },
+  { name: 'Tools & Others', percentage: 10, color: '#8892b0' },
 ];
 
 const commitActivity = [
@@ -574,15 +576,15 @@ const About = () => {
 
           {/* Language & Personality - Side by Side */}
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* Language Distribution - Circle Chart */}
+            {/* Technology Distribution - Circle Chart */}
             <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary">
                   <Code2 size={20} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-100">Language Distribution</h3>
-                  <p className="text-xs text-slate-500 font-mono">Technologies I use</p>
+                  <h3 className="font-semibold text-slate-100">Technology Distribution</h3>
+                  <p className="text-xs text-slate-500 font-mono">Where I focus my skills</p>
                 </div>
               </div>
               <div className="flex flex-col items-center">
@@ -590,30 +592,30 @@ const About = () => {
                 <div className="relative w-48 h-48 rounded-full mb-6"
                   style={{
                     background: `conic-gradient(
-                      #f7df1e 0% 45%,
-                      #3178c6 45% 65%,
-                      #e34c26 65% 85%,
-                      #3776ab 85% 95%,
-                      #8892b0 95% 100%
+                      #61dafb 0% 30%,
+                      #68a063 30% 65%,
+                      #f7df1e 65% 80%,
+                      #f34f29 80% 90%,
+                      #8892b0 90% 100%
                     )`
                   }}
                 >
                   <div className="absolute inset-3 rounded-full bg-[#0a192f] flex items-center justify-center">
                     <div className="text-center">
                       <Code2 size={24} className="text-primary mx-auto mb-1" />
-                      <p className="text-xs font-mono text-slate-400">Languages</p>
+                      <p className="text-xs font-mono text-slate-400">Technologies</p>
                     </div>
                   </div>
                 </div>
                 {/* Legend */}
                 <div className="w-full space-y-3">
-                  {githubLanguages.map((lang, i) => (
+                  {techDistribution.map((tech, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="flex items-center gap-2 text-sm text-slate-300">
-                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: lang.color }} />
-                        {lang.name}
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: tech.color }} />
+                        {tech.name}
                       </span>
-                      <span className="text-xs font-mono text-slate-500">{lang.percentage}%</span>
+                      <span className="text-xs font-mono text-slate-500">{tech.percentage}%</span>
                     </div>
                   ))}
                 </div>
@@ -719,10 +721,10 @@ const About = () => {
         <div className="mb-32">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { value: 3, suffix: '+', label: 'Projects Built' },
-              { value: 4, suffix: '+', label: 'Years Learning' },
+              { value: 15, suffix: '+', label: 'Projects Built' },
+              { value: 3, suffix: '+', label: 'Years Learning' },
               { value: 15, suffix: '+', label: 'Technologies' },
-              { value: 10, suffix: '+', label: 'GitHub Repos' },
+              { value: 20, suffix: '+', label: 'GitHub Repos' },
             ].map((stat, index) => (
               <motion.div
                 key={index}

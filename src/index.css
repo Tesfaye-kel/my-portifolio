@@ -36,13 +36,13 @@
 }
 
 body {
-  margin: 1px;
-  padding: 1px;
-}
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  background-color: #0a192f;
+  color: #ccd6f6;
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 body {

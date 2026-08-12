@@ -346,13 +346,24 @@ const Projects = () => {
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies?.map((tech, i) => (
                     <span key={i} className="px-2 py-1 rounded bg-[#0a192f]/60 border border-[#233554]/50 text-xs font-mono text-primary/70">
                       {tech}
                     </span>
                   ))}
                 </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/project/${project.id}`);
+                  }}
+                  className="magnetic-btn w-full justify-center text-sm"
+                >
+                  View Case Study
+                  <ArrowRight size={14} />
+                </button>
               </div>
             </motion.div>
           ))}
