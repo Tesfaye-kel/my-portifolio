@@ -1,16 +1,133 @@
-# React + Vite
+# 🚀 Tesfaye Kelbesa — Full Stack Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div align="center">
 
-Currently, two official plugins are available:
+[![Portfolio](https://img.shields.io/badge/Portfolio-Live-64ffda?style=for-the-badge&logo=vercel&logoColor=white)](https://tesfaye-kel.github.io/my-portifolio/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tesfaye-kel/my-portifolio)
+[![React](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-7-646cff?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+</div>
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Overview
 
-## Expanding the ESLint configuration
+A modern, animated, and fully responsive **personal portfolio** built with the **MERN stack** and modern frontend tooling. This portfolio showcases my journey, skills, projects, and personality — all wrapped in a sleek, glassmorphic dark theme with smooth animations and a premium user experience.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+> *"Embrace what life gives you, then Try to make something beautiful from it."*
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | React 19, Vite 7, Tailwind CSS 4, Framer Motion |
+| **3D & Visuals** | Three.js, @react-three/fiber, @react-three/drei |
+| **Backend** | Node.js, Express, Go |
+| **Database** | MongoDB, SQL, PostgreSQL, Firebase |
+| **Tools** | Git, GitHub, Docker, Postman, Figma |
+| **AI** | Claude API, Prompt Engineering |
+
+---
+
+## 🎯 Features
+
+- ⚡ **Lightning-fast** — Built with Vite for instant HMR and optimized production builds
+- 🎨 **Premium Design** — Glassmorphic cards, gradient text, subtle grid patterns, and smooth animations
+- 📱 **Fully Responsive** — Perfect on mobile, tablet, and desktop
+- 🌙 **Dark/Light Mode** — Seamless theme switching with localStorage persistence
+- 🧭 **Smart Navigation** — Active section tracking with grouped nav capsule behavior
+- 📊 **Interactive Charts** — Technology distribution visualization
+- 🎭 **Animated Backgrounds** — Premium layered effects with Three.js
+- 📝 **Case Studies** — Detailed project breakdowns with problem, solution, architecture, and results
+- 🔗 **Social Integration** — GitHub, LinkedIn, Twitter, Facebook, Telegram, and Email links
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Tesfaye-kel/my-portifolio.git
+
+# Navigate to the project
+cd my-portifolio
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## 📁 Project Structure
+
+```
+my-portifolio/
+├── src/
+│   ├── components/          # React components
+│   │   ├── admin/           # Admin panel components
+│   │   ├── Hero.jsx         # Hero section
+│   │   ├── About.jsx        # About section
+│   │   ├── Projects.jsx     # Projects section
+│   │   ├── Contact.jsx      # Contact section
+│   │   └── Navbar.jsx       # Navigation bar
+│   ├── context/             # React context providers
+│   ├── data/                # Data files
+│   ├── App.jsx              # Main app component
+│   └── index.css            # Global styles
+├── public/                  # Static assets
+└── index.html               # HTML entry point
+```
+
+---
+
+## 🌐 Deployment
+
+This portfolio is deployed to two platforms:
+
+| Platform | URL | Base Path |
+|----------|-----|-----------|
+| **GitHub Pages** | `https://tesfaye-kel.github.io/my-portifolio/` | `/my-portifolio/` |
+| **Vercel** | Root domain | `/` |
+
+The GitHub Actions workflow automatically builds and deploys on every push to `master`.
+
+---
+
+## 📬 Contact
+
+- **Email**: [tesfayekelbesa912@gmail.com](mailto:tesfayekelbesa912@gmail.com)
+- **GitHub**: [@Tesfaye-kel](https://github.com/Tesfaye-kel)
+- **LinkedIn**: [Tesfaye Kelbesa](https://linkedin.com)
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+  Made with ❤️ by <strong>Tesfaye Kelbesa</strong>
+</div>
