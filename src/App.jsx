@@ -24,6 +24,9 @@ import GalleryManager from './components/admin/GalleryManager';
 import Messages from './components/admin/Messages';
 import PageTransition from './components/admin/PageTransition';
 import ProjectDetail from './components/ProjectDetail';
+import AdminAnalytics from './components/admin/AdminAnalytics';
+import ChangePassword from './components/admin/ChangePassword';
+import { recordVisit } from './utils/visitor';
 
 // Public Portfolio Sections with Page Transition
 const HomePage = () => (
@@ -83,10 +86,15 @@ const ScrollToHash = () => {
 };
 
 function App() {
-  const { isAdmin, login } = usePortfolio();
+  const { isAdmin } = usePortfolio();
   
-  // Use '/' for Vercel, '/my-portifolio/' for GitHub Pages
-  const basename = import.meta.env.VITE_BASE_URL || '/';
+  // Simple callback for Login component - context login already sets isAdmin
+  const handleLogin = () => {
+    // isAdmin is already set by context login function
+  };
+  
+  // Use Vite's BASE_URL (matches vite.config.js base) - works for dev and production
+  const basename = import.meta.env.BASE_URL || '/';
 
   // Initialize Lenis smooth scrolling
   useEffect(() => {
@@ -108,6 +116,11 @@ function App() {
     };
   }, []);
 
+  // Record visitor visit on page load
+  useEffect(() => {
+    recordVisit();
+  }, []);
+
   return (
     <BrowserRouter basename={basename}>
       <ScrollToHash />
@@ -125,7 +138,7 @@ function App() {
         {/* Admin Login - Only accessible via direct /admin URL, no public links point here */}
         <Route 
           path="/admin" 
-          element={isAdmin ? <AdminLayout /> : <Login onLogin={login} />}
+          element={isAdmin ? <AdminLayout /> : <Login onLogin={handleLogin} />}
         >
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<PageTransition><Dashboard /></PageTransition>} />
@@ -137,6 +150,8 @@ function App() {
           <Route path="skills" element={<PageTransition><SkillsManager /></PageTransition>} />
           <Route path="gallery" element={<PageTransition><GalleryManager /></PageTransition>} />
           <Route path="messages" element={<PageTransition><Messages /></PageTransition>} />
+          <Route path="analytics" element={<PageTransition><AdminAnalytics /></PageTransition>} />
+          <Route path="password" element={<PageTransition><ChangePassword /></PageTransition>} />
         </Route>
         
         {/* Catch all - redirect to home page */}

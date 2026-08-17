@@ -127,7 +127,7 @@ const Projects = () => {
 
   const projects = (contextProjects && contextProjects.length > 0) ? contextProjects : defaultProjects;
   const featuredProject = projects.find(p => p.featured) || projects[0];
-  const otherProjects = projects.filter(p => p.id !== featuredProject.id);
+  const otherProjects = projects.filter(p => (p._id || p.id) !== (featuredProject._id || featuredProject.id));
 
   const handleCardKeyDown = (e, id) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -238,7 +238,7 @@ const Projects = () => {
                     {/* Actions */}
                     <div className="flex flex-wrap gap-4">
                       <button
-                        onClick={() => navigate(`/project/${featuredProject.id}`)}
+                        onClick={() => navigate(`/project/${featuredProject._id || featuredProject.id}`)}
                         className="magnetic-btn"
                       >
                         View Case Study
@@ -278,13 +278,13 @@ const Projects = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {otherProjects.map((project, index) => (
             <motion.div
-              key={project.id || index}
+              key={project._id || project.id || index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              onClick={() => navigate(`/project/${project.id}`)}
-              onKeyDown={(e) => handleCardKeyDown(e, project.id)}
+              onClick={() => navigate(`/project/${project._id || project.id}`)}
+              onKeyDown={(e) => handleCardKeyDown(e, project._id || project.id)}
               role="link"
               tabIndex="0"
               className="project-card group cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
@@ -357,7 +357,7 @@ const Projects = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/project/${project.id}`);
+                    navigate(`/project/${project._id || project.id}`);
                   }}
                   className="magnetic-btn w-full justify-center text-sm"
                 >

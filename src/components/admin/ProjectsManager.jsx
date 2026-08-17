@@ -56,7 +56,7 @@ const ProjectsManager = () => {
       ...project,
       technologies: project.technologies.join(", "),
     });
-    setIsEditing(project.id);
+    setIsEditing(project._id || project.id);
     setShowForm(true);
   };
 
@@ -245,7 +245,7 @@ const ProjectsManager = () => {
         <AnimatePresence>
         {projects.map((project) => (
           <motion.div
-            key={project.id}
+            key={project._id || project.id}
             variants={itemVariants}
             layout
             exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
@@ -306,7 +306,7 @@ const ProjectsManager = () => {
                     <Edit size={18} />
                   </button>
                   <button
-                    onClick={() => handleDelete(project.id)}
+                    onClick={() => handleDelete(project._id || project.id)}
                     className="p-2 text-gray-400 hover:text-red-400 transition-colors"
                   >
                     <Trash2 size={18} />

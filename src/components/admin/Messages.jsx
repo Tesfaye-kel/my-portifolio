@@ -28,7 +28,7 @@ const Messages = () => {
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this message?')) {
       deleteMessage(id);
-      if (selectedMessage?.id === id) {
+      if (selectedMessage?._id === id || selectedMessage?.id === id) {
         setSelectedMessage(null);
       }
     }
@@ -65,10 +65,10 @@ const Messages = () => {
             {filteredMessages.length > 0 ? (
               filteredMessages.map((message) => (
                 <div
-                  key={message.id}
+                  key={message._id || message.id}
                   onClick={() => setSelectedMessage(message)}
                   className={`p-4 cursor-pointer hover:bg-gray-700/50 transition-colors ${
-                    selectedMessage?.id === message.id ? 'bg-gray-700' : ''
+                    (selectedMessage?._id || selectedMessage?.id) === (message._id || message.id) ? 'bg-gray-700' : ''
                   } ${!message.read ? 'border-l-4 border-primary' : ''}`}
                 >
                   <div className="flex items-start justify-between">
@@ -107,7 +107,7 @@ const Messages = () => {
                   <div className="flex items-center gap-2">
                     {!selectedMessage.read && (
                       <button
-                        onClick={() => handleMarkRead(selectedMessage.id)}
+                        onClick={() => handleMarkRead(selectedMessage._id || selectedMessage.id)}
                         className="flex items-center gap-2 px-3 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors"
                         title="Mark as read"
                       >
@@ -116,7 +116,7 @@ const Messages = () => {
                       </button>
                     )}
                     <button
-                      onClick={() => handleDelete(selectedMessage.id)}
+                      onClick={() => handleDelete(selectedMessage._id || selectedMessage.id)}
                       className="flex items-center gap-2 px-3 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
                       title="Delete message"
                     >

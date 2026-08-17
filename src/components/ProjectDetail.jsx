@@ -131,7 +131,7 @@ const ProjectDetail = () => {
   ];
 
   const allProjects = (data.projects && data.projects.length > 0) ? data.projects : defaultProjects;
-  const project = allProjects.find(p => p.id === id);
+  const project = allProjects.find(p => (p._id || p.id) === id);
 
   if (!project) {
     return (

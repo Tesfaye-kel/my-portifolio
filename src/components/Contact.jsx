@@ -5,8 +5,10 @@ import {
   Twitter, Facebook, Send, CheckCircle2, 
   Loader2, MessageSquare, ArrowUpRight
 } from 'lucide-react';
+import { usePortfolio } from '../context/PortfolioContext';
 
 const Contact = () => {
+  const { addMessage } = usePortfolio();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,20 +18,24 @@ const Contact = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setIsError(false);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      await addMessage(formData);
       setIsSubmitting(false);
       setIsSuccess(true);
       setFormData({ name: '', email: '', message: '' });
       
       // Reset success state after 3 seconds
       setTimeout(() => setIsSuccess(false), 3000);
-    }, 2000);
+    } catch (error) {
+      setIsSubmitting(false);
+      setIsError(true);
+      setTimeout(() => setIsError(false), 3000);
+    }
   };
  
   const handleChange = (e) => {
