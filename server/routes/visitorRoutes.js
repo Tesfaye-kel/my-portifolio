@@ -51,6 +51,29 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @desc    Update visitor name by visitorId
+// @route   PUT /api/visitors/name
+// @access  Public
+router.put('/name', async (req, res) => {
+  try {
+    const { visitorId, name } = req.body;
+
+    if (!visitorId || !name) {
+      return res.status(400).json({ message: 'visitorId and name are required' });
+    }
+
+    // Update all visitor records with this visitorId
+    const result = await Visitor.updateMany(
+      { visitorId },
+      { $set: { name, username: name } }
+    );
+
+    res.json({ message: `Updated ${result.modifiedCount} visitor records`, modifiedCount: result.modifiedCount });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // @desc    Get all visitors
 // @route   GET /api/visitors
 // @access  Private

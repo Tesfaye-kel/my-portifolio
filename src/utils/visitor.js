@@ -5,6 +5,7 @@ import { visitorsAPI } from './api';
 
 const VISITOR_ID_KEY = 'portfolio_visitor_id';
 const FIRST_VISIT_KEY = 'portfolio_first_visit';
+const VISITOR_NAME_KEY = 'portfolio_visitor_name';
 
 // Detect referral source from document.referrer
 export const detectSource = () => {
@@ -90,6 +91,16 @@ export const getVisitorId = () => {
   return id;
 };
 
+// Get stored visitor name (from contact form submission)
+export const getVisitorName = () => {
+  return localStorage.getItem(VISITOR_NAME_KEY) || null;
+};
+
+// Save visitor name (called when contact form is submitted)
+export const setVisitorName = (name) => {
+  if (name) localStorage.setItem(VISITOR_NAME_KEY, name);
+};
+
 // Check if returning visitor
 export const isReturningVisitor = () => {
   return !!localStorage.getItem(FIRST_VISIT_KEY);
@@ -116,9 +127,11 @@ export const recordVisit = async () => {
     
     const country = await getCountry();
     
+    const storedName = getVisitorName();
+    
     const visit = {
       visitorId,
-      name: 'Anonymous Visitor',
+      name: storedName || 'Anonymous Visitor',
       source: detectSource(),
       username: null,
       country,

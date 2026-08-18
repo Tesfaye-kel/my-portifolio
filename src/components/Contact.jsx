@@ -6,6 +6,8 @@ import {
   Loader2, MessageSquare, ArrowUpRight
 } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
+import { setVisitorName, getVisitorId } from '../utils/visitor';
+import { visitorsAPI } from '../utils/api';
 
 const Contact = () => {
   const { addMessage } = usePortfolio();
@@ -25,6 +27,14 @@ const Contact = () => {
     
     try {
       await addMessage(formData);
+      // Save visitor name so future visits show their real name
+      setVisitorName(formData.name);
+      // Update past visitor records with the real name
+      try {
+        await visitorsAPI.updateName(getVisitorId(), formData.name);
+      } catch (err) {
+        console.error('Failed to update visitor name:', err);
+      }
       setIsSubmitting(false);
       setIsSuccess(true);
       setFormData({ name: '', email: '', message: '' });

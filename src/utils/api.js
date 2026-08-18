@@ -97,6 +97,10 @@ export const visitorsAPI = {
     method: 'POST',
     body: JSON.stringify(data),
   }),
+  updateName: (visitorId, name) => apiRequest('/visitors/name', {
+    method: 'PUT',
+    body: JSON.stringify({ visitorId, name }),
+  }),
   getAll: () => apiRequest('/visitors'),
   getAnalytics: () => apiRequest('/visitors/analytics'),
   getRange: (days = 7) => apiRequest(`/visitors/range?days=${days}`),
