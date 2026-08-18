@@ -249,9 +249,10 @@ const AdminAnalytics = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-[#0a192f]/60 border-b border-[#233554]/50">
-                <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Name / Username</th>
                 <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Source</th>
-                <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Country</th>
+                <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">IP / ISP</th>
                 <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Device</th>
                 <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Date</th>
                 <th className="px-6 py-3 text-left text-xs font-mono uppercase tracking-wider text-slate-500">Time</th>
@@ -261,13 +262,29 @@ const AdminAnalytics = () => {
               {recentVisitors.length > 0 ? (
                 recentVisitors.map((v, i) => (
                   <tr key={i} className="border-b border-[#233554]/30 hover:bg-primary/5 transition-colors">
-                    <td className="px-6 py-3 text-white text-sm">{v.name}</td>
+                    <td className="px-6 py-3">
+                      <div className="text-white text-sm">{v.name}</div>
+                      {v.username && v.username !== v.name && (
+                        <div className="text-primary text-xs font-mono mt-0.5">@{v.username}</div>
+                      )}
+                    </td>
                     <td className="px-6 py-3">
                       <span className="px-2 py-1 rounded-lg bg-primary/10 border border-primary/30 text-primary text-xs font-mono">
                         {v.source}
                       </span>
                     </td>
-                    <td className="px-6 py-3 text-slate-400 text-sm">{v.country}</td>
+                    <td className="px-6 py-3">
+                      <div className="text-slate-400 text-sm">{v.country}</div>
+                      {v.city && v.city !== 'Unknown' && (
+                        <div className="text-slate-500 text-xs">{v.city}{v.region && v.region !== 'Unknown' ? `, ${v.region}` : ''}</div>
+                      )}
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="text-slate-400 text-sm font-mono">{v.ip}</div>
+                      {v.isp && v.isp !== 'Unknown' && (
+                        <div className="text-slate-500 text-xs">{v.isp}</div>
+                      )}
+                    </td>
                     <td className="px-6 py-3 text-slate-400 text-sm">{v.device}</td>
                     <td className="px-6 py-3 text-slate-400 text-sm font-mono">{v.date}</td>
                     <td className="px-6 py-3 text-slate-400 text-sm font-mono">{v.time}</td>
@@ -275,7 +292,7 @@ const AdminAnalytics = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="px-6 py-12 text-center text-slate-500">No visitors recorded yet</td>
+                  <td colSpan="7" className="px-6 py-12 text-center text-slate-500">No visitors recorded yet</td>
                 </tr>
               )}
             </tbody>

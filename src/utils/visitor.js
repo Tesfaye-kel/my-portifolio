@@ -37,6 +37,72 @@ export const detectSource = () => {
   }
 };
 
+// Extract username from referrer URL (e.g., github.com/username → username)
+export const detectReferrerUsername = () => {
+  const referrer = document.referrer || '';
+  if (!referrer) return null;
+  
+  try {
+    const url = new URL(referrer);
+    const host = url.hostname.toLowerCase();
+    const pathParts = url.pathname.split('/').filter(Boolean);
+    
+    // GitHub: github.com/username or github.com/username/repo
+    if (host.includes('github.com') && pathParts.length > 0) {
+      return pathParts[0];
+    }
+    
+    // LinkedIn: linkedin.com/in/username
+    if (host.includes('linkedin.com') && pathParts[0] === 'in' && pathParts.length > 1) {
+      return pathParts[1];
+    }
+    
+    // Twitter/X: twitter.com/username or x.com/username
+    if ((host.includes('twitter.com') || host.includes('x.com')) && pathParts.length > 0) {
+      return pathParts[0];
+    }
+    
+    // Instagram: instagram.com/username
+    if (host.includes('instagram.com') && pathParts.length > 0) {
+      return pathParts[0];
+    }
+    
+    // Facebook: facebook.com/username
+    if (host.includes('facebook.com') && pathParts.length > 0) {
+      return pathParts[0];
+    }
+    
+    // Telegram: t.me/username
+    if (host.includes('t.me') && pathParts.length > 0) {
+      return pathParts[0];
+    }
+    
+    // Reddit: reddit.com/user/username
+    if (host.includes('reddit.com') && pathParts[0] === 'user' && pathParts.length > 1) {
+      return pathParts[1];
+    }
+    
+    // Medium: medium.com/@username
+    if (host.includes('medium.com') && pathParts[0]?.startsWith('@')) {
+      return pathParts[0].replace('@', '');
+    }
+    
+    // Dev.to: dev.to/username
+    if (host.includes('dev.to') && pathParts.length > 0) {
+      return pathParts[0];
+    }
+    
+    // Stack Overflow: stackoverflow.com/users/12345/username
+    if (host.includes('stackoverflow.com') && pathParts[0] === 'users' && pathParts.length > 2) {
+      return pathParts[2];
+    }
+    
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 // Detect device type
 export const detectDevice = () => {
   const ua = navigator.userAgent;
@@ -67,6 +133,25 @@ export const detectOS = () => {
   if (ua.includes('Linux')) return 'Linux';
   if (ua.includes('CrOS')) return 'Chrome OS';
   return 'Unknown';
+};
+
+// Get detailed IP info via free IP geolocation API
+export const getIPInfo = async () => {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    if (!response.ok) return null;
+    const data = await response.json();
+    return {
+      country: data.country_name || 'Unknown',
+      city: data.city || 'Unknown',
+      region: data.region || 'Unknown',
+      isp: data.org || 'Unknown',
+      ip: data.ip || 'Unknown',
+      timezone: data.timezone || 'Unknown',
+    };
+  } catch {
+    return null;
+  }
 };
 
 // Get country via free IP geolocation API
@@ -126,15 +211,21 @@ export const recordVisit = async () => {
     }
     
     const country = await getCountry();
-    
+    const ipInfo = await getIPInfo();
+    const referrerUsername = detectReferrerUsername();
     const storedName = getVisitorName();
     
     const visit = {
       visitorId,
-      name: storedName || 'Anonymous Visitor',
+      name: storedName || referrerUsername || 'Anonymous Visitor',
       source: detectSource(),
-      username: null,
+      username: referrerUsername || storedName || null,
       country,
+      city: ipInfo?.city || 'Unknown',
+      region: ipInfo?.region || 'Unknown',
+      isp: ipInfo?.isp || 'Unknown',
+      ip: ipInfo?.ip || 'Unknown',
+      timezone: ipInfo?.timezone || 'Unknown',
       device: detectDevice(),
       browser: detectBrowser(),
       os: detectOS(),
