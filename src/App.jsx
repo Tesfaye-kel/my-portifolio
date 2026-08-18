@@ -27,6 +27,7 @@ import ProjectDetail from './components/ProjectDetail';
 import AdminAnalytics from './components/admin/AdminAnalytics';
 import ChangePassword from './components/admin/ChangePassword';
 import { recordVisit } from './utils/visitor';
+import VisitorNamePrompt from './components/VisitorNamePrompt';
 
 // Public Portfolio Sections with Page Transition
 const HomePage = () => (
@@ -124,6 +125,7 @@ function App() {
   return (
     <BrowserRouter basename={basename}>
       <ScrollToHash />
+      <VisitorNamePrompt />
       <Routes>
         {/* Public Portfolio Routes */}
         <Route 
