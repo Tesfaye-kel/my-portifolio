@@ -1,4 +1,4 @@
-# Admin Panel Implementation Plan
+  # Admin Panel Implementation Plan
 
 ## Information Gathered
 

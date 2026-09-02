@@ -118,7 +118,7 @@ The GitHub Actions workflow automatically builds and deploys on every push to `m
 
 - **Email**: [tesfayekelbesa912@gmail.com](mailto:tesfayekelbesa912@gmail.com)
 - **GitHub**: [@Tesfaye-kel](https://github.com/Tesfaye-kel)
-- **LinkedIn**: [Tesfaye Kelbesa](https://linkedin.com)
+- **LinkedIn**: [https://www.linkedin.com/in/tesfaye-kelbesa-5b9a133b0?utm_source=share_via&utm_content=profile&utm_medium=member_android](https://linkedin.com)
 
 ---
 
