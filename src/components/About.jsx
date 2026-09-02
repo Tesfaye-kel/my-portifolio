@@ -858,38 +858,7 @@ const About = () => {
           </div>
         </div>
 
-        {/* 6. Engineering Principles */}
-        <div className="mb-32">
-          <SectionHeader number="05" title="Engineering Mindset" subtitle="How I approach development" />
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {engineeringPrinciples.map((principle, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="tech-card"
-              >
-                <div className="flex items-start gap-4">
-                  <div 
-                    className="p-3 rounded-lg"
-                    style={{ backgroundColor: `${principle.color}15`, color: principle.color }}
-                  >
-                    {principle.icon}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-100 mb-2">{principle.title}</h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">{principle.description}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* 7. Services */}
+        {/* Services */}
         <div id="services" className="mb-32">
           <SectionHeader number="06" title="Services" subtitle="What I can do for you" />
           

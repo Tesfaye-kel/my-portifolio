@@ -1,8 +1,8 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { usePortfolio } from '../context/PortfolioContext';
 import { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Mail, ArrowDown, Download, ExternalLink, Twitter, Facebook, Send } from 'lucide-react';
-import myProfileImage from '../../me.jpg';
+import { Github, Linkedin, Mail, ArrowDown, ArrowRight, Download, ExternalLink, Twitter, Facebook, Send } from 'lucide-react';
+import myProfileImage from '../../mee.jpg';
 
 // --- Typewriter Effect ---
 const TypewriterEffect = ({ texts, speed = 80, deleteSpeed = 40, delayBetween = 2000 }) => {
@@ -114,7 +114,37 @@ const Hero = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          
+
+          {/* Mobile-only Story Quote - shown at the very top, replacing the profile pic's usual top spot */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:hidden order-0"
+          >
+            <div className="flex items-center justify-center gap-4 mb-2">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/60 max-w-[70px]" />
+              <span className="text-primary font-mono text-xs sm:text-sm tracking-[0.25em] uppercase">My Why</span>
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-primary/40 to-primary/60 max-w-[70px]" />
+            </div>
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              className="flex justify-center mb-3"
+            >
+              <div className="flex items-center justify-center gap-2 text-primary/90">
+                <ArrowDown size={14} />
+              </div>
+            </motion.div>
+            <div className="relative max-w-md mx-auto px-6 py-6 rounded-2xl bg-[#112240]/40 border border-[#233554]/50">
+              <span className="absolute top-3 left-4 text-2xl text-primary/20 font-serif leading-none select-none">"</span>
+              <p className="text-slate-300/90 text-sm sm:text-base leading-loose text-left max-w-[90%] mx-auto">
+                We are all given different beginnings. Some are easy, some are uncertain, and some force us to grow before we are ready. I chose to see mine not as limitations, but as materials—things I could learn from, shape, and turn into something meaningful.
+              </p>
+              <span className="absolute bottom-3 right-4 text-2xl text-primary/20 font-serif leading-none select-none">"</span>
+            </div>
+          </motion.div>
+
           {/* Left Content */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
@@ -248,20 +278,21 @@ const Hero = () => {
             className="flex flex-col items-center justify-center order-1 lg:order-2"
           >
             <div className="relative mb-4">
-              {/* Professional soft shadow */}
-              <div className="absolute inset-0 rounded-full shadow-[0_20px_60px_-15px_rgba(2,12,27,0.5)]" />
+              <div className="absolute inset-[-18px] rounded-full bg-primary/10 blur-3xl" />
+              <div className="absolute inset-[-4px] rounded-full bg-gradient-to-br from-[#1d3557]/30 via-[#0a192f]/10 to-[#020817]/40 blur-sm" />
               
-              {/* Profile Image - slightly smaller and moved up */}
               <motion.div 
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="relative w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden shadow-[0_10px_40px_-10px_rgba(2,12,27,0.6)] ring-1 ring-[#233554]/40"
+                className="relative w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden border border-[#233554]/70 bg-[radial-gradient(circle_at_30%_30%,rgba(96,165,250,0.18),rgba(17,34,64,0.92)_38%,rgba(2,6,23,1)_100%)] p-2 shadow-[0_0_0_1px_rgba(148,163,184,0.08),0_25px_60px_-18px_rgba(2,6,23,0.95),0_0_30px_rgba(96,165,250,0.18)]"
               >
-                <img 
-                  src={myProfileImage} 
-                  alt="Tesfaye Kelbesa - Full Stack Developer" 
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-full h-full overflow-hidden rounded-full border border-white/5 bg-[#020817] shadow-inner shadow-[#020817]/80">
+                  <img 
+                    src={myProfileImage} 
+                    alt="Tesfaye Kelbesa - Full Stack Developer" 
+                    className="w-full h-full object-cover object-center opacity-95"
+                  />
+                </div>
               </motion.div>
 
             </div>

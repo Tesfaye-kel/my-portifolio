@@ -7,6 +7,41 @@ const PortfolioContext = createContext();
 
 export const usePortfolio = () => useContext(PortfolioContext);
 
+const STORAGE_KEY = 'portfolio_local_data_v1';
+
+const sortProjects = (projects = []) => {
+  return [...projects].sort((a, b) => {
+    const aTime = a.createdAt ? new Date(a.createdAt).getTime() : (typeof a.order === 'number' ? a.order : 0);
+    const bTime = b.createdAt ? new Date(b.createdAt).getTime() : (typeof b.order === 'number' ? b.order : 0);
+
+    if (aTime !== bTime) {
+      return bTime - aTime;
+    }
+
+    const aOrder = typeof a.order === 'number' ? a.order : 0;
+    const bOrder = typeof b.order === 'number' ? b.order : 0;
+    return bOrder - aOrder;
+  });
+};
+
+const getStoredPortfolio = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    console.error('Failed to read local portfolio cache:', error);
+    return null;
+  }
+};
+
+const saveStoredPortfolio = (portfolioData) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolioData));
+  } catch (error) {
+    console.error('Failed to write local portfolio cache:', error);
+  }
+};
+
 const fallbackData = {
   docId: 'main',
   profile: {
@@ -55,7 +90,47 @@ const fallbackData = {
     ],
     careerGoals: "",
   },
-  projects: [],
+  projects: [
+    {
+      _id: 'sample-project-1',
+      title: 'Zenivial Social Network',
+      description: 'A real-time social platform built with MERN stack and Socket.io for live messaging.',
+      technologies: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
+      github: 'https://github.com/Tesfaye-kel/zenivial-social',
+      live: '',
+      image: null,
+      certificateImage: '',
+      certificateTitle: 'Certificate of Completion',
+      featured: true,
+      order: 1,
+    },
+    {
+      _id: 'sample-project-2',
+      title: 'Restaurant Management System',
+      description: 'A restaurant operations app for staff coordination, orders, and reservations.',
+      technologies: ['React', 'Firebase', 'Tailwind CSS'],
+      github: 'https://github.com/Tesfaye-kel/restaurant-management',
+      live: '',
+      image: null,
+      certificateImage: '',
+      certificateTitle: 'Achievement Certificate',
+      featured: false,
+      order: 2,
+    },
+    {
+      _id: 'sample-project-3',
+      title: 'Weather Dashboard',
+      description: 'Interactive weather analytics with real-time forecast and chart-based monitoring.',
+      technologies: ['React', 'REST API', 'Chart.js'],
+      github: '',
+      live: '',
+      image: null,
+      certificateImage: '',
+      certificateTitle: 'Course Certificate',
+      featured: false,
+      order: 3,
+    }
+  ],
   socialLinks: [],
   messages: [],
   gallery: [],
@@ -76,27 +151,40 @@ export const PortfolioProvider = ({ children }) => {
   const loadPortfolio = useCallback(async () => {
     try {
       setLoading(true);
-      const portfolioData = await portfolioAPI.getPortfolio();
+      const [portfolioData, allProjects] = await Promise.all([
+        portfolioAPI.getPortfolio(),
+        projectsAPI.getAll(),
+      ]);
+      const stored = getStoredPortfolio();
       
-      // Transform MongoDB data to match frontend structure
+      const sortedProjects = sortProjects(
+        Array.isArray(allProjects) && allProjects.length > 0
+          ? allProjects
+          : (Array.isArray(portfolioData.projects) && portfolioData.projects.length > 0
+            ? portfolioData.projects
+            : (stored?.projects || fallbackData.projects))
+      );
+
       const transformed = {
         ...portfolioData,
         profile: portfolioData.profile || fallbackData.profile,
         hero: portfolioData.hero || fallbackData.hero,
         about: portfolioData.about || fallbackData.about,
-        socialLinks: portfolioData.socialLinks || [],
-        projects: portfolioData.projects || [],
-        messages: portfolioData.messages || [],
-        gallery: portfolioData.gallery || [],
+        socialLinks: portfolioData.socialLinks?.length ? portfolioData.socialLinks : fallbackData.socialLinks,
+        projects: sortedProjects,
+        messages: portfolioData.messages?.length ? portfolioData.messages : fallbackData.messages,
+        gallery: Array.isArray(portfolioData.gallery) && portfolioData.gallery.length > 0 ? portfolioData.gallery : fallbackData.gallery,
         contact: portfolioData.contact || fallbackData.contact,
         theme: portfolioData.theme || 'dark',
       };
-      
+
+      saveStoredPortfolio(transformed);
       setData(transformed);
     } catch (error) {
       console.error('Failed to load portfolio:', error);
-      // Use fallback data if backend is not available
-      setData(fallbackData);
+      const stored = getStoredPortfolio() || fallbackData;
+      saveStoredPortfolio(stored);
+      setData(stored);
     } finally {
       setLoading(false);
     }
@@ -120,7 +208,11 @@ export const PortfolioProvider = ({ children }) => {
   // --- Generic Update Function ---
   const updateSection = async (section, sectionData) => {
     // Optimistic update
-    setData(prev => ({ ...prev, [section]: sectionData }));
+    setData(prev => {
+      const next = { ...prev, [section]: sectionData };
+      saveStoredPortfolio(next);
+      return next;
+    });
     
     try {
       await portfolioAPI.updateSection(section, sectionData);
@@ -141,38 +233,86 @@ export const PortfolioProvider = ({ children }) => {
   const addProject = async (projectData) => {
     try {
       const newProject = await projectsAPI.create(projectData);
-      setData(prev => ({ ...prev, projects: [...prev.projects, newProject] }));
+      setData(prev => {
+        const next = { ...prev, projects: sortProjects([newProject, ...(prev.projects || [])]) };
+        saveStoredPortfolio(next);
+        return next;
+      });
+      await loadPortfolio();
       return newProject;
     } catch (error) {
-      console.error('Failed to add project:', error);
-      throw error;
+      console.error('Failed to add project via API, using local storage fallback:', error);
+      const nextProject = {
+        ...projectData,
+        _id: `local-${Date.now()}`,
+        technologies: Array.isArray(projectData.technologies) ? projectData.technologies : (projectData.technologies || '').split(',').map((item) => item.trim()).filter(Boolean),
+        image: projectData.image || null,
+        certificateImage: projectData.certificateImage || null,
+        certificateTitle: projectData.certificateTitle || 'Certificate',
+        featured: Boolean(projectData.featured),
+      };
+
+      setData(prev => {
+        const next = { ...prev, projects: sortProjects([nextProject, ...(prev.projects || [])]) };
+        saveStoredPortfolio(next);
+        return next;
+      });
+      return nextProject;
     }
   };
 
   const updateProject = async (projectId, projectData) => {
     try {
       const updatedProject = await projectsAPI.update(projectId, projectData);
-      setData(prev => ({
-        ...prev,
-        projects: prev.projects.map(p => p._id === projectId ? updatedProject : p)
-      }));
+      setData(prev => {
+        const next = {
+          ...prev,
+          projects: mergeProjects((prev.projects || []).map(p => (p._id || p.id) === projectId ? updatedProject : p), [updatedProject])
+        };
+        saveStoredPortfolio(next);
+        return next;
+      });
+      await loadPortfolio();
       return updatedProject;
     } catch (error) {
-      console.error('Failed to update project:', error);
-      throw error;
+      console.error('Failed to update project via API, using local storage fallback:', error);
+      const nextProject = {
+        ...projectData,
+        _id: projectId,
+        technologies: Array.isArray(projectData.technologies) ? projectData.technologies : (projectData.technologies || '').split(',').map((item) => item.trim()).filter(Boolean),
+        image: projectData.image || null,
+        certificateImage: projectData.certificateImage || null,
+        certificateTitle: projectData.certificateTitle || 'Certificate',
+      };
+
+      setData(prev => {
+        const next = {
+          ...prev,
+          projects: sortProjects((prev.projects || []).map(p => (p._id || p.id) === projectId ? { ...p, ...nextProject } : p))
+        };
+        saveStoredPortfolio(next);
+        return next;
+      });
+      return nextProject;
     }
   };
 
   const deleteProject = async (projectId) => {
     try {
       await projectsAPI.delete(projectId);
-      setData(prev => ({
-        ...prev,
-        projects: prev.projects.filter(p => p._id !== projectId)
-      }));
+      setData(prev => {
+        const next = { ...prev, projects: (prev.projects || []).filter(p => (p._id || p.id) !== projectId) };
+        saveStoredPortfolio(next);
+        return next;
+      });
+      await loadPortfolio();
     } catch (error) {
-      console.error('Failed to delete project:', error);
-      throw error;
+      console.error('Failed to delete project via API, using local storage fallback:', error);
+      setData(prev => {
+        const next = { ...prev, projects: (prev.projects || []).filter(p => (p._id || p.id) !== projectId) };
+        saveStoredPortfolio(next);
+        return next;
+      });
     }
   };
 

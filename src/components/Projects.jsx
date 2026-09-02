@@ -125,15 +125,25 @@ const Projects = () => {
     }
   ];
 
-  const projects = (contextProjects && contextProjects.length > 0) ? contextProjects : defaultProjects;
-  const featuredProject = projects.find(p => p.featured) || projects[0];
-  const otherProjects = projects.filter(p => (p._id || p.id) !== (featuredProject._id || featuredProject.id));
+  const projects = (contextProjects && contextProjects.length > 0)
+    ? [...contextProjects].sort((a, b) => {
+        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : (typeof a.order === 'number' ? a.order : 0);
+        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : (typeof b.order === 'number' ? b.order : 0);
+        return bTime - aTime;
+      })
+    : defaultProjects;
 
   const handleCardKeyDown = (e, id) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
+      sessionStorage.setItem('portfolio-project-scroll', String(window.scrollY || 0));
       navigate(`/project/${id}`);
     }
+  };
+
+  const handleProjectOpen = (id) => {
+    sessionStorage.setItem('portfolio-project-scroll', String(window.scrollY || 0));
+    navigate(`/project/${id}`);
   };
 
   return (
@@ -156,199 +166,84 @@ const Projects = () => {
           <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">A selection of projects I've built, showcasing my skills in full-stack development.</p>
         </motion.div>
 
-        {/* Featured Project - Large Immersive Layout */}
-        {featuredProject && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20"
-          >
-            <div className="relative rounded-2xl overflow-hidden border border-[#233554]/50 bg-gradient-to-br from-[#112240]/80 to-[#0a192f]/80">
-              {/* Background glow */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl" />
-
-              <div className="relative p-8 md:p-12">
-                <div className="flex items-center gap-2 mb-6">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-mono">
-                    Featured Project
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-[#0a192f]/60 border border-[#233554]/50 text-slate-400 text-xs font-mono">
-                    {featuredProject.category}
-                  </span>
-                </div>
-
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  {/* Project Visual */}
-                  <div className="relative group">
-                    <div className="absolute -inset-4 bg-primary/10 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative aspect-video rounded-xl overflow-hidden border border-[#233554]/50 bg-[#0a192f]/60 flex items-center justify-center">
-                      {featuredProject.image ? (
-                        <img 
-                          src={featuredProject.image} 
-                          alt={featuredProject.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="text-center p-8">
-                          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
-                            {featuredProject.icon}
-                          </div>
-                          <p className="text-slate-500 font-mono text-sm">Project Preview</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Project Details */}
-                  <div>
-                    <h3 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">
-                      {featuredProject.title}
-                    </h3>
-                    <p className="text-slate-400 text-lg leading-relaxed mb-6">
-                      {featuredProject.description}
-                    </p>
-
-                    {/* Features */}
-                    <div className="mb-6">
-                      <h4 className="text-sm font-mono text-primary mb-3">Key Features</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {featuredProject.features?.map((feature, i) => (
-                          <span key={i} className="px-3 py-1 rounded-md bg-[#0a192f]/60 border border-[#233554]/50 text-xs text-slate-300">
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Tech Stack */}
-                    <div className="mb-8">
-                      <h4 className="text-sm font-mono text-primary mb-3">Tech Stack</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {featuredProject.technologies?.map((tech, i) => (
-                          <span key={i} className="px-3 py-1 rounded-md bg-primary/10 border border-primary/30 text-xs font-mono text-primary">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex flex-wrap gap-4">
-                      <button
-                        onClick={() => navigate(`/project/${featuredProject._id || featuredProject.id}`)}
-                        className="magnetic-btn"
-                      >
-                        View Case Study
-                        <ArrowRight size={16} />
-                      </button>
-                      {featuredProject.github && (
-                        <a
-                          href={featuredProject.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-3 rounded-lg bg-[#112240]/50 border border-[#233554]/50 text-slate-400 hover:text-primary hover:border-primary/50 transition-all"
-                          aria-label="GitHub"
-                        >
-                          <Github size={20} />
-                        </a>
-                      )}
-                      {featuredProject.live && (
-                        <a
-                          href={featuredProject.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-3 rounded-lg bg-[#112240]/50 border border-[#233554]/50 text-slate-400 hover:text-primary hover:border-primary/50 transition-all"
-                          aria-label="Live Demo"
-                        >
-                          <ExternalLink size={20} />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Other Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {otherProjects.map((project, index) => (
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+          {projects.map((project, index) => (
             <motion.div
               key={project._id || project.id || index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              onClick={() => navigate(`/project/${project._id || project.id}`)}
+              transition={{ duration: 0.6, delay: index * 0.08 }}
+              onClick={() => handleProjectOpen(project._id || project.id)}
               onKeyDown={(e) => handleCardKeyDown(e, project._id || project.id)}
               role="link"
               tabIndex="0"
-              className="project-card group cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+              className="project-card group flex h-full min-h-[360px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-[#233554]/50 bg-[#112240]/80 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.1)] focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <div className="relative aspect-video overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden border-b border-[#233554]/50">
                 {project.image ? (
-                  <img 
-                    src={project.image} 
+                  <img
+                    src={project.image}
                     alt={project.title}
-                    className="project-image w-full h-full object-cover"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[#112240] to-[#0a192f] flex items-center justify-center">
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#112240] to-[#0a192f]">
                     <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-3 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        {project.icon}
+                      <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
+                        {project.icon || <ArrowRight size={18} />}
                       </div>
-                      <span className="text-slate-500 font-mono text-xs">{project.category}</span>
+                      <span className="text-[10px] font-mono text-slate-500">{project.category || 'Project'}</span>
                     </div>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xl font-bold text-slate-100 group-hover:text-primary transition-colors">
+              <div className="flex flex-1 flex-col p-4 md:p-5">
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <h3 className="text-base font-bold text-slate-100 transition-colors group-hover:text-primary md:text-lg">
                     {project.title}
                   </h3>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     {project.github && (
-                      <a 
+                      <a
                         href={project.github}
                         onClick={(e) => e.stopPropagation()}
-                        className="p-2 rounded-lg text-slate-400 hover:text-primary transition-colors"
+                        className="rounded-lg p-2 text-slate-400 transition-colors hover:text-primary"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="GitHub"
                       >
-                        <Github size={18} />
+                        <Github size={16} />
                       </a>
                     )}
                     {project.live && (
-                      <a 
+                      <a
                         href={project.live}
                         onClick={(e) => e.stopPropagation()}
-                        className="p-2 rounded-lg text-slate-400 hover:text-primary transition-colors"
+                        className="rounded-lg p-2 text-slate-400 transition-colors hover:text-primary"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Live Demo"
                       >
-                        <ExternalLink size={18} />
+                        <ExternalLink size={16} />
                       </a>
                     )}
                   </div>
                 </div>
 
-                <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
+                <p className="mb-3 line-clamp-3 text-[11px] leading-relaxed text-slate-400 md:text-xs">
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="mt-auto flex flex-wrap gap-1.5">
                   {project.technologies?.map((tech, i) => (
-                    <span key={i} className="px-2 py-1 rounded bg-[#0a192f]/60 border border-[#233554]/50 text-xs font-mono text-primary/70">
+                    <span
+                      key={i}
+                      className="rounded bg-[#0a192f]/60 border border-[#233554]/50 px-2 py-0.5 text-[9px] font-mono text-primary/70 md:text-[10px]"
+                    >
                       {tech}
                     </span>
                   ))}
@@ -357,9 +252,9 @@ const Projects = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/project/${project._id || project.id}`);
+                    handleProjectOpen(project._id || project.id);
                   }}
-                  className="magnetic-btn w-full justify-center text-sm"
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-primary/40 bg-transparent px-3 py-2 text-[11px] font-medium text-primary transition-all duration-300 hover:bg-primary/10 md:text-xs"
                 >
                   View Case Study
                   <ArrowRight size={14} />

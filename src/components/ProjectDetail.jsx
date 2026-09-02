@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { 
   Github, ExternalLink, ArrowLeft, 
   AlertCircle, Lightbulb, Layers, 
@@ -12,6 +13,23 @@ import {
 const ProjectDetail = () => {
   const { id } = useParams();
   const { data } = usePortfolio();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [id]);
+
+  const handleBackToProjects = () => {
+    const savedScroll = sessionStorage.getItem('portfolio-project-scroll');
+    if (savedScroll) {
+      sessionStorage.removeItem('portfolio-project-scroll');
+      window.history.back();
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: Number(savedScroll), behavior: 'instant' });
+      });
+      return;
+    }
+    window.location.href = '/#projects';
+  };
   
   const defaultProjects = [
     {
@@ -187,6 +205,8 @@ const ProjectDetail = () => {
     }
   ];
 
+  const populatedCaseStudySections = caseStudySections.filter((section) => section.content);
+
   return (
     <section className="min-h-screen py-28">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -195,10 +215,14 @@ const ProjectDetail = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Link to="/#projects" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 font-mono transition-all hover:-translate-x-1">
+          <button
+            type="button"
+            onClick={handleBackToProjects}
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 font-mono transition-all hover:-translate-x-1"
+          >
             <ArrowLeft size={18} />
             Back to Projects
-          </Link>
+          </button>
 
           {/* Header */}
           <div className="mb-12">
@@ -212,8 +236,8 @@ const ProjectDetail = () => {
                 </span>
               )}
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-100 mb-4">{project.title}</h1>
-            <p className="text-slate-400 text-lg leading-relaxed">{project.description}</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-100 mb-4">{project.title}</h1>
+            <p className="text-slate-400 text-sm md:text-base leading-relaxed">{project.description}</p>
           </div>
 
           {/* Project Visual */}
@@ -236,11 +260,32 @@ const ProjectDetail = () => {
             )}
           </div>
 
+          {/* Certificate / Achievement Screenshot */}
+          {(project.certificateImage || project.certificateTitle) && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
+                <Layers size={20} className="text-primary" />
+                {project.certificateTitle || 'Certificate'}
+              </h2>
+              <div className="overflow-hidden rounded-2xl border border-[#233554]/50 bg-[#112240]/40 shadow-[0_0_30px_rgba(96,165,250,0.08)]">
+                {project.certificateImage ? (
+                  <img
+                    src={project.certificateImage}
+                    alt={project.certificateTitle || 'Certificate'}
+                    className="w-full h-auto object-cover"
+                  />
+                ) : (
+                  <div className="p-8 text-slate-400 text-center">No certificate image added yet.</div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Features */}
           {project.features && project.features.length > 0 && (
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-2">
-                <ListChecks size={24} className="text-primary" />
+              <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
+                <ListChecks size={20} className="text-primary" />
                 Key Features
               </h2>
               <div className="grid sm:grid-cols-2 gap-4">
@@ -254,7 +299,7 @@ const ProjectDetail = () => {
                     className="flex items-center gap-3 p-4 rounded-lg bg-[#112240]/40 border border-[#233554]/50"
                   >
                     <span className="w-2 h-2 rounded-full bg-primary" />
-                    <span className="text-slate-300">{feature}</span>
+                    <span className="text-slate-300 text-sm">{feature}</span>
                   </motion.div>
                 ))}
               </div>
@@ -263,12 +308,12 @@ const ProjectDetail = () => {
 
           {/* Case Study Sections */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-2">
-              <Layers size={24} className="text-primary" />
+            <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
+              <Layers size={20} className="text-primary" />
               Case Study
             </h2>
             <div className="space-y-6">
-              {caseStudySections.map((section, index) => (
+              {populatedCaseStudySections.length > 0 ? populatedCaseStudySections.map((section, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
@@ -284,18 +329,20 @@ const ProjectDetail = () => {
                     >
                       {section.icon}
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-100">{section.title}</h3>
+                    <h3 className="text-base font-semibold text-slate-100">{section.title}</h3>
                   </div>
-                  <p className="text-slate-400 leading-relaxed">{section.content}</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">{section.content}</p>
                 </motion.div>
-              ))}
+              )) : (
+                <p className="text-slate-400">Case study content will be added soon.</p>
+              )}
             </div>
           </div>
 
           {/* Tech Stack */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-2">
-              <Layers size={24} className="text-primary" />
+            <h2 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
+              <Layers size={20} className="text-primary" />
               Technology Stack
             </h2>
             <div className="flex flex-wrap gap-3">
@@ -306,7 +353,7 @@ const ProjectDetail = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: i * 0.05 }}
-                  className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 text-primary font-mono text-sm"
+                  className="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/30 text-primary font-mono text-xs"
                 >
                   {tech}
                 </motion.span>
@@ -338,6 +385,14 @@ const ProjectDetail = () => {
                 View Live Demo
               </a>
             )}
+            <button
+              type="button"
+              onClick={handleBackToProjects}
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-mono text-sm"
+            >
+              <ArrowLeft size={16} />
+              Back to Projects
+            </button>
             <Link to="/#projects" className="inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors font-mono text-sm">
               <Link2 size={16} />
               More Projects

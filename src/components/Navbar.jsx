@@ -21,67 +21,83 @@ const Navbar = () => {
     { name: 'About', href: '#about', id: 'about', icon: <User size={16} /> },
     { name: 'Experience', href: '#experience', id: 'experience', icon: <Briefcase size={16} /> },
     { name: 'Skills', href: '#skills', id: 'skills', icon: <Wrench size={16} /> },
-    { name: 'Projects', href: '#projects', id: 'projects', icon: <FolderGit2 size={16} /> },
     { name: 'Services', href: '#services', id: 'services', icon: <Sparkles size={16} /> },
+    { name: 'Projects', href: '#projects', id: 'projects', icon: <FolderGit2 size={16} /> },
     { name: 'Contact', href: '#contact', id: 'contact', icon: <Mail size={16} /> },
   ];
 
-  // Map each section to its navigation group
-  const sectionGroups = {
-    home: 'home',
-    about: 'about',
-    experience: 'about',
-    skills: 'about',
-    projects: 'projects',
-    services: 'projects',
-    contact: 'contact',
-  };
-  // Order of group boundaries for detection
-  const groupBoundaries = ['home', 'about', 'projects', 'contact'];
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      
-      // Track active section: find the nav link element whose top is closest above the viewport center
-      const viewportCenter = window.innerHeight / 2;
-      let current = 'home';
-      let closestTop = -Infinity;
-      
-      for (const link of navLinks) {
-        const element = document.getElementById(link.id);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Section is active if its top is above the center and it's the closest one
-          if (rect.top <= viewportCenter && rect.top > closestTop) {
-            closestTop = rect.top;
-            current = sectionGroups[link.id] || link.id;
-          }
-        }
-      }
-      setActiveSection(current);
-    };
+    const sections = navLinks
+      .map((link) => document.getElementById(link.id))
+      .filter(Boolean);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry) {
+          setActiveSection(visibleEntry.target.id);
+        }
+      },
+      {
+        root: null,
+        threshold: [0.2, 0.4, 0.6, 0.8],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [navLinks]);
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
     setIsOpen(false);
-    
-    if (location.pathname !== '/') {
-      window.location.href = `/${href}`;
+
+    const targetId = href.startsWith('#') ? href.slice(1) : href;
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+      if (href.startsWith('#')) {
+        window.history.pushState(null, '', `${window.location.pathname}${href}`);
+      }
       return;
     }
-    
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-      // Immediately set active section based on the clicked link's group
-      const clickedId = href.replace('#', '');
-      setActiveSection(sectionGroups[clickedId] || clickedId);
-    }
+
+    const offset = 90;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.history.pushState(null, '', `${window.location.pathname}${href}`);
+    setActiveSection(targetId);
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+
+    setTimeout(() => {
+      const finalTarget = document.getElementById(targetId);
+      if (finalTarget) {
+        finalTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      window.location.hash = targetId;
+    }, 50);
   };
 
   return (
@@ -96,7 +112,7 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-3 items-center h-20">
+        <div className="hidden md:grid md:grid-cols-3 md:items-center md:h-20">
           {/* Logo */}
           <Link 
             to="/" 
@@ -154,9 +170,26 @@ const Navbar = () => {
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
           </div>
+        </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2 justify-self-end">
+        <div className="md:hidden flex items-center justify-between h-20">
+          <Link 
+            to="/" 
+            className="group flex items-center gap-3"
+            aria-label="Home"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/20 blur-lg rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative p-2 rounded-lg bg-primary/10 border border-primary/30 group-hover:bg-primary/20 transition-all duration-300">
+                <Code2 className="w-6 h-6 text-primary" />
+              </div>
+            </div>
+            <span className="font-mono font-bold text-primary text-lg tracking-tight">
+              {'<TK />'}
+            </span>
+          </Link>
+
+          <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-all duration-300"

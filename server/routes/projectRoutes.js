@@ -37,7 +37,25 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.post('/', protect, async (req, res) => {
   try {
-    const { title, description, technologies, github, live, image, featured, order } = req.body;
+    const {
+      title,
+      description,
+      technologies,
+      github,
+      live,
+      image,
+      certificateImage,
+      certificateTitle,
+      features,
+      problem,
+      solution,
+      architecture,
+      challenges,
+      results,
+      contribution,
+      featured,
+      order,
+    } = req.body;
 
     if (!title) {
       return res.status(400).json({ message: 'Project title is required' });
@@ -50,6 +68,15 @@ router.post('/', protect, async (req, res) => {
       github: github || '',
       live: live || '',
       image: image || null,
+      certificateImage: certificateImage || null,
+      certificateTitle: certificateTitle || 'Certificate',
+      features: features || [],
+      problem: problem || '',
+      solution: solution || '',
+      architecture: architecture || '',
+      challenges: challenges || '',
+      results: results || '',
+      contribution: contribution || '',
       featured: featured || false,
       order: order || 0,
     });
@@ -78,7 +105,25 @@ router.put('/:id', protect, async (req, res) => {
       return res.status(404).json({ message: 'Project not found' });
     }
 
-    const { title, description, technologies, github, live, image, featured, order } = req.body;
+    const {
+      title,
+      description,
+      technologies,
+      github,
+      live,
+      image,
+      certificateImage,
+      certificateTitle,
+      features,
+      problem,
+      solution,
+      architecture,
+      challenges,
+      results,
+      contribution,
+      featured,
+      order,
+    } = req.body;
 
     project.title = title || project.title;
     project.description = description !== undefined ? description : project.description;
@@ -86,6 +131,15 @@ router.put('/:id', protect, async (req, res) => {
     project.github = github !== undefined ? github : project.github;
     project.live = live !== undefined ? live : project.live;
     project.image = image !== undefined ? image : project.image;
+    project.certificateImage = certificateImage !== undefined ? certificateImage : project.certificateImage;
+    project.certificateTitle = certificateTitle !== undefined ? certificateTitle : project.certificateTitle;
+    project.features = features !== undefined ? features : project.features;
+    project.problem = problem !== undefined ? problem : project.problem;
+    project.solution = solution !== undefined ? solution : project.solution;
+    project.architecture = architecture !== undefined ? architecture : project.architecture;
+    project.challenges = challenges !== undefined ? challenges : project.challenges;
+    project.results = results !== undefined ? results : project.results;
+    project.contribution = contribution !== undefined ? contribution : project.contribution;
     project.featured = featured !== undefined ? featured : project.featured;
     project.order = order !== undefined ? order : project.order;
 
