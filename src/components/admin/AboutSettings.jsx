@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { portfolioAPI } from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Save, Plus, Trash2, Briefcase, GraduationCap, Star, Target, Cpu, Wrench, Heart, Mail, Link } from 'lucide-react';
+import { Save, Plus, Trash2, Briefcase, GraduationCap, Star, Target, Cpu, Wrench, Heart, Mail, Link, Upload, FileText } from 'lucide-react';
 
 const AboutSettings = () => {
   const { data, updateAbout } = usePortfolio();
@@ -9,6 +10,7 @@ const AboutSettings = () => {
   // Initialize state with default structure
   const [formData, setFormData] = useState({
     careerGoals: '',
+    cvUrl: '',
     experience: [],
     education: [],
     whatMakesMeDifferent: [],
@@ -19,11 +21,14 @@ const AboutSettings = () => {
   });
   
   const [saved, setSaved] = useState(false);
+  const [uploadingCV, setUploadingCV] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState('');
 
   useEffect(() => {
     if (data?.about) {
       setFormData({
         careerGoals: data.about.careerGoals || '',
+        cvUrl: data.about.cvUrl || '',
         experience: data.about.experience || [],
         education: data.about.education || [],
         whatMakesMeDifferent: data.about.whatMakesMeDifferent || [],
@@ -75,8 +80,25 @@ const AboutSettings = () => {
   const addExperience = () => {
     setFormData({
       ...formData,
-      experience: [...formData.experience, { role: '', company: '', period: '', description: '' }]
+      experience: [...formData.experience, { role: '', company: '', period: '', description: '', technologies: [], achievements: [] }]
     });
+  };
+
+  const handleCVUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setUploadingCV(true);
+    setUploadMessage('');
+    try {
+      const result = await portfolioAPI.uploadCV(file);
+      setFormData((current) => ({ ...current, cvUrl: result.cvUrl }));
+      setUploadMessage('CV uploaded successfully. Save About Settings to keep the link in your local admin state.');
+    } catch (error) {
+      setUploadMessage(error.message);
+    } finally {
+      setUploadingCV(false);
+      event.target.value = '';
+    }
   };
 
   // Helper for Technical Skills (objects)
@@ -218,6 +240,20 @@ const AboutSettings = () => {
                   className="bg-gray-600 border-gray-500 rounded px-3 py-2 text-white w-full"
                   rows={2}
                 />
+                <textarea
+                  placeholder="Technologies (one per line or comma separated)"
+                  value={(exp.technologies || []).join(', ')}
+                  onChange={(e) => updateExperience(index, 'technologies', e.target.value.split(',').map((item) => item.trim()).filter(Boolean))}
+                  className="bg-gray-600 border-gray-500 rounded px-3 py-2 text-white w-full"
+                  rows={2}
+                />
+                <textarea
+                  placeholder="Achievements (one per line)"
+                  value={(exp.achievements || []).join('\n')}
+                  onChange={(e) => updateExperience(index, 'achievements', e.target.value.split('\n').filter(Boolean))}
+                  className="bg-gray-600 border-gray-500 rounded px-3 py-2 text-white w-full"
+                  rows={4}
+                />
                 <button onClick={() => removeArrayItem('experience', index)} className="text-red-400 text-sm flex items-center gap-1 hover:text-red-300">
                   <Trash2 size={14} /> Remove
                 </button>
@@ -225,6 +261,24 @@ const AboutSettings = () => {
             ))}
           </AnimatePresence>
         </div>
+      </motion.div>
+
+      {/* CV Upload */}
+      <motion.div variants={itemVariants} className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <div className="flex items-center gap-3 mb-4 text-primary">
+          <FileText size={24} />
+          <h2 className="text-xl font-bold text-white">CV / Resume</h2>
+        </div>
+        <p className="text-sm text-gray-400 mb-4">Upload one PDF. The Hero Resume and About Download My CV buttons will use the same file.</p>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <label className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-[#0a192f] font-semibold cursor-pointer hover:bg-primary/80 transition-colors">
+            <Upload size={18} />
+            {uploadingCV ? 'Uploading...' : 'Upload PDF CV'}
+            <input type="file" accept="application/pdf,.pdf" onChange={handleCVUpload} disabled={uploadingCV} className="hidden" />
+          </label>
+          {formData.cvUrl && <a href={formData.cvUrl} target="_blank" rel="noopener noreferrer" className="text-primary text-sm hover:underline">View current CV</a>}
+        </div>
+        {uploadMessage && <p className="mt-3 text-sm text-gray-300">{uploadMessage}</p>}
       </motion.div>
 
       {/* Technical Skills */}

@@ -40,7 +40,7 @@ const TypewriterEffect = ({ texts, speed = 80, deleteSpeed = 40, delayBetween = 
 };
 
 // --- Magnetic Button ---
-const MagneticButton = ({ children, href, className = '', onClick }) => {
+const MagneticButton = ({ children, href, className = '', onClick, download = false }) => {
   const ref = useRef(null);
 
   const handleMouseMove = (e) => {
@@ -62,6 +62,7 @@ const MagneticButton = ({ children, href, className = '', onClick }) => {
     <a
       ref={ref}
       href={href}
+      download={download || undefined}
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -89,6 +90,7 @@ const FloatingBadge = ({ icon, label, position, delay }) => (
 const Hero = () => {
   const { data } = usePortfolio();
   const { hero, profile } = data;
+  const cvUrl = data.about?.cvUrl || `${import.meta.env.BASE_URL || '/'}cv.pdf`;
   const { scrollY } = useScroll();
   
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
@@ -219,7 +221,7 @@ const Hero = () => {
                 View My Work
                 <ArrowDown size={16} />
               </MagneticButton>
-              <MagneticButton href="#" className="border-slate-500 text-slate-400 hover:border-primary hover:text-primary">
+              <MagneticButton href={cvUrl} download className="border-slate-500 text-slate-400 hover:border-primary hover:text-primary">
                 <Download size={16} />
                 Resume
               </MagneticButton>

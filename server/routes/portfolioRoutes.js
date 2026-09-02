@@ -1,8 +1,20 @@
 import express from 'express';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 import Portfolio from '../models/Portfolio.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+const uploadsDirectory = path.resolve('uploads');
+fs.mkdirSync(uploadsDirectory, { recursive: true });
+const upload = multer({
+  dest: uploadsDirectory,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, callback) => {
+    callback(null, file.mimetype === 'application/pdf');
+  },
+});
 
 // @desc    Get portfolio data
 // @route   GET /api/portfolio
@@ -104,6 +116,31 @@ router.put('/:section', protect, async (req, res) => {
 
     res.json({ message: `${section} updated successfully`, data: portfolio[section] });
   } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// @desc    Upload the public CV
+// @route   POST /api/portfolio/cv
+// @access  Private
+router.post('/cv', protect, upload.single('cv'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload a PDF CV' });
+    }
+
+    const filename = `cv-${Date.now()}.pdf`;
+    const finalPath = path.join(uploadsDirectory, filename);
+    fs.renameSync(req.file.path, finalPath);
+
+    let portfolio = await Portfolio.findOne({ docId: 'main' });
+    if (!portfolio) portfolio = await Portfolio.create({ docId: 'main' });
+    portfolio.about = { ...(portfolio.about?.toObject?.() || portfolio.about || {}), cvUrl: `/uploads/${filename}` };
+    await portfolio.save();
+
+    res.json({ message: 'CV uploaded successfully', cvUrl: `/uploads/${filename}` });
+  } catch (error) {
+    if (req.file?.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
     res.status(500).json({ message: error.message });
   }
 });

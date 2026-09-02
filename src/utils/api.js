@@ -57,6 +57,19 @@ export const portfolioAPI = {
     method: 'PUT',
     body: JSON.stringify(data),
   }),
+  uploadCV: async (file) => {
+    const token = getToken();
+    const formData = new FormData();
+    formData.append('cv', file);
+    const response = await fetch(`${API_BASE_URL}/portfolio/cv`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'CV upload failed');
+    return data;
+  },
 };
 
 // Projects API functions

@@ -40,31 +40,34 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const sections = navLinks
-      .map((link) => document.getElementById(link.id))
-      .filter(Boolean);
+    const handleScrollDetection = () => {
+      const sections = navLinks
+        .map((link) => ({ id: link.id, element: document.getElementById(link.id) }))
+        .filter((s) => s.element);
 
-    if (sections.length === 0) return;
+      if (sections.length === 0) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      const scrollY = window.scrollY + 120; // Offset for navbar height
 
-        if (visibleEntry) {
-          setActiveSection(visibleEntry.target.id);
+      // Find the section closest to the top of the viewport
+      let closestSection = sections[0];
+      let closestDistance = Math.abs(scrollY - closestSection.element.offsetTop);
+
+      sections.forEach((section) => {
+        const distance = Math.abs(scrollY - section.element.offsetTop);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
         }
-      },
-      {
-        root: null,
-        threshold: [0.2, 0.4, 0.6, 0.8],
-      }
-    );
+      });
 
-    sections.forEach((section) => observer.observe(section));
+      setActiveSection(closestSection.id);
+    };
 
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScrollDetection, { passive: true });
+    handleScrollDetection(); // Call once on mount
+
+    return () => window.removeEventListener('scroll', handleScrollDetection);
   }, [navLinks]);
 
   const handleNavClick = (e, href) => {

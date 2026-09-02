@@ -26,6 +26,7 @@ const skillSchema = new mongoose.Schema({
 
 const aboutSchema = new mongoose.Schema({
   introduction: { type: String, default: '' },
+  cvUrl: { type: String, default: '' },
   technicalSkills: [skillSchema],
   tools: [String],
   softSkills: [String],

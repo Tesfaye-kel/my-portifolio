@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { 
   Code2, Database, Server, Wrench, 
   Github, Linkedin, Mail, Phone, 
-  ArrowRight, Sparkles, Rocket, 
+  ArrowRight, Sparkles, Rocket, Download, BriefcaseBusiness,
   Shield, Zap, Layout, GitBranch,
   Globe, Layers, Cpu, Terminal,
   Star, GitFork, Users, GitCommit,
@@ -12,6 +12,9 @@ import {
   Brain, Coffee, Music, BookOpen, 
   Gamepad2, Camera, Compass, Dumbbell, Plane
 } from 'lucide-react';
+
+const baseUrl = import.meta.env.BASE_URL || '/';
+
 // --- Animated Counter ---
 const Counter = ({ value, suffix = '', duration = 2 }) => {
   const [count, setCount] = useState(0);
@@ -160,52 +163,35 @@ const experienceData = [
     role: 'Full Stack Developer',
     company: 'Freelance / Personal Projects',
     period: '2023 - Present',
-    description: 'Building full-stack applications with the MERN stack. Developing scalable solutions for real-world problems.',
-    technologies: ['React', 'Node.js', 'Express', 'MongoDB', 'Socket.io'],
+    description: 'Building modern, scalable, and responsive full-stack applications using the MERN stack and related technologies. Focused on developing real-world solutions, implementing real-time features, and creating user-friendly experiences.',
+    technologies: ['React.js', 'Node.js', 'TypeScript', 'Express.js', 'MongoDB', 'Firebase', 'Socket.io'],
     achievements: [
-      'Built Zenivial Social Network - a real-time social media platform',
-      'Developed Restaurant Management System with Firebase integration',
-      'Created multiple responsive web applications',
-      'Implemented real-time messaging with Socket.io'
-    ]
-  },
-  {
-    role: 'Frontend Developer',
-    company: 'Open Source Contributions',
-    period: '2022 - Present',
-    description: 'Contributing to open-source projects and building reusable UI components. Collaborating with developers worldwide.',
-    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Git'],
-    achievements: [
-      'Contributed to multiple open-source repositories',
-      'Built reusable component libraries',
-      'Collaborated with international developer teams',
-      'Improved code quality through code reviews'
-    ]
-  },
-  {
-    role: 'Web Development Mentor',
-    company: 'Community Teaching',
-    period: '2022 - Present',
-    description: 'Mentoring aspiring developers and sharing knowledge through community leadership and content creation.',
-    technologies: ['JavaScript', 'React', 'Node.js', 'Communication'],
-    achievements: [
-      'Mentored 10+ aspiring developers',
-      'Created educational content for the developer community',
-      'Led study groups and coding workshops',
-      'Shared knowledge through community leadership'
+      'Built Zenivial Social Network - developed a real-time social media platform with user authentication, profiles, posts, interactions, and real-time communication',
+      'Developed Restaurant Management System - created a management platform with Firebase integration for data storage, authentication, and real-time updates',
+      'Developed Responsive Web Applications - built multiple modern, responsive applications optimized for desktop, tablet, and mobile devices',
+      'Implemented Real-Time Messaging - integrated Socket.io to enable fast and reliable real-time communication between users',
+      'Designed RESTful APIs - developed backend APIs using Node.js and Express.js for efficient communication between frontend and database systems',
+      'Worked with MongoDB - designed database structures, managed application data, and implemented CRUD operations for full-stack applications',
+      'Implemented Authentication & Authorization - added secure user authentication and access-control features across applications',
+      'Integrated Third-Party Services - connected external APIs and services to extend application functionality and improve user experience',
+      'Focused on Clean & Maintainable Code - followed reusable component patterns and organized project structures to improve scalability and maintainability',
+      'Deployed Full-Stack Applications - managed application deployment and configuration for production-ready web applications'
     ]
   },
   {
     role: 'Computer Science Student',
     company: 'University',
     period: '2020 - Present',
-    description: 'Pursuing a Bachelor\'s degree in Computer Science with a strong foundation in programming, algorithms, and database systems.',
+    description: 'Pursuing a Bachelor\'s degree in Computer Science with a strong foundation in software development, algorithms, data structures, databases, and object-oriented programming. Actively applying academic knowledge through personal projects, web development, and hackathons.',
     technologies: ['Data Structures', 'Algorithms', 'Database Systems', 'OOP'],
     achievements: [
-      'Strong foundation in programming and algorithms',
-      'Experience developing responsive web applications',
-      'Skilled in both front-end and back-end development',
-      'Active in academic projects and hackathons'
+      'Strong foundation in programming - developed solid problem-solving skills through algorithms, data structures, and software development coursework',
+      'Web Application Development - built responsive and user-friendly web applications using modern front-end and back-end technologies',
+      'Full-Stack Development - gained hands-on experience developing both front-end interfaces and back-end services',
+      'Database Management - worked with relational and NoSQL databases to design, store, and manage application data',
+      'Academic Projects - applied theoretical knowledge to practical software development projects and coursework',
+      'Hackathon Participation - participated in hackathons and collaborative projects to develop solutions to real-world problems',
+      'Continuous Learning - continuously improving technical skills by exploring new technologies, frameworks, and software development practices'
     ]
   }
 ];
@@ -430,6 +416,8 @@ const About = () => {
 
   const fullName = profile?.name || "Tesfaye Kelbesa";
   const professionalTitle = profile?.title || "Full-Stack Developer";
+  const displayExperience = about?.experience?.length ? about.experience : experienceData;
+  const cvUrl = about?.cvUrl || `${baseUrl}cv.pdf`;
 
   const education = about?.education || [
     "Bachelor's Degree in Computer Science.",
@@ -522,48 +510,49 @@ const About = () => {
           </div>
         </div>
 
-        {/* What makes me different - Full width */}
-        <div className="my-32">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="my-20"
-          >
-            <div className="flex items-center justify-center gap-6 mb-6">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/60 max-w-[200px]" />
-              <div className="p-3 rounded-xl bg-primary/10 text-primary shadow-[0_0_20px_rgba(100,255,218,0.15)]">
-                <Sparkles size={28} />
-              </div>
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-primary/40 to-primary/60 max-w-[200px]" />
+        {/* What makes me different - Card Container */}
+        <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50 mt-6 mb-32">
+          <div className="flex flex-col items-center gap-3 mb-6 text-center">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Sparkles size={20} />
             </div>
-            <h3 className="text-3xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-primary via-blue-400 to-purple-400 bg-clip-text text-transparent">
-              What Makes Me Different
-            </h3>
-            <p className="text-slate-400 text-center max-w-2xl mx-auto text-sm md:text-base">
-              The principles and mindset that shape how I work and grow
-            </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary/60 via-blue-400/60 to-purple-400/60 rounded-full mx-auto mt-6" />
-          </motion.div>
-          <div className="grid sm:grid-cols-2 gap-8">
+            <div>
+              <h3 className="font-semibold text-slate-100 bg-gradient-to-r from-primary via-blue-400 to-purple-400 bg-clip-text text-transparent shadow-[0_0_30px_rgba(100,255,218,0.4)] drop-shadow-[0_0_20px_rgba(100,255,218,0.3)]">What Shines Through Me</h3>
+              <p className="text-xs text-slate-500 font-mono">The principles that shape how I work</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
             {whatMakesMeDifferent.map((item, index) => {
               const [title, ...descParts] = item.split(' - ');
               const description = descParts.join(' - ');
+              const emoji = title.split(' ')[0]; // Get emoji from title
+              const titleText = title.substring(2); // Remove emoji
+              
+              // Assign colors to each item
+              const colors = [
+                '#64ffda', // Cyan (Curiosity)
+                '#3b82f6', // Blue (Cosmopolitan)
+                '#f59e0b', // Amber (Consistency)
+                '#10b981', // Green (Purpose)
+                '#8b5cf6', // Purple (Independent)
+                '#f97316'  // Orange (Calm)
+              ];
+              
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="group p-5 rounded-xl bg-[#112240]/40 border border-[#233554]/30 hover:border-primary/30 hover:bg-[#112240]/60 transition-all duration-300"
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="p-3 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all min-h-[140px] flex flex-col items-center justify-between"
                 >
-                  <p className="font-semibold text-slate-200 mb-2 leading-snug text-center">{title}</p>
-                  <p className="flex items-start gap-2 text-sm text-slate-400 leading-relaxed text-left">
-                    <ArrowRight size={12} className="text-primary shrink-0 mt-1" />
-                    <span>{description}</span>
-                  </p>
+                  <span className="text-3xl">{emoji}</span>
+                  <span className="text-xs font-semibold text-slate-200 text-center leading-tight">{titleText}</span>
+                  <div className="flex items-start gap-2 w-full">
+                    <ArrowRight size={10} className="shrink-0 mt-0.5" style={{ color: colors[index] }} />
+                    <span className="text-[10px] text-slate-400 leading-tight text-left">{description}</span>
+                  </div>
                 </motion.div>
               );
             })}
@@ -746,64 +735,127 @@ const About = () => {
         {/* 4. Experience Timeline */}
         <div id="experience" className="mb-32">
           <SectionHeader number="03" title="Experience" subtitle="My professional journey and growth" />
-          
-          <div className="relative pl-8">
-            {/* Timeline line */}
-            <div className="timeline-line" />
+
+          <div className="grid lg:grid-cols-5 gap-8 items-stretch">
             <motion.div
-              className="timeline-line-progress"
-              style={{ height: '0%' }}
-              initial={{ height: '0%' }}
-              whileInView={{ height: '100%' }}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: 'easeInOut' }}
-            />
-            
-            <div className="space-y-16">
-              {experienceData.map((exp, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  className="relative"
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute -left-[37px] top-2 w-4 h-4 rounded-full bg-primary border-4 border-[#0a192f] shadow-[0_0_10px_rgba(100,255,218,0.5)]" />
-                  
-                  <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50 hover:border-primary/30 transition-all duration-300 hover:translate-x-2">
-                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                      <div>
-                        <h3 className="text-xl font-bold text-slate-100">{exp.role}</h3>
-                        <p className="text-primary font-mono text-sm mt-1">{exp.company}</p>
-                      </div>
-                      <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-mono">
-                        {exp.period}
-                      </span>
-                    </div>
-                    
-                    <p className="text-slate-400 mb-4">{exp.description}</p>
-                    
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {exp.technologies.map((tech, i) => (
-                        <span key={i} className="px-3 py-1 rounded-md bg-[#0a192f]/60 border border-[#233554]/50 text-xs font-mono text-primary/80">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    <ul className="space-y-2">
-                      {exp.achievements.map((achievement, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-slate-400">
-                          <span className="text-primary mt-1"><ArrowRight size={12} /></span>
-                          {achievement}
-                        </li>
-                      ))}
-                    </ul>
+              transition={{ duration: 0.6 }}
+              className="order-2 lg:col-span-2 lg:order-2 h-full p-5 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
+            >
+              <div className="h-full flex flex-col gap-4">
+                <div className="flex-1 p-5 rounded-lg bg-gradient-to-br from-[#112240]/70 to-[#0a192f]/70 border border-[#233554]/50 hover:border-primary/30 transition-all">
+                  <div className="p-3 w-fit rounded-lg bg-primary/10 text-primary mb-5">
+                    <Rocket size={22} />
                   </div>
-                </motion.div>
-              ))}
+                  <p className="text-primary font-mono text-xs uppercase tracking-widest mb-2">Have an idea?</p>
+                  <h3 className="text-2xl font-bold text-slate-100 mb-3">Build Something</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                    I turn thoughtful ideas into useful, reliable digital experiences. Let&apos;s create something that makes a difference.
+                  </p>
+                  <a href="#contact" className="magnetic-btn w-full justify-center mt-4">
+                    Start a conversation <ArrowRight size={16} />
+                  </a>
+                </div>
+
+                <div className="group flex-1 flex flex-col p-4 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-105 transition-transform">
+                      <Download size={20} />
+                    </span>
+                    <h3 className="text-sm font-semibold text-slate-100">Download My CV</h3>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed flex-1">
+                    Every project, challenge, and experience has shaped the way I think, learn, and build. My CV brings together the journey behind my work - from the skills I&apos;ve developed and the problems I&apos;ve solved to the experiences that continue to shape me as an engineer. Take a closer look at where I&apos;ve been, what I&apos;ve learned, and where I&apos;m heading next.
+                  </p>
+                  <a
+                    href={cvUrl}
+                    download
+                    className="magnetic-btn w-full justify-center mt-4"
+                  >
+                    <Download size={15} /> Download My CV <ArrowRight size={15} />
+                  </a>
+                </div>
+
+                <div className="group flex-1 flex flex-col p-4 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-105 transition-transform">
+                      <BriefcaseBusiness size={20} />
+                    </span>
+                    <h3 className="text-sm font-semibold text-slate-100">Hire Me</h3>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed flex-1">
+                    Good work starts with the right people, clear communication, and a shared purpose. I&apos;m always interested in opportunities where I can bring my skills, curiosity, and problem-solving mindset to a team that values thoughtful work. If you&apos;re looking for someone who is ready to learn, contribute, and take ownership, I&apos;d be glad to connect and explore what we can build together.
+                  </p>
+                  <a
+                    href="#contact"
+                    className="magnetic-btn w-full justify-center mt-4"
+                  >
+                    Hire Me <ArrowRight size={15} />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="order-1 lg:col-span-3 lg:order-1 p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
+              <div className="relative pl-8">
+                <div className="timeline-line" />
+                <motion.div
+                  className="timeline-line-progress"
+                  style={{ height: '0%' }}
+                  initial={{ height: '0%' }}
+                  whileInView={{ height: '100%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.5, ease: 'easeInOut' }}
+                />
+
+                <div className="space-y-10">
+                  {displayExperience.map((exp, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.2 }}
+                      className="relative"
+                    >
+                      <div className="absolute -left-[37px] top-2 w-4 h-4 rounded-full bg-primary border-4 border-[#0a192f] shadow-[0_0_10px_rgba(100,255,218,0.5)]" />
+
+                      <div className="p-5 rounded-lg bg-[#0a192f]/45 border border-[#233554]/50 hover:border-primary/30 transition-all duration-300">
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                          <div>
+                            <h3 className="text-lg font-bold text-slate-100">{exp.role}</h3>
+                            <p className="text-primary font-mono text-xs mt-1">{exp.company}</p>
+                          </div>
+                          <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-mono">
+                            {exp.period}
+                          </span>
+                        </div>
+
+                        <p className="text-sm text-slate-400 mb-4">{exp.description}</p>
+
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {exp.technologies.map((tech, i) => (
+                            <span key={i} className="px-2.5 py-1 rounded-md bg-[#0a192f]/60 border border-[#233554]/50 text-[10px] font-mono text-primary/80">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+
+                        <ul className="space-y-2">
+                          {exp.achievements.map((achievement, i) => (
+                            <li key={i} className="flex items-start gap-2 text-xs text-slate-400">
+                              <span className="text-primary mt-0.5"><ArrowRight size={11} /></span>
+                              {achievement}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
