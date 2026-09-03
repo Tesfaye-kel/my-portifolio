@@ -2,14 +2,18 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import Portfolio from '../models/Portfolio.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
-const uploadsDirectory = path.resolve('uploads');
-fs.mkdirSync(uploadsDirectory, { recursive: true });
+const uploadsDirectory = path.join(os.tmpdir(), 'portfolio-uploads');
 const upload = multer({
-  dest: uploadsDirectory,
+  storage: multer.diskStorage({
+    destination: (req, file, callback) => {
+      fs.mkdir(uploadsDirectory, { recursive: true }, (error) => callback(error, uploadsDirectory));
+    },
+  }),
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, callback) => {
     callback(null, file.mimetype === 'application/pdf');
