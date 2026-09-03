@@ -127,8 +127,8 @@ const Projects = () => {
 
   const projects = (contextProjects && contextProjects.length > 0)
     ? [...contextProjects].sort((a, b) => {
-        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : (typeof a.order === 'number' ? a.order : 0);
-        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : (typeof b.order === 'number' ? b.order : 0);
+        const aTime = a.updatedAt ? new Date(a.updatedAt).getTime() : (a.createdAt ? new Date(a.createdAt).getTime() : (typeof a.order === 'number' ? a.order : 0));
+        const bTime = b.updatedAt ? new Date(b.updatedAt).getTime() : (b.createdAt ? new Date(b.createdAt).getTime() : (typeof b.order === 'number' ? b.order : 0));
         return bTime - aTime;
       })
     : defaultProjects;
