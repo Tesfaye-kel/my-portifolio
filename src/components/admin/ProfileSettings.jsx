@@ -107,6 +107,18 @@ const ProfileSettings = () => {
           />
         </div>
 
+        {/* Phone */}
+        <div>
+          <label className={labelClass}>Phone</label>
+          <input
+            type="tel"
+            value={formData.phone || ''}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            className={inputClass}
+            placeholder="+251-912-345-678"
+          />
+        </div>
+
         {/* Location */}
         <div>
           <label className={labelClass}>Location</label>

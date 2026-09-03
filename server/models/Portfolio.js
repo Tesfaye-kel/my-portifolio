@@ -5,6 +5,7 @@ const profileSchema = new mongoose.Schema({
   title: { type: String, default: '' },
   tagline: { type: String, default: '' },
   email: { type: String, default: '' },
+  phone: { type: String, default: '' },
   location: { type: String, default: '' },
   avatar: { type: String, default: '' },
 }, { _id: false });
@@ -33,6 +34,7 @@ const aboutSchema = new mongoose.Schema({
   experience: [mongoose.Schema.Types.Mixed],
   education: [String],
   whatMakesMeDifferent: [String],
+  contactInfo: [mongoose.Schema.Types.Mixed],
   careerGoals: { type: String, default: '' },
 }, { _id: false });
 

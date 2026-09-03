@@ -109,7 +109,7 @@ const StorySection = ({ title, tagline, icon, paragraphs, index }) => (
 // --- Tech Stack Data ---
 const techStack = {
   frontend: {
-    icon: <Layout size={20} />,
+    icon: <span role="img" aria-label="Computer">🖥️</span>,
     title: 'Frontend',
     color: '#61dafb',
     technologies: [
@@ -122,7 +122,7 @@ const techStack = {
     ]
   },
   backend: {
-    icon: <Server size={20} />,
+    icon: <span role="img" aria-label="Developer">🧑‍💻</span>,
     title: 'Backend',
     color: '#68a063',
     technologies: [
@@ -130,10 +130,11 @@ const techStack = {
       { name: 'Express', level: 85, desc: 'Middleware, routing, API design' },
       { name: 'REST APIs', level: 88, desc: 'CRUD operations, authentication, validation' },
       { name: 'Go', level: 80, desc: 'Concurrent systems, high-performance services' },
+      { name: 'Firebase', level: 85, desc: 'Authentication, real-time data, and cloud services' },
     ]
   },
   database: {
-    icon: <Database size={20} />,
+    icon: <span role="img" aria-label="Database">🗄️</span>,
     title: 'Database',
     color: '#4DB33D',
     technologies: [
@@ -143,7 +144,7 @@ const techStack = {
     ]
   },
   tools: {
-    icon: <Wrench size={20} />,
+    icon: <span role="img" aria-label="Tools">🛠️</span>,
     title: 'Tools',
     color: '#f34f29',
     technologies: [
@@ -240,27 +241,27 @@ const engineeringPrinciples = [
 const servicesData = [
   {
     icon: <Code2 size={24} />,
-    title: 'Frontend Development',
-    description: 'Building responsive, interactive user interfaces with React and modern CSS. Creating pixel-perfect designs that work across all devices.',
-    technologies: ['React', 'Tailwind CSS', 'JavaScript']
-  },
-  {
-    icon: <Server size={24} />,
     title: 'Full-Stack Development',
-    description: 'End-to-end application development with the MERN stack. From database design to API development to frontend implementation.',
-    technologies: ['Node.js', 'Express', 'MongoDB']
+    description: 'Building complete, production-ready web applications from frontend interfaces to backend systems and databases. I develop responsive user experiences, robust APIs, authentication systems, and scalable application architectures tailored to each project.',
+    technologies: ['React', 'Next.js', 'Node.js', 'Express.js', 'JavaScript', 'TypeScript', 'Go', 'Firebase']
   },
   {
     icon: <Database size={24} />,
-    title: 'Database Integration',
-    description: 'Designing and implementing efficient database schemas. Optimizing queries and ensuring data integrity.',
-    technologies: ['MongoDB', 'Firebase', 'Mongoose']
+    title: 'Database & Data Management',
+    description: 'Designing efficient data structures and integrating applications with reliable database systems. I work with both SQL and NoSQL databases, focusing on schema design, relationships, query performance, and data integrity.',
+    technologies: ['MongoDB', 'PostgreSQL', 'MySQL', 'Mongoose', 'Prisma']
+  },
+  {
+    icon: <Sparkles size={24} />,
+    title: 'AI Integration',
+    description: 'Building intelligent application features by connecting modern AI models with real-world software. I develop AI workflows, prompt systems, API integrations, and backend logic that turn language models into useful product features.',
+    technologies: ['Python', 'OpenAI API', 'Claude API', 'LangChain', 'Prompt Engineering', 'REST APIs']
   },
   {
     icon: <Rocket size={24} />,
-    title: 'AI Integration',
-    description: 'Connecting applications to large language models to power intelligent features. Designing prompts and API workflows that turn raw model output into reliable, production-ready functionality.',
-    technologies: ['Claude API', 'Prompt Engineering', 'REST APIs']
+    title: 'DevOps & Deployment',
+    description: 'Taking applications from development to production with reliable deployment and development workflows. I configure environments, manage source control, deploy applications, and set up the infrastructure needed to keep projects running smoothly.',
+    technologies: ['Git', 'GitHub', 'Docker', 'Vercel', 'Render', 'Linux']
   }
 ];
 
@@ -419,14 +420,6 @@ const About = () => {
   const displayExperience = about?.experience?.length ? about.experience : experienceData;
   const cvUrl = about?.cvUrl || `${baseUrl}cv.pdf`;
 
-  const education = about?.education || [
-    "Bachelor's Degree in Computer Science.",
-    "Strong foundation in programming, algorithms, and database systems.",
-    "Experience developing responsive and user-friendly web applications.",
-    "Skilled in both front-end and back-end development.",
-    "Passionate about building scalable web solutions and learning new technologies."
-  ];
-
   const whatMakesMeDifferent = about?.whatMakesMeDifferent || [
     "🔍 Curiosity & Continuous Learning - I enjoy learning something new every day, whether it's a new technology, a better way to solve a problem, or a different perspective from others. Staying curious helps me continuously improve as an engineer and as a person.",
     "🌍 Cosmopolitan by Nature - I value diversity in cultures, backgrounds, ideas, and ways of thinking. My life has exposed me to struggles shaped by society and politics, but I choose to remain open-minded rather than defined by political labels. I learn from different perspectives while staying true to my own values, curiosity, and identity.",
@@ -434,13 +427,6 @@ const About = () => {
     "🎯 Building With Purpose - I don't want to write code simply because I can. I'm interested in understanding why something needs to be built and who it helps. I aim to create software that is useful, maintainable, and meaningful to its users.",
     "🤝 Independent Thinker & Collaborative Teammate - I'm comfortable exploring ideas independently, researching solutions, and taking ownership of my work. At the same time, I value teamwork, open communication, feedback, and learning from people with different experiences.",
     "🧘 Calm Under Pressure - I believe staying calm is one of the most valuable skills when facing difficult problems. When things don't go as planned, I take a step back, understand the situation, and approach the problem logically rather than reacting emotionally. This helps me make better decisions, solve problems effectively, and remain reliable when challenges arise."
-  ];
-
-  const contactInfo = [
-    { icon: <Mail size={18} />, label: "Email", value: "tesfayekelbesa912@gmail.com", href: "mailto:tesfayekelbesa912@gmail.com" },
-    { icon: <Linkedin size={18} />, label: "LinkedIn", value: "linkedin.com/in/tesfaye-kelbesa", href: "https://linkedin.com" },
-    { icon: <Github size={18} />, label: "GitHub", value: "github.com/Tesfaye-kel", href: "https://github.com/Tesfaye-kel" },
-    { icon: <Phone size={18} />, label: "Phone", value: "+251-912-345-678", href: "tel:+251912345678" }
   ];
 
   return (
@@ -708,27 +694,29 @@ const About = () => {
 
         {/* 3. Statistics */}
         <div className="mb-32">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { value: 15, suffix: '+', label: 'Projects Built' },
-              { value: 3, suffix: '+', label: 'Years Learning' },
-              { value: 15, suffix: '+', label: 'Technologies' },
-              { value: 20, suffix: '+', label: 'GitHub Repos' },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50 text-center hover:border-primary/30 transition-colors"
-              >
-                <p className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                  <Counter value={stat.value} suffix={stat.suffix} />
-                </p>
-                <p className="text-slate-400 text-sm font-mono">{stat.label}</p>
-              </motion.div>
-            ))}
+          <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[
+                { value: 15, suffix: '+', label: 'Projects Built' },
+                { value: 3, suffix: '+', label: 'Years Learning' },
+                { value: 15, suffix: '+', label: 'Technologies' },
+                { value: 20, suffix: '+', label: 'GitHub Repos' },
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50 text-center hover:border-primary/30 transition-colors"
+                >
+                  <p className="text-4xl md:text-5xl font-bold gradient-text mb-2">
+                    <Counter value={stat.value} suffix={stat.suffix} />
+                  </p>
+                  <p className="text-slate-400 text-sm font-mono">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -864,16 +852,17 @@ const About = () => {
         <div id="skills" className="mb-32">
           <SectionHeader number="04" title="Tech Stack" subtitle="Technologies I work with daily" />
           
-          <div className="grid md:grid-cols-2 gap-6">
-            {Object.entries(techStack).map(([key, category], index) => (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
-              >
+          <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
+            <div className="grid md:grid-cols-2 gap-6">
+              {Object.entries(techStack).map(([key, category], index) => (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
+                >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 rounded-lg bg-primary/10 text-primary">
                     {category.icon}
@@ -905,25 +894,27 @@ const About = () => {
                     </div>
                   ))}
                 </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Services */}
-        <div id="services" className="mb-32">
+        <div id="services" className="mb-12">
           <SectionHeader number="06" title="Services" subtitle="What I can do for you" />
           
-          <div className="grid md:grid-cols-2 gap-6">
-            {servicesData.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="tech-card group"
-              >
+          <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
+            <div className="grid md:grid-cols-2 gap-6">
+              {servicesData.map((service, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="tech-card group"
+                >
                 <div className="flex items-start gap-4 mb-4">
                   <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform">
                     {service.icon}
@@ -938,80 +929,12 @@ const About = () => {
                     </span>
                   ))}
                 </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* 8. Education & Contact */}
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Education */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
-          >
-            <h3 className="text-xl font-semibold text-slate-100 mb-6 flex items-center gap-2">
-              <Terminal size={20} className="text-primary" />
-              Education
-            </h3>
-            <ul className="space-y-3">
-              {education.map((item, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="flex items-start gap-3 text-slate-400"
-                >
-                  <span className="text-primary mt-1"><ArrowRight size={14} /></span>
-                  {item}
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
-          >
-            <h3 className="text-xl font-semibold text-slate-100 mb-6 flex items-center gap-2">
-              <Mail size={20} className="text-primary" />
-              Contact Information
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {contactInfo.map((info, index) => (
-                <motion.a
-                  key={index}
-                  href={info.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02, backgroundColor: "rgba(100, 255, 218, 0.05)" }}
-                  className="flex items-center gap-3 p-3 rounded-lg border border-[#233554]/50 hover:border-primary/30 transition-all"
-                >
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    {info.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs text-slate-500">{info.label}</p>
-                    <p className="text-sm text-slate-300 truncate">{info.value}</p>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-        </div>
       </div>
     </section>
   );

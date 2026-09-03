@@ -12,9 +12,6 @@ import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 
 dotenv.config();
 
-// Connect to MongoDB
-connectDB();
-
 const app = express();
 
 // Middleware
@@ -22,6 +19,17 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.resolve('uploads')));
+
+// Health checks should work even when the database is unavailable.
+app.use(async (req, res, next) => {
+  if (req.path === '/health' || req.path === '/api/health') return next();
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Routes
 app.use('/api/auth', authRoutes);

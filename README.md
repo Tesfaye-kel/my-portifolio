@@ -77,6 +77,20 @@ npm run build
 npm run preview
 ```
 
+### Contact Email Notifications
+
+Contact form messages are always saved in the admin Messages page. To also receive each message in Gmail, add these variables to the server `.env` file:
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-gmail-app-password
+CONTACT_EMAIL=your-email@gmail.com
+```
+
+For Gmail, create a Google App Password and use it as `SMTP_PASSWORD`. Do not use your normal Gmail password.
+
 ---
 
 ## 📁 Project Structure

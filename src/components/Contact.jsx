@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { 
-  Mail, MapPin, Clock, Github, Linkedin, 
+  Mail, MapPin, Clock, Phone, Github, Linkedin, 
   Twitter, Facebook, Send, CheckCircle2, 
   Loader2, MessageSquare, ArrowUpRight
 } from 'lucide-react';
@@ -10,7 +10,7 @@ import { setVisitorName, getVisitorId } from '../utils/visitor';
 import { visitorsAPI } from '../utils/api';
 
 const Contact = () => {
-  const { addMessage } = usePortfolio();
+  const { data, addMessage } = usePortfolio();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,11 +19,13 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setIsError(false);
+    setErrorMessage('');
     
     try {
       await addMessage(formData);
@@ -44,6 +46,7 @@ const Contact = () => {
     } catch (error) {
       setIsSubmitting(false);
       setIsError(true);
+      setErrorMessage(error.message || 'Something went wrong. Please try again.');
       setTimeout(() => setIsError(false), 3000);
     }
   };
@@ -55,18 +58,27 @@ const Contact = () => {
     });
   };
 
+  const adminContactInfo = data.about?.contactInfo || [];
+  const adminEmail = adminContactInfo.find((item) => item.label?.toLowerCase().includes('email'));
+  const adminLocation = adminContactInfo.find((item) => item.label?.toLowerCase().includes('location'));
+  const phoneContact = adminContactInfo.find((item) => /phone|mobile|tel/i.test(item.label || '')) || {
+    label: 'Phone',
+    value: data.profile?.phone || '+251-912-345-678',
+    href: ''
+  };
+
   const contactInfo = [
     {
       icon: <Mail size={20} />,
       label: 'Email',
-      value: 'tesfayekelbesa912@gmail.com',
-      href: 'mailto:tesfayekelbesa912@gmail.com'
+      value: adminEmail?.value || data.profile?.email || 'tesfayekelbesa912@gmail.com',
+      href: adminEmail?.href || `mailto:${data.profile?.email || 'tesfayekelbesa912@gmail.com'}`
     },
     {
       icon: <MapPin size={20} />,
       label: 'Location',
-      value: 'Addis Ababa, Ethiopia',
-      href: null
+      value: adminLocation?.value || data.profile?.location || 'Addis Ababa, Ethiopia',
+      href: adminLocation?.href || null
     },
     {
       icon: <Clock size={20} />,
@@ -74,6 +86,12 @@ const Contact = () => {
       value: 'Open to opportunities',
       href: null,
       highlight: true
+    },
+    {
+      icon: <Phone size={20} />,
+      label: phoneContact.label,
+      value: phoneContact.value,
+      href: phoneContact.href || `tel:${phoneContact.value.replace(/[^\d+]/g, '')}`
     }
   ];
 
@@ -99,28 +117,29 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="mb-20 text-center"
         >
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
-            <span className="font-mono text-primary text-lg">07.</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">Get In Touch</h2>
-            <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/40 to-white/60 max-w-[80px]" />
+            <h2 className="text-white font-mono text-base tracking-widest uppercase">Get In Touch</h2>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/40 to-white/60 max-w-[80px]" />
           </div>
-          <p className="text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className="text-slate-400 max-w-2xl mx-auto text-left text-lg leading-relaxed">
             Have a project in mind? Let's build something meaningful together.
             I'm currently looking for new opportunities and my inbox is always open.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid min-w-0 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="min-w-0 w-full max-w-full"
           >
-            <div className="space-y-6 mb-10">
-              {contactInfo.map((info, index) => (
+            <div className="min-w-0 w-full max-w-full overflow-hidden p-6 rounded-2xl bg-[#112240]/40 border border-[#233554]/50 mb-10">
+              <div className="space-y-6">
+                {contactInfo.map((info, index) => (
                 <motion.a
                   key={index}
                   href={info.href}
@@ -128,75 +147,49 @@ const Contact = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  whileHover={{ x: 10 }}
-                  className={`flex items-center gap-4 p-4 rounded-xl border transition-all duration-300 ${
-                    info.highlight 
-                      ? 'border-primary/50 bg-primary/5' 
-                      : 'border-[#233554]/50 hover:border-primary/30 bg-[#112240]/40'
-                  }`}
+                  className="min-w-0 max-w-full flex items-center gap-4 p-4 rounded-xl border border-[#233554]/50 bg-[#112240]/40 hover:border-primary/30 transition-all duration-300"
                 >
-                  <div className={`p-3 rounded-lg ${info.highlight ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary'}`}>
+                  <div className="p-3 rounded-lg bg-primary/10 text-primary">
                     {info.icon}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-slate-500 text-sm">{info.label}</p>
-                    <p className={`font-medium ${info.highlight ? 'text-primary' : 'text-slate-200'}`}>
+                    <p className="break-words text-sm text-slate-200">
                       {info.value}
                     </p>
                   </div>
                 </motion.a>
-              ))}
-            </div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <h4 className="text-slate-500 text-sm font-mono mb-6">FIND ME ON</h4>
-              <div className="flex gap-4">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.15, y: -3 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-3 rounded-xl bg-[#112240]/50 border border-[#233554]/50 text-slate-400 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
-                    aria-label={social.name}
-                  >
-                    {social.icon}
-                  </motion.a>
                 ))}
               </div>
-            </motion.div>
 
-            {/* Quick message */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-8 p-6 rounded-xl bg-gradient-to-br from-[#112240]/60 to-[#0a192f]/60 border border-[#233554]/50"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <MessageSquare size={20} className="text-primary" />
-                <h4 className="font-semibold text-slate-100">Prefer a quick chat?</h4>
-              </div>
-              <p className="text-slate-400 text-sm mb-4">
-                Feel free to reach out directly via email. I typically respond within 24 hours.
-              </p>
-              <a 
-                href="mailto:tesfayekelbesa912@gmail.com"
-                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-mono text-sm transition-colors"
+              {/* Social Links */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="mt-8"
               >
-                Say Hello
-                <ArrowUpRight size={16} />
-              </a>
-            </motion.div>
+                <h4 className="text-slate-500 text-sm font-mono mb-6">FIND ME ON</h4>
+                <div className="flex max-w-full gap-4 overflow-hidden">
+                  {socialLinks.map((social, index) => (
+                    <motion.a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.15, y: -3 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-3 rounded-xl bg-[#112240]/50 border border-[#233554]/50 text-slate-400 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
+                      aria-label={social.name}
+                    >
+                      {social.icon}
+                    </motion.a>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
           </motion.div>
 
           {/* Right Column - Message Form */}
@@ -205,6 +198,7 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
+            className="min-w-0"
           >
             <div className="p-8 rounded-2xl bg-[#112240]/40 border border-[#233554]/50 backdrop-blur-md">
               <h3 className="text-2xl font-bold text-slate-100 mb-6">Send a Message</h3>
@@ -321,12 +315,36 @@ const Contact = () => {
                       exit={{ opacity: 0, y: -20 }}
                       className="flex items-center gap-3 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400"
                     >
-                      <span>Something went wrong. Please try again.</span>
+                      <span>{errorMessage}</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </form>
             </div>
+
+            {/* Quick message */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="mt-8 p-6 rounded-xl bg-gradient-to-br from-[#112240]/60 to-[#0a192f]/60 border border-[#233554]/50"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <MessageSquare size={20} className="text-primary" />
+                <h4 className="font-semibold text-slate-100">Prefer a quick chat?</h4>
+              </div>
+              <p className="text-slate-400 text-sm mb-4">
+                Feel free to reach out directly via email. I typically respond within 24 hours.
+              </p>
+              <a
+                href={contactInfo.find((info) => info.label === 'Email')?.href}
+                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-mono text-sm transition-colors"
+              >
+                Say Hello
+                <ArrowUpRight size={16} />
+              </a>
+            </motion.div>
           </motion.div>
         </div>
       </div>

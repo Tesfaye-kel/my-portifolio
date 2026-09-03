@@ -147,7 +147,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="relative py-32">
+    <section id="projects" className="relative pt-8 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -157,11 +157,10 @@ const Projects = () => {
           transition={{ duration: 0.6 }}
           className="mb-20 text-center"
         >
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
-            <span className="font-mono text-primary text-lg">06.</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-100">Featured Projects</h2>
-            <div className="flex-1 h-px bg-[#233554] max-w-[200px]" />
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/40 to-white/60 max-w-[80px]" />
+            <h2 className="text-white font-mono text-base tracking-widest uppercase">Featured Projects</h2>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/40 to-white/60 max-w-[80px]" />
           </div>
           <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">A selection of projects I've built, showcasing my skills in full-stack development.</p>
         </motion.div>
@@ -181,12 +180,12 @@ const Projects = () => {
               tabIndex="0"
               className="project-card group flex h-full min-h-[360px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-[#233554]/50 bg-[#112240]/80 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.1)] focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <div className="relative aspect-[16/10] overflow-hidden border-b border-[#233554]/50">
+              <div className="relative aspect-[16/10] overflow-hidden shadow-[0_14px_24px_-20px_rgba(100,255,218,0.45)]">
                 {project.image ? (
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    className="h-full w-full bg-[#112240] object-contain transition-transform duration-500 group-hover:scale-[1.01]"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#112240] to-[#0a192f]">
@@ -198,10 +197,9 @@ const Projects = () => {
                     </div>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
-              <div className="flex flex-1 flex-col p-4 md:p-5">
+              <div className="flex flex-1 flex-col bg-[#112240]/80 p-4 md:p-5">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <h3 className="text-base font-bold text-slate-100 transition-colors group-hover:text-primary md:text-lg">
                     {project.title}
