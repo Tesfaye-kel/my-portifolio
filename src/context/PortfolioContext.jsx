@@ -158,7 +158,7 @@ export const PortfolioProvider = ({ children }) => {
       ]);
       const portfolioData = portfolioResult.status === 'fulfilled'
         ? portfolioResult.value
-        : (stored || fallbackData);
+        : fallbackData;
       const allProjects = projectsResult.status === 'fulfilled' ? projectsResult.value : [];
       
       const sortedProjects = sortProjects(
@@ -213,17 +213,16 @@ export const PortfolioProvider = ({ children }) => {
 
   // --- Generic Update Function ---
   const updateSection = async (section, sectionData) => {
-    // Optimistic update
-    setData(prev => {
-      const next = { ...prev, [section]: sectionData };
-      saveStoredPortfolio(next);
-      return next;
-    });
-    
     try {
       await portfolioAPI.updateSection(section, sectionData);
+      setData(prev => {
+        const next = { ...prev, [section]: sectionData };
+        saveStoredPortfolio(next);
+        return next;
+      });
     } catch (error) {
       console.error(`Failed to update ${section}:`, error);
+      throw error;
     }
   };
 

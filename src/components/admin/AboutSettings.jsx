@@ -23,6 +23,7 @@ const AboutSettings = () => {
   const [saved, setSaved] = useState(false);
   const [uploadingCV, setUploadingCV] = useState(false);
   const [uploadMessage, setUploadMessage] = useState('');
+  const [saveError, setSaveError] = useState('');
 
   useEffect(() => {
     if (data?.about) {
@@ -45,11 +46,16 @@ const AboutSettings = () => {
     }
   }, [data.about]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateAbout(formData);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setSaveError('');
+    try {
+      await updateAbout(formData);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error) {
+      setSaveError(error.message || 'Unable to save About settings.');
+    }
   };
 
   // Helper to update simple array fields (strings)
@@ -484,6 +490,8 @@ const AboutSettings = () => {
           Save Changes
         </button>
       </div>
+
+      {saveError && <p className="text-right text-sm text-red-400">{saveError}</p>}
 
       {saved && (
         <motion.div 
