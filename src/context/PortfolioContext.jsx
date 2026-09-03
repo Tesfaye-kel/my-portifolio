@@ -151,11 +151,15 @@ export const PortfolioProvider = ({ children }) => {
   const loadPortfolio = useCallback(async () => {
     try {
       setLoading(true);
-      const [portfolioData, allProjects] = await Promise.all([
+      const stored = getStoredPortfolio();
+      const [portfolioResult, projectsResult] = await Promise.allSettled([
         portfolioAPI.getPortfolio(),
         projectsAPI.getAll(),
       ]);
-      const stored = getStoredPortfolio();
+      const portfolioData = portfolioResult.status === 'fulfilled'
+        ? portfolioResult.value
+        : (stored || fallbackData);
+      const allProjects = projectsResult.status === 'fulfilled' ? projectsResult.value : [];
       
       const sortedProjects = sortProjects(
         Array.isArray(allProjects) && allProjects.length > 0
@@ -178,7 +182,9 @@ export const PortfolioProvider = ({ children }) => {
         theme: portfolioData.theme || 'dark',
       };
 
-      saveStoredPortfolio(transformed);
+      if (portfolioResult.status === 'fulfilled' || projectsResult.status === 'fulfilled') {
+        saveStoredPortfolio(transformed);
+      }
       setData(transformed);
     } catch (error) {
       console.error('Failed to load portfolio:', error);
