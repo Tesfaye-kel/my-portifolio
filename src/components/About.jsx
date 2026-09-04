@@ -163,7 +163,7 @@ const experienceData = [
   {
     role: 'Full Stack Developer',
     company: 'Freelance / Personal Projects',
-    period: '2023 - Present',
+    period: '2026 - Present',
     description: 'Building modern, scalable, and responsive full-stack applications using the MERN stack and related technologies. Focused on developing real-world solutions, implementing real-time features, and creating user-friendly experiences.',
     technologies: ['React.js', 'Node.js', 'TypeScript', 'Express.js', 'MongoDB', 'Firebase', 'Socket.io'],
     achievements: [
@@ -182,7 +182,7 @@ const experienceData = [
   {
     role: 'Computer Science Student',
     company: 'University',
-    period: '2020 - Present',
+    period: '2023 - Present',
     description: 'Pursuing a Bachelor\'s degree in Computer Science with a strong foundation in software development, algorithms, data structures, databases, and object-oriented programming. Actively applying academic knowledge through personal projects, web development, and hackathons.',
     technologies: ['Data Structures', 'Algorithms', 'Database Systems', 'OOP'],
     achievements: [

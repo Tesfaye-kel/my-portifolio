@@ -122,7 +122,7 @@ const Contact = () => {
             <h2 className="text-white font-mono text-base tracking-widest uppercase">Get In Touch</h2>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/40 to-white/60 max-w-[80px]" />
           </div>
-          <p className="text-slate-400 max-w-2xl mx-auto text-left text-lg leading-relaxed">
+          <p className="text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
             Have a project in mind? Let's build something meaningful together.
             I'm currently looking for new opportunities and my inbox is always open.
           </p>
