@@ -1,6 +1,11 @@
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { usePortfolio } from '../context/PortfolioContext';
 import { useRef, useState } from 'react';
+import {
+  siReact, siJavascript, siTypescript, siTailwindcss, siHtml5, siCss,
+  siNodedotjs, siExpress, siGo, siFirebase, siMongodb, siPostgresql,
+  siGit, siGithub, siVscodium, siDocker, siPostman, siFigma
+} from 'simple-icons';
 import { 
   Code2, Database, Server, Wrench, 
   Github, Linkedin, Mail, Phone, 
@@ -14,6 +19,27 @@ import {
 } from 'lucide-react';
 
 const baseUrl = import.meta.env.BASE_URL || '/';
+
+const skillIcons = {
+  React: siReact,
+  JavaScript: siJavascript,
+  TypeScript: siTypescript,
+  'Tailwind CSS': siTailwindcss,
+  HTML5: siHtml5,
+  CSS3: siCss,
+  'Node.js': siNodedotjs,
+  Express: siExpress,
+  Go: siGo,
+  Firebase: siFirebase,
+  MongoDB: siMongodb,
+  PostgreSQL: siPostgresql,
+  Git: siGit,
+  GitHub: siGithub,
+  'VS Code': siVscodium,
+  Docker: siDocker,
+  Postman: siPostman,
+  Figma: siFigma,
+};
 
 // --- Animated Counter ---
 const Counter = ({ value, suffix = '', duration = 2 }) => {
@@ -113,12 +139,12 @@ const techStack = {
     title: 'Frontend',
     color: '#61dafb',
     technologies: [
-      { name: 'React', level: 90, desc: 'Component architecture, hooks, state management' },
-      { name: 'JavaScript', level: 92, desc: 'ES6+, async patterns, DOM manipulation' },
-      { name: 'TypeScript', level: 75, desc: 'Type safety, interfaces, generics' },
-      { name: 'Tailwind CSS', level: 88, desc: 'Utility-first styling, responsive design' },
-      { name: 'HTML5', level: 95, desc: 'Semantic markup, accessibility' },
-      { name: 'CSS3', level: 90, desc: 'Flexbox, Grid, animations, preprocessors' },
+      { name: 'React', level: 90, desc: 'Building reusable component interfaces with hooks, props, and state management for interactive web applications.' },
+      { name: 'JavaScript', level: 92, desc: 'Writing modern ES6+ code with asynchronous patterns, browser APIs, and dynamic DOM interactions.' },
+      { name: 'TypeScript', level: 75, desc: 'Adding static types, interfaces, and generics to make application code safer and easier to maintain.' },
+      { name: 'Tailwind CSS', level: 88, desc: 'Creating responsive interfaces with utility classes, consistent design tokens, and maintainable styling.' },
+      { name: 'HTML5', level: 95, desc: 'Structuring accessible web pages with semantic elements, clear document hierarchy, and modern markup.' },
+      { name: 'CSS3', level: 90, desc: 'Styling polished layouts with Flexbox, Grid, responsive rules, transitions, and reusable visual patterns.' },
     ]
   },
   backend: {
@@ -126,11 +152,11 @@ const techStack = {
     title: 'Backend',
     color: '#68a063',
     technologies: [
-      { name: 'Node.js', level: 85, desc: 'Event-driven architecture, REST APIs' },
-      { name: 'Express', level: 85, desc: 'Middleware, routing, API design' },
-      { name: 'REST APIs', level: 88, desc: 'CRUD operations, authentication, validation' },
-      { name: 'Go', level: 80, desc: 'Concurrent systems, high-performance services' },
-      { name: 'Firebase', level: 85, desc: 'Authentication, real-time data, and cloud services' },
+      { name: 'Node.js', level: 85, desc: 'Building server-side applications and event-driven services, including APIs that support full-stack projects.' },
+      { name: 'Express', level: 85, desc: 'Creating backend routes and middleware to organize requests, handle application logic, and deliver API responses.' },
+      { name: 'REST APIs', level: 88, desc: 'Designing resource-based endpoints with CRUD operations, validation, and reliable client-server communication.' },
+      { name: 'Go', level: 80, desc: 'Developing efficient backend programs with concurrent workflows and straightforward, compiled application code.' },
+      { name: 'Firebase', level: 85, desc: 'Connecting applications to managed authentication, cloud-hosted data, and real-time service integrations.' },
     ]
   },
   database: {
@@ -138,9 +164,9 @@ const techStack = {
     title: 'Database',
     color: '#4DB33D',
     technologies: [
-      { name: 'MongoDB', level: 90, desc: 'NoSQL, Mongoose ODM, aggregation' },
-      { name: 'SQL', level: 85, desc: 'Relational queries, schema design' },
-      { name: 'PostgreSQL', level: 85, desc: 'Advanced queries, indexing, transactions' },
+      { name: 'MongoDB', level: 90, desc: 'Modeling document data, querying collections, and using Mongoose schemas and aggregation pipelines.' },
+      { name: 'SQL', level: 85, desc: 'Writing relational queries and structuring tables, joins, and constraints for consistent application data.' },
+      { name: 'PostgreSQL', level: 85, desc: 'Working with relational schemas, advanced queries, indexes, and transactions for dependable data storage.' },
     ]
   },
   tools: {
@@ -148,12 +174,12 @@ const techStack = {
     title: 'Tools',
     color: '#f34f29',
     technologies: [
-      { name: 'Git', level: 90, desc: 'Version control, branching, collaboration' },
-      { name: 'GitHub', level: 92, desc: 'Repositories, CI/CD, project management' },
-      { name: 'VS Code', level: 95, desc: 'Development environment, extensions' },
-      { name: 'Docker', level: 70, desc: 'Containerization, deployment' },
-      { name: 'Postman', level: 85, desc: 'API testing, documentation' },
-      { name: 'Figma', level: 75, desc: 'UI design, prototyping, collaboration' },
+      { name: 'Git', level: 90, desc: 'Tracking code changes, managing branches, and collaborating through clear, reviewable development history.' },
+      { name: 'GitHub', level: 92, desc: 'Hosting repositories, reviewing pull requests, and organizing project work and automated workflows.' },
+      { name: 'VS Code', level: 95, desc: 'Customizing a productive coding environment with useful extensions, debugging tools, and integrated terminals.' },
+      { name: 'Docker', level: 70, desc: 'Packaging applications and their dependencies into containers to support consistent development and deployment.' },
+      { name: 'Postman', level: 85, desc: 'Sending and validating API requests, checking responses, and organizing collections for development testing.' },
+      { name: 'Figma', level: 75, desc: 'Exploring interface designs, reviewing prototypes, and collaborating on visual details before implementation.' },
     ]
   }
 };
@@ -861,7 +887,7 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
+                  className="rounded-xl border border-[#233554]/50 bg-[#112240]/40 px-6 pb-6 pt-4"
                 >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -870,29 +896,81 @@ const About = () => {
                   <h3 className="text-lg font-semibold text-slate-100">{category.title}</h3>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="relative rounded-xl bg-[#0a192f]/25 p-2">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 -top-1 bottom-0 rounded-xl border border-primary/15"
+                  />
+                  <div className="relative grid grid-cols-2 items-stretch gap-x-0.5 gap-y-2">
                   {category.technologies.map((tech, i) => (
-                    <div key={i} className="group">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-slate-300 group-hover:text-primary transition-colors">
-                          {tech.name}
+                    <motion.div
+                      key={tech.name}
+                      whileHover={{ y: -4 }}
+                      transition={{ type: 'spring', stiffness: 350, damping: 24 }}
+                      className={`group flex aspect-[9/8] w-7/8 min-w-0 flex-col rounded-xl border border-[#233554]/50 bg-[#0a192f]/35 p-3 transition-colors hover:border-primary/40 hover:bg-[#0a192f]/60 sm:p-4 ${
+                        i % 2 === 0 ? 'justify-self-end' : 'justify-self-start'
+                      } ${tech.name === 'React' ? 'translate-x-1' : ''}`}
+                    >
+                      <div className="flex items-start gap-2 sm:gap-3">
+                        <div
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border text-xs font-bold sm:h-11 sm:w-11 sm:text-sm"
+                          style={{
+                            color: skillIcons[tech.name] ? `#${skillIcons[tech.name].hex}` : category.color,
+                            borderColor: `${category.color}40`,
+                            backgroundColor: `${category.color}12`,
+                          }}
+                          aria-hidden="true"
+                        >
+                          {skillIcons[tech.name] ? (
+                            <svg
+                              viewBox="0 0 24 24"
+                              className="h-5 w-5 sm:h-6 sm:w-6"
+                              role="img"
+                              aria-label={`${tech.name} logo`}
+                            >
+                              <path d={skillIcons[tech.name].path} fill="currentColor" />
+                            </svg>
+                          ) : (
+                            <span role="img" aria-label={`${tech.name} icon`}>
+                              <Database size={20} aria-hidden="true" />
+                            </span>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                            <span className="text-xs font-semibold text-slate-200 transition-colors group-hover:text-primary sm:text-sm">
+                              {tech.name}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex items-center gap-2">
+                        <div
+                          className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-[#233554]/60"
+                          role="progressbar"
+                          aria-label={`${tech.name} proficiency`}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={tech.level}
+                        >
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${tech.level}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: 0.2 + i * 0.1 }}
+                            className="h-full rounded-full bg-gradient-to-r from-primary to-blue-400 transition-shadow duration-300 group-hover:shadow-[0_0_12px_rgba(100,255,218,0.7)]"
+                          />
+                        </div>
+                        <span className="shrink-0 text-[10px] font-mono text-slate-500 sm:text-xs">
+                          {tech.level}%
                         </span>
-                        <span className="text-xs font-mono text-slate-500">{tech.level}%</span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-[#0a192f]/60 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${tech.level}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, delay: 0.2 + i * 0.1 }}
-                          className="h-full rounded-full bg-gradient-to-r from-primary to-blue-400"
-                        />
-                      </div>
-                      <p className="text-xs text-slate-500 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <p className="mt-3 flex-1 text-xs leading-relaxed text-slate-500">
                         {tech.desc}
                       </p>
-                    </div>
+                    </motion.div>
                   ))}
+                  </div>
                 </div>
                 </motion.div>
               ))}

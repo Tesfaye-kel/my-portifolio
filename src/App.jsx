@@ -55,7 +55,7 @@ const PortfolioLayout = ({ children }) => {
   }, [isDark]);
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative pb-20 md:pb-0">
       <style>{`html { scroll-behavior: smooth; }`}</style>
       <ThreeBackground />
       <div className="noise-overlay" />
