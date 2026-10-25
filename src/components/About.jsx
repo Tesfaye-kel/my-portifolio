@@ -878,8 +878,8 @@ const About = () => {
         <div id="skills" className="mb-32">
           <SectionHeader number="04" title="Tech Stack" subtitle="Technologies I work with daily" />
           
-          <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
-            <div className="grid md:grid-cols-2 gap-6">
+          <div className="md:rounded-xl md:border md:border-[#233554]/50 md:bg-[#112240]/40 md:p-6">
+            <div className="grid gap-3 md:grid-cols-2 md:gap-6">
               {Object.entries(techStack).map(([key, category], index) => (
                 <motion.div
                   key={key}
@@ -887,27 +887,27 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="rounded-xl border border-[#233554]/50 bg-[#112240]/40 px-6 pb-6 pt-4"
+                  className="rounded-xl border border-[#233554]/50 bg-[#112240]/40 p-3 md:px-6 md:pb-6 md:pt-4"
                 >
-                <div className="flex items-center gap-3 mb-6">
+                <div className="mb-3 flex items-center gap-3 md:mb-6">
                   <div className="p-2 rounded-lg bg-primary/10 text-primary">
                     {category.icon}
                   </div>
                   <h3 className="text-lg font-semibold text-slate-100">{category.title}</h3>
                 </div>
                 
-                <div className="relative rounded-xl bg-[#0a192f]/25 p-2">
+                <div className="relative rounded-xl bg-transparent p-0 md:bg-[#0a192f]/25 md:p-2">
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-0 -top-1 bottom-0 rounded-xl border border-primary/15"
+                    className="pointer-events-none absolute inset-x-0 -top-1 bottom-0 hidden rounded-xl border border-primary/15 md:block"
                   />
-                  <div className="relative grid grid-cols-2 items-stretch gap-x-0.5 gap-y-2">
+                  <div className="relative grid grid-cols-2 items-stretch gap-x-2 gap-y-2 md:gap-x-0.5">
                   {category.technologies.map((tech, i) => (
                     <motion.div
                       key={tech.name}
                       whileHover={{ y: -4 }}
                       transition={{ type: 'spring', stiffness: 350, damping: 24 }}
-                      className={`group flex aspect-[9/8] w-7/8 min-w-0 flex-col rounded-xl border border-[#233554]/50 bg-[#0a192f]/35 p-3 transition-colors hover:border-primary/40 hover:bg-[#0a192f]/60 sm:p-4 ${
+                      className={`group flex aspect-[9/8] w-full min-w-0 flex-col rounded-xl border border-[#233554]/50 bg-[#0a192f]/35 p-3 transition-colors hover:border-primary/40 hover:bg-[#0a192f]/60 sm:p-4 md:w-7/8 ${
                         i % 2 === 0 ? 'justify-self-end' : 'justify-self-start'
                       } ${tech.name === 'React' ? 'translate-x-1' : ''}`}
                     >
