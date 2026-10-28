@@ -13,19 +13,11 @@ const ThreeBackground = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
       {/* Base deep background */}
-      <div className="absolute inset-0 bg-[#0a192f]" />
+      <div className="absolute inset-0 bg-[var(--portfolio-bg)]" />
 
-      {/* Clearly visible fine grid — more prominent */}
+      {/* Palette-aware grid and ambient glow from the supplied home design */}
       <div className="absolute inset-0 premium-grid" />
-
-      {/* Transparent glass coating — minimal depth */}
-      <div className="absolute inset-0 premium-glass opacity-50" />
-
-      {/* Soft light wash from the top */}
-      <div className="absolute inset-0 premium-light opacity-60" />
-
-      {/* Very light depth, keeping edges open and airy */}
-      <div className="absolute inset-0 premium-vignette opacity-70" />
+      <div className="absolute inset-0 portfolio-ambient" />
     </div>
   );
 };

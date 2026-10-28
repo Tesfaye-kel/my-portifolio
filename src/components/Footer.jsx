@@ -42,7 +42,7 @@ const Footer = () => {
 
           {/* Navigation */}
           <nav className="flex flex-wrap justify-center gap-6">
-            {['About', 'Experience', 'Skills', 'Projects', 'Services', 'Contact'].map((item) => (
+            {['Experience', 'Skills', 'Services', 'Projects', 'About', 'Contact'].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}

@@ -46,7 +46,7 @@ const fallbackData = {
   docId: 'main',
   profile: {
     name: "Tesfaye Kelbesa",
-    title: "Full Stack Developer",
+    title: "Frontend Dev & AI Freelancer",
     tagline: "Building digital experiences",
     email: "tesfayekelbesa912@gmail.com",
     location: "Addis Ababa, Ethiopia",
@@ -55,7 +55,7 @@ const fallbackData = {
   hero: {
     greeting: "Hi, I am",
     name: "Tesfaye Kelbesa",
-    subtitle: "Full Stack Developer",
+    subtitle: "Frontend Dev & AI Freelancer",
     description: "I build things for the web.",
     ctaText: "Get in Touch",
     ctaLink: "#contact",

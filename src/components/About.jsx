@@ -437,7 +437,7 @@ const dailyHabits = [
   { icon: <Users size={16} />, label: 'Connect', time: '1 hr', color: '#10b981' },
 ];
 
-const About = () => {
+const About = ({ part = 'all' }) => {
   const { data } = usePortfolio();
   const { profile, about } = data;
 
@@ -456,7 +456,9 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="relative py-32">
+    <>
+    {part !== 'work' && (
+    <section id="about" className="portfolio-snap-panel relative py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* 1. Introduction - Editorial Layout */}
@@ -745,9 +747,15 @@ const About = () => {
             </div>
           </div>
         </div>
+      </div>
+    </section>
+    )}
 
+    {part !== 'about' && (
+    <div className="relative py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 4. Experience Timeline */}
-        <div id="experience" className="mb-32">
+        <div id="experience" className="portfolio-snap-panel mb-32">
           <SectionHeader number="03" title="Experience" subtitle="My professional journey and growth" />
 
           <div className="grid lg:grid-cols-5 gap-8 items-stretch">
@@ -875,7 +883,7 @@ const About = () => {
         </div>
 
         {/* 5. Tech Stack */}
-        <div id="skills" className="mb-32">
+        <div id="skills" className="portfolio-snap-panel mb-32">
           <SectionHeader number="04" title="Tech Stack" subtitle="Technologies I work with daily" />
           
           <div className="md:rounded-xl md:border md:border-[#233554]/50 md:bg-[#112240]/40 md:p-6">
@@ -979,7 +987,7 @@ const About = () => {
         </div>
 
         {/* Services */}
-        <div id="services" className="mb-12">
+        <div id="services" className="portfolio-snap-panel mb-12">
           <SectionHeader number="06" title="Services" subtitle="What I can do for you" />
           
           <div className="p-6 rounded-xl bg-[#112240]/40 border border-[#233554]/50">
@@ -1014,7 +1022,9 @@ const About = () => {
         </div>
 
       </div>
-    </section>
+    </div>
+    )}
+    </>
   );
 };
 

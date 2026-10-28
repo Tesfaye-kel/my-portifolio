@@ -147,7 +147,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="relative pt-8 pb-32">
+    <section id="projects" className="portfolio-snap-panel relative pt-8 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
