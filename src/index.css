@@ -1218,7 +1218,29 @@ html.portfolio-snap {
   .portfolio-terminal-mobile {
     display: block;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
+  }
+
+  #home .hero-lead {
+    font-size: 14px;
+    line-height: 1.45;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  #home .hero-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #home .hero-button,
+  #home .hero-button-work,
+  #home .hero-button-cv {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    padding: 12px 8px;
+    font-size: 14px;
   }
 
   #home .portfolio-terminal-mobile .portfolio-terminal {
