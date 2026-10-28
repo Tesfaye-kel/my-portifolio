@@ -1,4 +1,4 @@
-const scrollToSection = (section) => {
+const scrollToSection = (section, behavior = 'smooth') => {
   const documentElement = document.documentElement;
   const scrollPaddingTop = Number.parseFloat(
     window.getComputedStyle(documentElement).scrollPaddingTop
@@ -8,7 +8,7 @@ const scrollToSection = (section) => {
   ) || 0;
   const top = window.scrollY + section.getBoundingClientRect().top - scrollPaddingTop - scrollMarginTop;
 
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  window.scrollTo({ top: Math.max(0, top), behavior });
 };
 
 export default scrollToSection;

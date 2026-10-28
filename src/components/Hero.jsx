@@ -4,6 +4,7 @@ import { Github, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 const palettes = [
+  { id: 'red', label: 'Red', accent: '#ff4d5e', warm: '#ff9a76' },
   { id: 'green', label: 'Green', accent: '#5dffa8', warm: '#ffb454' },
   { id: 'pink', label: 'Pink', accent: '#ff5c9a', warm: '#8be9fd' },
   { id: 'purple', label: 'Purple', accent: '#8b5cf6', warm: '#c4b5fd' },
@@ -11,6 +12,7 @@ const palettes = [
   { id: 'gold', label: 'Gold', accent: '#f5c542', warm: '#f0e6c8' },
   { id: 'cyan', label: 'Cyan', accent: '#22e1ff', warm: '#b6ff6b' },
   { id: 'blue', label: 'Blue', accent: '#4da3ff', warm: '#ffd166' },
+  { id: 'brown', label: 'Brown', accent: '#c58a55', warm: '#f0c18a' },
 ];
 
 const socialLinks = [
@@ -23,7 +25,8 @@ const socialLinks = [
 const Hero = () => {
   const { data } = usePortfolio();
   const { profile } = data;
-  const [palette, setPalette] = useState('green');
+  const [palette, setPalette] = useState('red');
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [command, setCommand] = useState('');
   const [terminalLines, setTerminalLines] = useState([]);
@@ -57,7 +60,7 @@ const Hero = () => {
   }, []);
 
   useEffect(() => {
-    const sectionIds = ['home', 'about', 'experience', 'skills', 'projects', 'contact'];
+    const sectionIds = ['home', 'experience', 'skills', 'projects', 'about', 'contact'];
     const sections = sectionIds
       .map((id) => document.getElementById(id))
       .filter(Boolean);
@@ -89,7 +92,7 @@ const Hero = () => {
     return (
       <span
         key={`${text}-${index}`}
-        className="hero-name-letter"
+        className="hero-name-letter hero-name-letter-card"
         style={{
           '--name-letter-color': palettes[colorIndex % palettes.length].accent,
           '--name-letter-delay': `${delayIndex * 0.12}s`,
@@ -108,7 +111,7 @@ const Hero = () => {
       ['cat role.txt', `${role}, Haramaya University student`],
       ['ls projects/', 'mesob-sululta/   tenafinder/   smart-shop/'],
       ['cat status.txt', 'open to new roles and freelance work'],
-      ['help', 'whoami  projects  skills  contact  status  clear', 'prompt'],
+      ['cat philosophy.txt', 'Trying to embrace the world I was given.'],
     ];
     let active = true;
     let commandIndex = 0;
@@ -396,7 +399,7 @@ const Hero = () => {
             </a>
             <a
               href="#projects"
-              className="hero-button"
+              className="hero-button hero-button-work"
             >
               View my work
             </a>
@@ -407,6 +410,14 @@ const Hero = () => {
               className="hero-button"
             >
               GitHub
+            </a>
+            <a
+              href={data.about?.cvUrl || `${import.meta.env.BASE_URL || '/'}cv.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-button hero-button-cv"
+            >
+              View My CV
             </a>
           </div>
 
@@ -437,7 +448,7 @@ const Hero = () => {
       {createPortal(
         <>
           <nav className="section-dots" aria-label="Page sections">
-            {['home', 'about', 'experience', 'skills', 'projects', 'contact'].map((section) => (
+            {['home', 'experience', 'skills', 'projects', 'about', 'contact'].map((section) => (
               <a
                 key={section}
                 href={`#${section}`}
@@ -449,38 +460,45 @@ const Hero = () => {
             ))}
           </nav>
 
-          <div className="palette-picker" role="group" aria-label="Color palette">
-            <span>
-              {palettes.find((item) => item.id === palette)?.label}
-            </span>
-            {palettes.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                title={`${item.label} palette`}
-                aria-label={`${item.label} color palette`}
-                aria-pressed={palette === item.id}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => selectPalette(item.id)}
-                className={palette === item.id ? 'is-selected' : ''}
-              >
-                <span
-                  style={{ background: `linear-gradient(135deg, ${item.accent} 55%, ${item.warm} 55%)` }}
-                />
-              </button>
-            ))}
+          <div className={`palette-picker${isPaletteOpen ? ' is-open' : ''}`}>
+            {isPaletteOpen && (
+              <div className="palette-options" role="group" aria-label="Color palette">
+                {palettes.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    title={`${item.label} palette`}
+                    aria-label={`${item.label} color palette`}
+                    aria-pressed={palette === item.id}
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => {
+                      selectPalette(item.id);
+                      setIsPaletteOpen(false);
+                    }}
+                    className={palette === item.id ? 'is-selected' : ''}
+                  >
+                    <span
+                      style={{ background: `linear-gradient(135deg, ${item.accent} 55%, ${item.warm} 55%)` }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              className="palette-toggle"
+              aria-label={isPaletteOpen ? 'Close color palette' : 'Open color palette'}
+              aria-expanded={isPaletteOpen}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => setIsPaletteOpen((open) => !open)}
+            >
+              <span
+                className="palette-toggle-swatch"
+                style={{ background: `linear-gradient(135deg, ${palettes[0].accent} 55%, ${palettes[0].warm} 55%)` }}
+                aria-hidden="true"
+              />
+            </button>
           </div>
-
-          <a
-            href={`mailto:${profile?.email || 'tesfayekelbesa912@gmail.com'}`}
-            aria-label="Send an email"
-            className="hero-mail-button"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <path d="M3 7l9 6 9-6" />
-            </svg>
-          </a>
         </>,
         document.body
       )}
