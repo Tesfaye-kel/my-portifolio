@@ -110,20 +110,21 @@ const Hero = () => {
       ['whoami', name.toLowerCase().replaceAll(' ', '-')],
       ['cat role.txt', `${role}, Haramaya University student`],
       ['ls projects/', 'mesob-sululta/   tenafinder/   smart-shop/'],
-      ['cat status.txt', 'open to new roles and freelance work'],
-      ['cat philosophy.txt', 'Trying to embrace the world I was given.'],
+      ['cat status.txt', 'open to new roles and freelance work', 'output', true],
+      ['cat philosophy.txt', 'Trying to embrace the world I was given.', 'output', true],
     ];
     let active = true;
     let commandIndex = 0;
 
-    const createLine = (text, type) => ({
+    const createLine = (text, type, mobileHidden = false) => ({
       id: nextTerminalLineId.current++,
       text,
       type,
+      mobileHidden,
     });
-    const addLine = (text, type) => {
+    const addLine = (text, type, mobileHidden) => {
       if (active) {
-        const line = createLine(text, type);
+        const line = createLine(text, type, mobileHidden);
         setTerminalLines((lines) => [...lines, line]);
       }
     };
@@ -134,9 +135,9 @@ const Hero = () => {
         return;
       }
 
-      const [input, output, outputType = 'output'] = commands[commandIndex];
+      const [input, output, outputType = 'output', mobileHidden = false] = commands[commandIndex];
       let characterIndex = 0;
-      const inputLine = createLine('$ ', 'prompt');
+      const inputLine = createLine('$ ', 'prompt', mobileHidden);
       setTerminalLines((lines) => [...lines, inputLine]);
       const typeNextCharacter = () => {
         if (!active) return;
@@ -155,7 +156,7 @@ const Hero = () => {
         }
 
         schedule(() => {
-          addLine(output, outputType);
+          addLine(output, outputType, mobileHidden);
           commandIndex += 1;
           schedule(typeCommand, reducedMotion ? 0 : 350);
         }, reducedMotion ? 0 : 200);
@@ -320,7 +321,7 @@ const Hero = () => {
                 line.type === 'accent' ? 'terminal-warm' :
                   line.type === 'muted' ? 'terminal-muted' :
                     'terminal-text'
-            }`}
+            }${line.mobileHidden ? ' terminal-mobile-hidden' : ''}`}
           >
             {renderTerminalLine(line)}
           </div>
@@ -332,6 +333,7 @@ const Hero = () => {
         className="terminal-input"
       >
         <span>$</span>
+        <span className="terminal-cursor" aria-hidden="true" />
         <input
           value={command}
           onChange={(event) => setCommand(event.target.value)}

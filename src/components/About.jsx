@@ -1,6 +1,9 @@
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { usePortfolio } from '../context/PortfolioContext';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { getVisitorId, setVisitorName } from '../utils/visitor';
+import { visitorsAPI } from '../utils/api';
+import { downloadResumePdf } from '../utils/generateResumePdf';
 import {
   siReact, siJavascript, siTypescript, siTailwindcss, siHtml5, siCss,
   siNodedotjs, siExpress, siGo, siFirebase, siMongodb, siPostgresql,
@@ -9,7 +12,7 @@ import {
 import { 
   Code2, Database, Server, Wrench, 
   Github, Linkedin, Mail, Phone, 
-  ArrowRight, Sparkles, Rocket, Download, BriefcaseBusiness,
+  ArrowRight, Sparkles, Rocket, Download, BriefcaseBusiness, X, Send, Loader2, CheckCircle2,
   Shield, Zap, Layout, GitBranch,
   Globe, Layers, Cpu, Terminal,
   Star, GitFork, Users, GitCommit,
@@ -17,8 +20,6 @@ import {
   Brain, Coffee, Music, BookOpen, 
   Gamepad2, Camera, Compass, Dumbbell, Plane
 } from 'lucide-react';
-
-const baseUrl = import.meta.env.BASE_URL || '/';
 
 const skillIcons = {
   React: siReact,
@@ -183,6 +184,10 @@ const techStack = {
     ]
   }
 };
+
+const marqueeTechnologies = [...new Set(
+  Object.values(techStack).flatMap((category) => category.technologies.map((technology) => technology.name))
+)];
 
 // --- Experience Data ---
 const experienceData = [
@@ -438,13 +443,586 @@ const dailyHabits = [
 ];
 
 const About = ({ part = 'all' }) => {
-  const { data } = usePortfolio();
+  const { data, addMessage } = usePortfolio();
+  const [isConversationOpen, setIsConversationOpen] = useState(false);
+  const [isCvOpen, setIsCvOpen] = useState(false);
+  const [isHireOpen, setIsHireOpen] = useState(false);
+  const [conversation, setConversation] = useState({ name: '', email: '', message: '' });
+  const [isSendingConversation, setIsSendingConversation] = useState(false);
+  const [conversationError, setConversationError] = useState('');
+  const [conversationSent, setConversationSent] = useState(false);
+  const conversationNameRef = useRef(null);
+  const [cvEntries, setCvEntries] = useState([]);
+  const [cvCommand, setCvCommand] = useState('');
+  const [cvError, setCvError] = useState('');
+  const cvCommandRef = useRef(null);
+  const cvOutputRef = useRef(null);
+  const [hireEntries, setHireEntries] = useState([]);
+  const [hireCommand, setHireCommand] = useState('');
+  const hireCommandRef = useRef(null);
+  const hireOutputRef = useRef(null);
   const { profile, about } = data;
+
+  useEffect(() => {
+    if (!isConversationOpen) return undefined;
+
+    if (window.matchMedia('(pointer: fine)').matches) conversationNameRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsConversationOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isConversationOpen]);
+
+  useEffect(() => {
+    if (!isCvOpen) return undefined;
+
+    if (window.matchMedia('(pointer: fine)').matches) cvCommandRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsCvOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isCvOpen]);
+
+  useEffect(() => {
+    if (!isHireOpen) return undefined;
+
+    if (window.matchMedia('(pointer: fine)').matches) hireCommandRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsHireOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isHireOpen]);
+
+  useEffect(() => {
+    if (cvOutputRef.current) cvOutputRef.current.scrollTop = cvOutputRef.current.scrollHeight;
+  }, [cvEntries, isCvOpen]);
+
+  useEffect(() => {
+    if (hireOutputRef.current) hireOutputRef.current.scrollTop = hireOutputRef.current.scrollHeight;
+  }, [hireEntries, isHireOpen]);
+
+  const handleConversationSubmit = async (event) => {
+    event.preventDefault();
+    setIsSendingConversation(true);
+    setConversationError('');
+
+    try {
+      await addMessage(conversation);
+      setVisitorName(conversation.name);
+      try {
+        await visitorsAPI.updateName(getVisitorId(), conversation.name);
+      } catch (error) {
+        console.error('Failed to update visitor name:', error);
+      }
+      setConversation({ name: '', email: '', message: '' });
+      setConversationSent(true);
+    } catch (error) {
+      setConversationError(error.message || 'Message could not be sent. Please try again.');
+    } finally {
+      setIsSendingConversation(false);
+    }
+  };
+
+  const handleConversationChange = (event) => {
+    setConversation((current) => ({ ...current, [event.target.name]: event.target.value }));
+    setConversationError('');
+    setConversationSent(false);
+  };
+
+  const renderConversationTerminal = () => (
+    <section
+      className="conversation-terminal conversation-terminal-inline"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="conversation-terminal-title"
+    >
+      <header className="conversation-terminal-bar">
+        <div className="conversation-terminal-lights" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </div>
+        <span>~/conversation</span>
+        <button
+          type="button"
+          onClick={() => setIsConversationOpen(false)}
+          className="conversation-terminal-close"
+          aria-label="Close conversation"
+        >
+          <X size={18} />
+        </button>
+      </header>
+
+      <div className="conversation-terminal-content">
+        <p className="conversation-terminal-prompt">$ ./start-conversation</p>
+        <h2 id="conversation-terminal-title">Let&apos;s talk.</h2>
+
+        {conversationSent && (
+          <p className="conversation-terminal-success" role="status">
+            <CheckCircle2 size={17} /> Message sent. Thanks for reaching out!
+          </p>
+        )}
+        {conversationError && (
+          <p className="conversation-terminal-error" role="alert">{conversationError}</p>
+        )}
+
+        <form onSubmit={handleConversationSubmit} className="conversation-terminal-form">
+          <label>
+            <span>Name</span>
+            <input
+              ref={conversationNameRef}
+              name="name"
+              autoComplete="name"
+              value={conversation.name}
+              onChange={handleConversationChange}
+              required
+              maxLength={100}
+            />
+          </label>
+          <label>
+            <span>Email</span>
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              value={conversation.email}
+              onChange={handleConversationChange}
+              required
+              maxLength={254}
+            />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea
+              name="message"
+              value={conversation.message}
+              onChange={handleConversationChange}
+              required
+              rows={2}
+              maxLength={5000}
+            />
+          </label>
+          <button type="submit" disabled={isSendingConversation}>
+            {isSendingConversation
+              ? <><Loader2 size={16} className="conversation-terminal-spinner" /> Sending...</>
+              : <><Send size={16} /> Send message</>}
+          </button>
+        </form>
+      </div>
+    </section>
+  );
 
   const fullName = profile?.name || "Tesfaye Kelbesa";
   const professionalTitle = profile?.title || "Full-Stack Developer";
   const displayExperience = about?.experience?.length ? about.experience : experienceData;
-  const cvUrl = about?.cvUrl || `${baseUrl}cv.pdf`;
+  const projects = Array.isArray(data.projects) ? data.projects : [];
+  const cvSkillGroups = [
+    ...Object.values(techStack).map((category) => ({
+      title: category.title,
+      skills: category.technologies.map((technology) => technology.name),
+    })),
+    ...(about?.technicalSkills?.length
+      ? [{ title: 'Additional Skills', skills: about.technicalSkills.map((skill) => skill.name).filter(Boolean) }]
+      : []),
+    ...(about?.tools?.length ? [{ title: 'Tools', skills: about.tools }] : []),
+    ...(about?.softSkills?.length ? [{ title: 'Professional Strengths', skills: about.softSkills }] : []),
+  ];
+
+  const handleCvCommand = (rawCommand) => {
+    const command = rawCommand.trim().toLowerCase();
+    if (!command) return;
+    setCvError('');
+    setCvCommand('');
+
+    if (command === 'clear') {
+      setCvEntries([]);
+      return;
+    }
+
+    const validCommands = ['help', 'about', 'skills', 'experience', 'projects', 'education', 'contact', 'cv'];
+    const normalizedCommand = command.split(/\s+/)[0];
+    const entry = {
+      id: `${Date.now()}-${Math.random()}`,
+      command,
+      section: validCommands.includes(normalizedCommand) ? normalizedCommand : 'unknown',
+    };
+    setCvEntries((entries) => [...entries, entry].slice(-30));
+  };
+
+  const handleCvSubmit = (event) => {
+    event.preventDefault();
+    handleCvCommand(cvCommand);
+  };
+
+  const handleHireCommand = (rawCommand) => {
+    const command = rawCommand.trim().toLowerCase();
+    if (!command) return;
+    setHireCommand('');
+
+    if (command === 'clear') {
+      setHireEntries([]);
+      return;
+    }
+
+    const validCommands = ['help', 'role', 'services', 'availability', 'process', 'contact'];
+    const normalizedCommand = command.split(/\s+/)[0];
+    setHireEntries((entries) => [...entries, {
+      id: `${Date.now()}-${Math.random()}`,
+      command,
+      section: validCommands.includes(normalizedCommand) ? normalizedCommand : 'unknown',
+    }].slice(-24));
+  };
+
+  const handleHireSubmit = (event) => {
+    event.preventDefault();
+    handleHireCommand(hireCommand);
+  };
+
+  const renderHireEntry = (entry) => {
+    const heading = `# ${entry.section}`;
+    if (entry.section === 'help') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{heading}</p>
+          <p>Get a quick overview of how I can help, then reach out to discuss your project.</p>
+          <p className="cv-terminal-muted">Commands: role, services, availability, process, contact, clear</p>
+        </div>
+      );
+    }
+
+    if (entry.section === 'role') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{heading}</p>
+          <p>{professionalTitle}</p>
+          {(about?.careerGoals || about?.introduction || data.hero?.description) && (
+            <p>{about?.careerGoals || about?.introduction || data.hero.description}</p>
+          )}
+        </div>
+      );
+    }
+
+    if (entry.section === 'services') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{heading}</p>
+          {servicesData.map((service) => (
+            <p key={service.title}><span className="cv-terminal-accent">{service.title}</span></p>
+          ))}
+          {cvSkillGroups.slice(0, 3).map((group) => (
+            <p key={group.title}>
+              <span className="cv-terminal-muted">{group.title}: </span>{group.skills.slice(0, 8).join(', ')}
+            </p>
+          ))}
+        </div>
+      );
+    }
+
+    if (entry.section === 'availability') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{heading}</p>
+          <p>Open to discussing new opportunities and projects.</p>
+          {profile?.location && <p className="cv-terminal-muted">Based in {profile.location}</p>}
+        </div>
+      );
+    }
+
+    if (entry.section === 'process') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{heading}</p>
+          <p>Share your goals, timeline, and any useful project details. We can then discuss the scope and next steps together.</p>
+        </div>
+      );
+    }
+
+    if (entry.section === 'contact') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{heading}</p>
+          {profile?.email
+            ? <p><a className="cv-terminal-accent underline" href={`mailto:${profile.email}?subject=${encodeURIComponent('Let’s work together')}`}>{profile.email}</a></p>
+            : <p>Email details are not available yet. Use the contact section to send a message.</p>}
+          <button type="button" className="hire-terminal-contact" onClick={() => {
+            setIsHireOpen(false);
+            setIsConversationOpen(true);
+          }}>
+            Start a conversation
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="cv-terminal-result">
+        <p className="cv-terminal-heading">{heading}</p>
+        <p>Command not found: <span className="cv-terminal-accent">{entry.command}</span></p>
+        <p className="cv-terminal-muted">Type help to see the available commands.</p>
+      </div>
+    );
+  };
+
+  const handleCvExport = () => {
+    try {
+      downloadResumePdf({
+        profile: { ...profile, name: fullName, title: professionalTitle },
+        hero: data.hero,
+        about,
+        experience: displayExperience,
+        projects,
+        skillGroups: cvSkillGroups,
+        accent: getComputedStyle(document.documentElement).getPropertyValue('--portfolio-accent').trim(),
+      });
+      setCvError('');
+    } catch (error) {
+      console.error('Failed to generate CV PDF:', error);
+      setCvError(error.message || 'Could not generate the CV PDF. Please try again.');
+    }
+  };
+
+  const renderCvEntry = (entry) => {
+    const sectionTitle = `# ${entry.section}`;
+    if (entry.section === 'help') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          <p>Explore my professional profile with the commands below, or export the complete CV as a PDF.</p>
+        </div>
+      );
+    }
+
+    if (entry.section === 'about') {
+      const summary = about?.careerGoals || about?.introduction || data.hero?.description
+        || 'Full-stack developer building responsive digital products and practical software solutions.';
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          <p>{summary}</p>
+          <p className="cv-terminal-muted">{professionalTitle}{profile?.location ? ` | ${profile.location}` : ''}</p>
+        </div>
+      );
+    }
+
+    if (entry.section === 'skills') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          {cvSkillGroups.map((group) => (
+            <p key={group.title}>
+              <span className="cv-terminal-accent">{group.title}: </span>
+              {group.skills.join(', ')}
+            </p>
+          ))}
+        </div>
+      );
+    }
+
+    if (entry.section === 'experience') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          {displayExperience.map((item, index) => (
+            <article className="cv-terminal-item" key={`${item.role || item.title}-${index}`}>
+              <p className="cv-terminal-accent">
+                {item.role || item.title}{item.period ? ` | ${item.period}` : ''}
+              </p>
+              {(item.company || item.organization) && (
+                <p className="cv-terminal-muted">{item.company || item.organization}</p>
+              )}
+              {item.description && <p>{item.description}</p>}
+              {Array.isArray(item.achievements) && item.achievements.length > 0 && (
+                <ul>
+                  {item.achievements.slice(0, 4).map((achievement) => <li key={achievement}>{achievement}</li>)}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      );
+    }
+
+    if (entry.section === 'projects') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          {projects.length ? projects.slice(0, 8).map((project, index) => (
+            <article className="cv-terminal-item" key={project._id || project.id || `${project.title}-${index}`}>
+              <p className="cv-terminal-accent">{project.title || project.name}</p>
+              {project.description && <p>{project.description}</p>}
+              {Array.isArray(project.technologies) && project.technologies.length > 0 && (
+                <p className="cv-terminal-muted">Stack: {project.technologies.join(', ')}</p>
+              )}
+            </article>
+          )) : <p>No projects are available yet.</p>}
+        </div>
+      );
+    }
+
+    if (entry.section === 'education') {
+      const education = Array.isArray(about?.education) ? about.education : [];
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          {education.length
+            ? <ul>{education.map((item, index) => <li key={`${item}-${index}`}>{item}</li>)}</ul>
+            : <p>Education details have not been added yet.</p>}
+        </div>
+      );
+    }
+
+    if (entry.section === 'contact') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          {profile?.email && <p><span className="cv-terminal-accent">Email: </span>{profile.email}</p>}
+          {profile?.location && <p><span className="cv-terminal-accent">Location: </span>{profile.location}</p>}
+          <p><span className="cv-terminal-accent">GitHub: </span>github.com/Tesfaye-kel</p>
+        </div>
+      );
+    }
+
+    if (entry.section === 'cv') {
+      return (
+        <div className="cv-terminal-result">
+          <p className="cv-terminal-heading">{sectionTitle}</p>
+          <p>The complete CV includes your profile, technical skills, experience, selected projects, and education.</p>
+          <p className="cv-terminal-muted">Use the Export PDF button above to download it.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="cv-terminal-result">
+        <p className="cv-terminal-error">Command not found: {entry.command}. Type help to see available commands.</p>
+      </div>
+    );
+  };
+
+  const renderCvTerminal = () => (
+    <section className="cv-terminal" aria-label="Interactive terminal CV">
+      <header className="conversation-terminal-bar cv-terminal-bar">
+        <div className="conversation-terminal-lights" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </div>
+        <span>{fullName} | Terminal CV</span>
+        <button type="button" className="cv-terminal-export" onClick={handleCvExport}>
+          <Download size={14} /> Export PDF
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsCvOpen(false)}
+          className="conversation-terminal-close"
+          aria-label="Close CV terminal"
+        >
+          <X size={18} />
+        </button>
+      </header>
+
+      <div className="cv-terminal-output" ref={cvOutputRef} aria-live="polite">
+        <p className="cv-terminal-startup">
+          <span className="cv-terminal-accent">{fullName}</span>
+          {' - '}{professionalTitle}
+          {profile?.location && <span className="cv-terminal-muted"> @ {profile.location}</span>}
+        </p>
+        <div className="cv-terminal-welcome">
+          <p className="cv-terminal-heading"># welcome</p>
+          <p>Run a command to explore my skills, experience, projects, and education.</p>
+        </div>
+        {cvEntries.map((entry) => (
+          <div className="cv-terminal-entry" key={entry.id}>
+            <p className="cv-terminal-command"><span>tesfaye@cv:~$</span> {entry.command}</p>
+            {renderCvEntry(entry)}
+          </div>
+        ))}
+        {cvError && <p className="cv-terminal-error" role="alert">{cvError}</p>}
+        <div className="cv-terminal-commands" aria-label="CV terminal commands">
+          {['help', 'about', 'skills', 'experience', 'projects', 'education', 'contact', 'cv', 'clear'].map((command) => (
+            <button type="button" key={command} onClick={() => handleCvCommand(command)}>{command}</button>
+          ))}
+        </div>
+      </div>
+
+      <form className="cv-terminal-input" onSubmit={handleCvSubmit}>
+        <label htmlFor="cv-terminal-command">tesfaye@cv:~$</label>
+        <input
+          ref={cvCommandRef}
+          id="cv-terminal-command"
+          value={cvCommand}
+          onChange={(event) => setCvCommand(event.target.value)}
+          placeholder="type a command"
+          autoComplete="off"
+          spellCheck="false"
+          aria-label="Enter a CV terminal command"
+        />
+        <button type="submit" className="sr-only">Run CV command</button>
+      </form>
+    </section>
+  );
+
+  const renderHireTerminal = () => (
+    <section className="cv-terminal hire-terminal" aria-label="Interactive hiring terminal">
+      <header className="conversation-terminal-bar cv-terminal-bar">
+        <div className="conversation-terminal-lights" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </div>
+        <span>{fullName} | Hire Me</span>
+        <button
+          type="button"
+          onClick={() => setIsHireOpen(false)}
+          className="conversation-terminal-close"
+          aria-label="Close hire terminal"
+        >
+          <X size={18} />
+        </button>
+      </header>
+
+      <div className="cv-terminal-output" ref={hireOutputRef} aria-live="polite">
+        <p className="cv-terminal-startup">
+          <span className="cv-terminal-accent">Ready to build something meaningful?</span>
+        </p>
+        <div className="cv-terminal-welcome">
+          <p className="cv-terminal-heading"># let&apos;s_work_together</p>
+          <p>Choose a command to learn more or start a conversation.</p>
+        </div>
+        {hireEntries.map((entry) => (
+          <div className="cv-terminal-entry" key={entry.id}>
+            <p className="cv-terminal-command"><span>tesfaye@hire:~$</span> {entry.command}</p>
+            {renderHireEntry(entry)}
+          </div>
+        ))}
+        <div className="cv-terminal-commands" aria-label="Hiring terminal commands">
+          {['help', 'role', 'services', 'availability', 'process', 'contact', 'clear'].map((command) => (
+            <button type="button" key={command} onClick={() => handleHireCommand(command)}>{command}</button>
+          ))}
+        </div>
+      </div>
+
+      <form className="cv-terminal-input" onSubmit={handleHireSubmit}>
+        <label htmlFor="hire-terminal-command">tesfaye@hire:~$</label>
+        <input
+          ref={hireCommandRef}
+          id="hire-terminal-command"
+          value={hireCommand}
+          onChange={(event) => setHireCommand(event.target.value)}
+          placeholder="type a command"
+          autoComplete="off"
+          spellCheck="false"
+          aria-label="Enter a hiring terminal command"
+        />
+        <button type="submit" className="sr-only">Run hiring command</button>
+      </form>
+    </section>
+  );
 
   const whatMakesMeDifferent = about?.whatMakesMeDifferent || [
     "🔍 Curiosity & Continuous Learning - I enjoy learning something new every day, whether it's a new technology, a better way to solve a problem, or a different perspective from others. Staying curious helps me continuously improve as an engineer and as a person.",
@@ -767,55 +1345,82 @@ const About = ({ part = 'all' }) => {
               className="order-2 lg:col-span-2 lg:order-2 h-full p-5 rounded-xl bg-[#112240]/40 border border-[#233554]/50"
             >
               <div className="h-full flex flex-col gap-4">
-                <div className="flex-1 p-5 rounded-lg bg-gradient-to-br from-[#112240]/70 to-[#0a192f]/70 border border-[#233554]/50 hover:border-primary/30 transition-all">
-                  <div className="p-3 w-fit rounded-lg bg-primary/10 text-primary mb-5">
-                    <Rocket size={22} />
+                <div className={`relative flex-1 overflow-hidden rounded-lg border bg-gradient-to-br from-[#112240]/70 to-[#0a192f]/70 p-5 ${
+                  isConversationOpen
+                    ? 'conversation-launch-card-open'
+                    : 'border-[#233554]/50 hover:border-primary/30 transition-all'
+                }`}>
+                  <div className={isConversationOpen ? 'invisible' : ''}>
+                    <div className="p-3 w-fit rounded-lg bg-primary/10 text-primary mb-5">
+                      <Rocket size={22} />
+                    </div>
+                    <p className="text-primary font-mono text-xs uppercase tracking-widest mb-2">Have an idea?</p>
+                    <h3 className="text-2xl font-bold text-slate-100 mb-3">Build Something</h3>
+                    <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                      I turn thoughtful ideas into useful, reliable digital experiences. Let&apos;s create something that makes a difference.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIsConversationOpen(true)}
+                      className="magnetic-btn w-full justify-center mt-4"
+                    >
+                      Start a conversation <ArrowRight size={16} />
+                    </button>
                   </div>
-                  <p className="text-primary font-mono text-xs uppercase tracking-widest mb-2">Have an idea?</p>
-                  <h3 className="text-2xl font-bold text-slate-100 mb-3">Build Something</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed mb-5">
-                    I turn thoughtful ideas into useful, reliable digital experiences. Let&apos;s create something that makes a difference.
-                  </p>
-                  <a href="#contact" className="magnetic-btn w-full justify-center mt-4">
-                    Start a conversation <ArrowRight size={16} />
-                  </a>
+                  {isConversationOpen && renderConversationTerminal()}
                 </div>
 
-                <div className="group flex-1 flex flex-col p-4 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-105 transition-transform">
-                      <Download size={20} />
-                    </span>
-                    <h3 className="text-sm font-semibold text-slate-100">Download My CV</h3>
+                <div className="group relative flex flex-1 flex-col overflow-hidden rounded-lg border border-[#233554]/50 bg-[#0a192f]/60 p-4 transition-all hover:border-primary/30 hover:bg-primary/5">
+                  <div className={isCvOpen ? 'invisible flex flex-1 flex-col' : 'flex flex-1 flex-col'}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-105 transition-transform">
+                        <Download size={20} />
+                      </span>
+                      <h3 className="text-sm font-semibold text-slate-100">Download My CV</h3>
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed flex-1">
+                      Every project, challenge, and experience has shaped the way I think, learn, and build. My CV brings together the journey behind my work - from the skills I&apos;ve developed and the problems I&apos;ve solved to the experiences that continue to shape me as an engineer. Take a closer look at where I&apos;ve been, what I&apos;ve learned, and where I&apos;m heading next.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCvEntries([]);
+                        setCvError('');
+                        setCvCommand('');
+                        setIsCvOpen(true);
+                      }}
+                      className="magnetic-btn w-full justify-center mt-4"
+                    >
+                      Open Terminal CV <ArrowRight size={15} />
+                    </button>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed flex-1">
-                    Every project, challenge, and experience has shaped the way I think, learn, and build. My CV brings together the journey behind my work - from the skills I&apos;ve developed and the problems I&apos;ve solved to the experiences that continue to shape me as an engineer. Take a closer look at where I&apos;ve been, what I&apos;ve learned, and where I&apos;m heading next.
-                  </p>
-                  <a
-                    href={cvUrl}
-                    download
-                    className="magnetic-btn w-full justify-center mt-4"
-                  >
-                    <Download size={15} /> Download My CV <ArrowRight size={15} />
-                  </a>
+                  {isCvOpen && renderCvTerminal()}
                 </div>
 
-                <div className="group flex-1 flex flex-col p-4 rounded-lg bg-[#0a192f]/60 border border-[#233554]/50 hover:border-primary/30 hover:bg-primary/5 transition-all">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-105 transition-transform">
-                      <BriefcaseBusiness size={20} />
-                    </span>
-                    <h3 className="text-sm font-semibold text-slate-100">Hire Me</h3>
+                <div className="group relative flex flex-1 flex-col overflow-hidden rounded-lg border border-[#233554]/50 bg-[#0a192f]/60 p-4 transition-all hover:border-primary/30 hover:bg-primary/5">
+                  <div className={isHireOpen ? 'invisible flex flex-1 flex-col' : 'flex flex-1 flex-col'}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-105 transition-transform">
+                        <BriefcaseBusiness size={20} />
+                      </span>
+                      <h3 className="text-sm font-semibold text-slate-100">Hire Me</h3>
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed flex-1">
+                      Good work starts with the right people, clear communication, and a shared purpose. I&apos;m always interested in opportunities where I can bring my skills, curiosity, and problem-solving mindset to a team that values thoughtful work. If you&apos;re looking for someone who is ready to learn, contribute, and take ownership, I&apos;d be glad to connect and explore what we can build together.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHireEntries([]);
+                        setHireCommand('');
+                        setIsHireOpen(true);
+                      }}
+                      className="magnetic-btn w-full justify-center mt-4"
+                    >
+                      Open Hire Terminal <ArrowRight size={15} />
+                    </button>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed flex-1">
-                    Good work starts with the right people, clear communication, and a shared purpose. I&apos;m always interested in opportunities where I can bring my skills, curiosity, and problem-solving mindset to a team that values thoughtful work. If you&apos;re looking for someone who is ready to learn, contribute, and take ownership, I&apos;d be glad to connect and explore what we can build together.
-                  </p>
-                  <a
-                    href="#contact"
-                    className="magnetic-btn w-full justify-center mt-4"
-                  >
-                    Hire Me <ArrowRight size={15} />
-                  </a>
+                  {isHireOpen && renderHireTerminal()}
                 </div>
               </div>
             </motion.div>
@@ -885,6 +1490,18 @@ const About = ({ part = 'all' }) => {
         {/* 5. Tech Stack */}
         <div id="skills" className="portfolio-snap-panel mb-32">
           <SectionHeader number="04" title="Tech Stack" subtitle="Technologies I work with daily" />
+
+          <div className="skills-marquee mb-6" aria-hidden="true">
+            <div className="skills-marquee-track">
+              {[0, 1].map((copy) => (
+                <div className="skills-marquee-group" key={copy}>
+                  {marqueeTechnologies.map((technology, index) => (
+                    <span key={`${technology}-${index}`}>{technology}</span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
           
           <div className="md:rounded-xl md:border md:border-[#233554]/50 md:bg-[#112240]/40 md:p-6">
             <div className="grid gap-3 md:grid-cols-2 md:gap-6">
@@ -1024,6 +1641,7 @@ const About = ({ part = 'all' }) => {
       </div>
     </div>
     )}
+
     </>
   );
 };
