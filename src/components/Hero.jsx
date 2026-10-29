@@ -4,6 +4,7 @@ import { Github, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 const palettes = [
+  { id: 'blue', label: 'Blue', accent: '#4da3ff', warm: '#ffd166' },
   { id: 'red', label: 'Red', accent: '#ff4d5e', warm: '#ff9a76' },
   { id: 'green', label: 'Green', accent: '#5dffa8', warm: '#ffb454' },
   { id: 'pink', label: 'Pink', accent: '#ff5c9a', warm: '#8be9fd' },
@@ -11,7 +12,6 @@ const palettes = [
   { id: 'orange', label: 'Orange', accent: '#ff6b2c', warm: '#ffd2a6' },
   { id: 'gold', label: 'Gold', accent: '#f5c542', warm: '#f0e6c8' },
   { id: 'cyan', label: 'Cyan', accent: '#22e1ff', warm: '#b6ff6b' },
-  { id: 'blue', label: 'Blue', accent: '#4da3ff', warm: '#ffd166' },
   { id: 'brown', label: 'Brown', accent: '#c58a55', warm: '#f0c18a' },
 ];
 
@@ -25,7 +25,7 @@ const socialLinks = [
 const Hero = () => {
   const { data } = usePortfolio();
   const { profile } = data;
-  const [palette, setPalette] = useState('red');
+  const [palette, setPalette] = useState('blue');
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [command, setCommand] = useState('');

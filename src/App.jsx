@@ -82,9 +82,21 @@ const SmoothScroll = () => {
     const sectionIds = ['home', 'experience', 'skills', 'services', 'projects', 'about', 'contact'];
     let isMovingToSection = false;
     let unlockTimer;
+    let wheelGestureActive = false;
+    let wheelGestureTimer;
+    let wheelGestureSection;
+    let wheelGestureDirection = 0;
+    let wheelGestureDelta = 0;
+    let wheelGestureAtBoundary = false;
+    let wheelGestureConsumed = false;
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchLastX = 0;
+    let touchLastY = 0;
     let touchSectionAtStart;
+    let touchAtTop = false;
+    let touchAtBottom = false;
+    let touchReachedBoundary = false;
 
     const getCurrentSection = () => {
       const marker = window.innerHeight * 0.3;
@@ -95,6 +107,32 @@ const SmoothScroll = () => {
           const bounds = section.getBoundingClientRect();
           return bounds.top <= marker && bounds.bottom > marker;
         });
+    };
+
+    const getBoundaryDistance = (section, direction) => {
+      if (!section) return Infinity;
+      const bounds = section.getBoundingClientRect();
+      const topOffset = section.id === 'home' ? 0 : 82;
+      return direction > 0
+        ? bounds.bottom - window.innerHeight
+        : bounds.top - topOffset;
+    };
+
+    const canScrollNestedTarget = (target, section, direction) => {
+      let element = target;
+      while (element instanceof HTMLElement && element !== section) {
+        const { overflowY } = window.getComputedStyle(element);
+        const isScrollable = ['auto', 'scroll', 'overlay'].includes(overflowY)
+          && element.scrollHeight > element.clientHeight + 1;
+        if (isScrollable) {
+          const canScroll = direction > 0
+            ? element.scrollTop + element.clientHeight < element.scrollHeight - 1
+            : element.scrollTop > 1;
+          if (canScroll) return true;
+        }
+        element = element.parentElement;
+      }
+      return false;
     };
 
     const moveToAdjacentSection = (direction, section = getCurrentSection()) => {
@@ -110,7 +148,7 @@ const SmoothScroll = () => {
       const bounds = section.getBoundingClientRect();
       const reachedBoundary = direction > 0
         ? bounds.bottom <= window.innerHeight + 24
-        : bounds.top >= -100;
+        : bounds.top >= (section.id === 'home' ? -2 : 80);
       if (!reachedBoundary) return false;
 
       isMovingToSection = true;
@@ -118,13 +156,70 @@ const SmoothScroll = () => {
       window.clearTimeout(unlockTimer);
       unlockTimer = window.setTimeout(() => {
         isMovingToSection = false;
-      }, 900);
+      }, 1200);
       return true;
+    };
+
+    const resetWheelGesture = () => {
+      wheelGestureActive = false;
+      wheelGestureSection = undefined;
+      wheelGestureDirection = 0;
+      wheelGestureDelta = 0;
+      wheelGestureAtBoundary = false;
+      wheelGestureConsumed = false;
     };
 
     const handleWheel = (event) => {
       if (event.ctrlKey || event.deltaY === 0) return;
-      if (moveToAdjacentSection(Math.sign(event.deltaY))) event.preventDefault();
+      const direction = Math.sign(event.deltaY);
+      if (!wheelGestureActive) {
+        wheelGestureActive = true;
+        wheelGestureSection = getCurrentSection();
+        wheelGestureDirection = direction;
+        wheelGestureDelta = 0;
+        wheelGestureAtBoundary = getBoundaryDistance(wheelGestureSection, direction) <= 1;
+        wheelGestureConsumed = false;
+      } else if (direction !== wheelGestureDirection) {
+        wheelGestureSection = getCurrentSection();
+        wheelGestureDirection = direction;
+        wheelGestureDelta = 0;
+        wheelGestureAtBoundary = getBoundaryDistance(wheelGestureSection, direction) <= 1;
+        wheelGestureConsumed = false;
+      }
+
+      window.clearTimeout(wheelGestureTimer);
+      wheelGestureTimer = window.setTimeout(resetWheelGesture, 260);
+
+      if (isMovingToSection || wheelGestureConsumed) {
+        event.preventDefault();
+        return;
+      }
+
+      const section = wheelGestureSection;
+      if (!section || canScrollNestedTarget(event.target, section, direction)) return;
+
+      if (wheelGestureAtBoundary) {
+        event.preventDefault();
+        wheelGestureDelta += event.deltaY;
+        if (Math.abs(wheelGestureDelta) >= 40) {
+          wheelGestureConsumed = true;
+          moveToAdjacentSection(direction, section);
+        }
+        return;
+      }
+
+      const distanceToBoundary = getBoundaryDistance(section, direction);
+      if (distanceToBoundary <= 1) {
+        event.preventDefault();
+        wheelGestureConsumed = true;
+      } else if (Math.abs(event.deltaY) >= distanceToBoundary) {
+        event.preventDefault();
+        wheelGestureConsumed = true;
+        window.scrollBy({
+          top: direction * distanceToBoundary,
+          behavior: 'instant',
+        });
+      }
     };
 
     const handleTouchStart = (event) => {
@@ -132,7 +227,50 @@ const SmoothScroll = () => {
       if (!touch) return;
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
+      touchLastX = touch.clientX;
+      touchLastY = touch.clientY;
       touchSectionAtStart = getCurrentSection();
+      touchReachedBoundary = false;
+      touchAtTop = getBoundaryDistance(touchSectionAtStart, -1) <= 1;
+      touchAtBottom = getBoundaryDistance(touchSectionAtStart, 1) <= 1;
+    };
+
+    const handleTouchMove = (event) => {
+      const touch = event.changedTouches[0];
+      if (!touch || !touchSectionAtStart) return;
+      const deltaX = touch.clientX - touchLastX;
+      const scrollDelta = touchLastY - touch.clientY;
+      touchLastX = touch.clientX;
+      touchLastY = touch.clientY;
+      if (Math.abs(deltaX) > Math.abs(scrollDelta)) return;
+      if (!scrollDelta) return;
+
+      const direction = Math.sign(scrollDelta);
+      if (canScrollNestedTarget(event.target, touchSectionAtStart, direction)) return;
+
+      const startsAtBoundary = direction > 0 ? touchAtBottom : touchAtTop;
+      if (startsAtBoundary) {
+        event.preventDefault();
+        return;
+      }
+
+      if (touchReachedBoundary) {
+        event.preventDefault();
+        return;
+      }
+
+      const distanceToBoundary = getBoundaryDistance(touchSectionAtStart, direction);
+      if (distanceToBoundary <= 1) {
+        event.preventDefault();
+        touchReachedBoundary = true;
+      } else if (Math.abs(scrollDelta) >= distanceToBoundary) {
+        event.preventDefault();
+        touchReachedBoundary = true;
+        window.scrollBy({
+          top: direction * distanceToBoundary,
+          behavior: 'instant',
+        });
+      }
     };
 
     const handleTouchEnd = (event) => {
@@ -140,18 +278,23 @@ const SmoothScroll = () => {
       if (!touch) return;
       const deltaX = touch.clientX - touchStartX;
       const deltaY = touchStartY - touch.clientY;
-      if (Math.abs(deltaY) < 55 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
-      moveToAdjacentSection(Math.sign(deltaY), touchSectionAtStart);
+      if (Math.abs(deltaY) < 40 || Math.abs(deltaY) <= Math.abs(deltaX) || touchReachedBoundary) return;
+      const direction = Math.sign(deltaY);
+      const startsAtBoundary = direction > 0 ? touchAtBottom : touchAtTop;
+      if (startsAtBoundary) moveToAdjacentSection(direction, touchSectionAtStart);
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd, { passive: true });
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.clearTimeout(unlockTimer);
+      window.clearTimeout(wheelGestureTimer);
     };
   }, [pathname]);
 
