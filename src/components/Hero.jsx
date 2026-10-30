@@ -1,19 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Github, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
-
-const palettes = [
-  { id: 'blue', label: 'Blue', accent: '#4da3ff', warm: '#ffd166' },
-  { id: 'red', label: 'Red', accent: '#ff4d5e', warm: '#ff9a76' },
-  { id: 'green', label: 'Green', accent: '#5dffa8', warm: '#ffb454' },
-  { id: 'pink', label: 'Pink', accent: '#ff5c9a', warm: '#8be9fd' },
-  { id: 'purple', label: 'Purple', accent: '#8b5cf6', warm: '#c4b5fd' },
-  { id: 'orange', label: 'Orange', accent: '#ff6b2c', warm: '#ffd2a6' },
-  { id: 'gold', label: 'Gold', accent: '#f5c542', warm: '#f0e6c8' },
-  { id: 'cyan', label: 'Cyan', accent: '#22e1ff', warm: '#b6ff6b' },
-  { id: 'brown', label: 'Brown', accent: '#c58a55', warm: '#f0c18a' },
-];
+import palettes from '../utils/palettes';
 
 const socialLinks = [
   { name: 'GitHub', url: 'https://github.com/Tesfaye-kel', icon: <Github aria-hidden="true" size={22} /> },
@@ -22,20 +10,13 @@ const socialLinks = [
   { name: 'Facebook', url: 'https://web.facebook.com/profile.php?id=61558584585875', icon: <Facebook aria-hidden="true" size={22} /> },
 ];
 
-const Hero = () => {
+const Hero = ({ onNavigate }) => {
   const { data } = usePortfolio();
   const { profile } = data;
-  const [palette, setPalette] = useState('blue');
-  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
   const [command, setCommand] = useState('');
   const [terminalLines, setTerminalLines] = useState([]);
   const nextTerminalLineId = useRef(0);
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  useEffect(() => {
-    document.documentElement.dataset.portfolioPalette = palette;
-  }, [palette]);
 
   useEffect(() => {
     document.querySelectorAll('.terminal-output').forEach((output) => {
@@ -57,26 +38,6 @@ const Hero = () => {
     });
 
     return () => window.cancelAnimationFrame(frameId);
-  }, []);
-
-  useEffect(() => {
-    const sectionIds = ['home', 'experience', 'skills', 'projects', 'about', 'contact'];
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
-
-    const observer = new IntersectionObserver((entries) => {
-      const visibleSections = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
-      if (visibleSections[0]) setActiveSection(visibleSections[0].target.id);
-    }, {
-      rootMargin: '-20% 0px -65% 0px',
-      threshold: 0,
-    });
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
   }, []);
 
   const name = profile?.name || 'Tesfaye Kelbesa';
@@ -170,10 +131,6 @@ const Hero = () => {
       timers.forEach(window.clearTimeout);
     };
   }, [name, role]);
-
-  const selectPalette = (nextPalette) => {
-    setPalette(nextPalette);
-  };
 
   const handleSocialLinkClick = (event, link) => {
     event.preventDefault();
@@ -359,11 +316,6 @@ const Hero = () => {
       >
         <div className="hero-layout">
         <div className="hero-copy">
-          <div className="hero-status">
-            <span />
-            Open to new roles
-          </div>
-
           <p className="hero-greeting">
             <b>&gt;</b> hello, I’m
           </p>
@@ -402,6 +354,10 @@ const Hero = () => {
             <a
               href="#projects"
               className="hero-button hero-button-work"
+              onClick={(event) => {
+                event.preventDefault();
+                onNavigate?.('projects');
+              }}
             >
               View my work
             </a>
@@ -447,63 +403,6 @@ const Hero = () => {
         </div>
         </div>
       </section>
-      {createPortal(
-        <>
-          <nav className="section-dots" aria-label="Page sections">
-            {['home', 'experience', 'skills', 'projects', 'about', 'contact'].map((section) => (
-              <a
-                key={section}
-                href={`#${section}`}
-                aria-label={section[0].toUpperCase() + section.slice(1)}
-                title={section[0].toUpperCase() + section.slice(1)}
-                aria-current={activeSection === section ? 'location' : undefined}
-                className={activeSection === section ? 'is-active' : ''}
-              />
-            ))}
-          </nav>
-
-          <div className={`palette-picker${isPaletteOpen ? ' is-open' : ''}`}>
-            {isPaletteOpen && (
-              <div className="palette-options" role="group" aria-label="Color palette">
-                {palettes.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    title={`${item.label} palette`}
-                    aria-label={`${item.label} color palette`}
-                    aria-pressed={palette === item.id}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => {
-                      selectPalette(item.id);
-                      setIsPaletteOpen(false);
-                    }}
-                    className={palette === item.id ? 'is-selected' : ''}
-                  >
-                    <span
-                      style={{ background: `linear-gradient(135deg, ${item.accent} 55%, ${item.warm} 55%)` }}
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-            <button
-              type="button"
-              className="palette-toggle"
-              aria-label={isPaletteOpen ? 'Close color palette' : 'Open color palette'}
-              aria-expanded={isPaletteOpen}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => setIsPaletteOpen((open) => !open)}
-            >
-              <span
-                className="palette-toggle-swatch"
-                style={{ background: `linear-gradient(135deg, ${palettes[0].accent} 55%, ${palettes[0].warm} 55%)` }}
-                aria-hidden="true"
-              />
-            </button>
-          </div>
-        </>,
-        document.body
-      )}
     </>
   );
 };

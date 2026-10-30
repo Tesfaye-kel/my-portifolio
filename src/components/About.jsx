@@ -1032,10 +1032,15 @@ const About = ({ part = 'all' }) => {
     "🤝 Independent Thinker & Collaborative Teammate - I'm comfortable exploring ideas independently, researching solutions, and taking ownership of my work. At the same time, I value teamwork, open communication, feedback, and learning from people with different experiences.",
     "🧘 Calm Under Pressure - I believe staying calm is one of the most valuable skills when facing difficult problems. When things don't go as planned, I take a step back, understand the situation, and approach the problem logically rather than reacting emotionally. This helps me make better decisions, solve problems effectively, and remain reliable when challenges arise."
   ];
+  const showAbout = part === 'all' || part === 'about';
+  const showExperience = part === 'all' || part === 'work' || part === 'experience';
+  const showSkills = part === 'all' || part === 'work' || part === 'skills';
+  const showServices = part === 'all' || part === 'work' || part === 'services';
+  const showWork = showExperience || showSkills || showServices;
 
   return (
     <>
-    {part !== 'work' && (
+    {showAbout && (
     <section id="about" className="portfolio-snap-panel relative py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -1329,10 +1334,11 @@ const About = ({ part = 'all' }) => {
     </section>
     )}
 
-    {part !== 'about' && (
+    {showWork && (
     <div className="relative py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 4. Experience Timeline */}
+        {showExperience && (
         <div id="experience" className="portfolio-snap-panel mb-32">
           <SectionHeader number="03" title="Experience" subtitle="My professional journey and growth" />
 
@@ -1486,8 +1492,10 @@ const About = ({ part = 'all' }) => {
             </div>
           </div>
         </div>
+        )}
 
         {/* 5. Tech Stack */}
+        {showSkills && (
         <div id="skills" className="portfolio-snap-panel mb-32">
           <SectionHeader number="04" title="Tech Stack" subtitle="Technologies I work with daily" />
 
@@ -1602,8 +1610,10 @@ const About = ({ part = 'all' }) => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Services */}
+        {showServices && (
         <div id="services" className="portfolio-snap-panel mb-12">
           <SectionHeader number="06" title="Services" subtitle="What I can do for you" />
           
@@ -1637,6 +1647,7 @@ const About = ({ part = 'all' }) => {
             </div>
           </div>
         </div>
+        )}
 
       </div>
     </div>
